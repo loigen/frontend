@@ -5,7 +5,8 @@ import { unreadNotificationsFunc } from "../../utils/unreadNotifications";
 import useFetchLatestMessage from "../../hooks/useFetchLatestMessage";
 import moment from "moment";
 import { deleteChat } from "../../api/chatApi/deleteChat";
-
+import Swal from "sweetalert2";
+import DeleteIcon from "@mui/icons-material/Delete";
 const UserChat = ({ chat, user }) => {
   const { recipientUser } = useFetchRecipient(chat, user);
   const { onlineUsers, notifications, markThisUserNotificationsAsRead } =
@@ -38,12 +39,29 @@ const UserChat = ({ chat, user }) => {
 
   const handleDelete = async () => {
     try {
-      await deleteChat(chat._id); // Call the deleteChat function
-      // Handle UI updates after deletion if necessary (e.g., refresh chat list)
+      await deleteChat(chat._id);
       console.log("Chat deleted successfully");
     } catch (error) {
       console.error("Failed to delete chat:", error);
     }
+  };
+
+  const confirmDelete = () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "This action cannot be undone.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        handleDelete();
+        Swal.fire("Deleted!", "The chat has been deleted.", "success");
+      }
+    });
   };
 
   return (
@@ -91,15 +109,14 @@ const UserChat = ({ chat, user }) => {
             {thisUserNotifications.length}
           </span>
         )}
-        {/* Add a delete button */}
         <button
           className="ml-4 text-red-500 hover:text-red-700"
           onClick={(e) => {
-            e.stopPropagation(); // Prevent the click event from triggering the parent onClick
-            handleDelete();
+            e.stopPropagation();
+            confirmDelete();
           }}
         >
-          Delete
+          <DeleteIcon />
         </button>
       </div>
     </div>
