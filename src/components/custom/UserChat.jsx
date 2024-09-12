@@ -41,6 +41,7 @@ const UserChat = ({ chat, user }) => {
     try {
       await deleteChat(chat._id);
       console.log("Chat deleted successfully");
+      window.location.reload();
     } catch (error) {
       console.error("Failed to delete chat:", error);
     }
