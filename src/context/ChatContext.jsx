@@ -21,7 +21,16 @@ export const ChatContextProvider = ({ children, user }) => {
   const [allUsers, setAllUsers] = useState([]);
 
   useEffect(() => {
-    const newSocket = io(`https://backend-production-c8da.up.railway.app`);
+    const newSocket = io(`https://backend-production-c8da.up.railway.app`, {
+      transports: ["websocket"],
+      secure: true,
+      reconnection: true,
+      rejectUnauthorized: false,
+    });
+
+    newSocket.on("connect_error", (err) => {
+      console.error("Socket connection error:", err);
+    });
     setSocket(newSocket);
 
     return () => {
