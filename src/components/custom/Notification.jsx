@@ -1,5 +1,6 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import { ChatContext } from "../../context/ChatContext";
+import { useAuth } from "../../context/AuthProvider"; // Import useAuth
 import { unreadNotificationsFunc } from "../../utils/unreadNotifications";
 import moment from "moment";
 import {
@@ -18,12 +19,9 @@ import {
 } from "@mui/material";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
 const Notification = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [user] = useState(null);
-  const [error, setError] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
   const {
     notifications,
@@ -33,6 +31,7 @@ const Notification = () => {
     markNotificationAsRead,
     updateCurrentChat,
   } = useContext(ChatContext);
+  const { user, error } = useAuth(); // Use user and error from useAuth
   const unreadNotifications = unreadNotificationsFunc(notifications);
   const modifiedNotifications = notifications.map((n) => {
     const sender = allUsers.find((user) => user._id === n.senderId);
@@ -62,7 +61,6 @@ const Notification = () => {
 
     if (desiredChat) {
       updateCurrentChat(desiredChat);
-      navigate(`/messenger/${desiredChat._id}`);
     }
 
     markNotificationAsRead(n, userChats, user, notifications);
@@ -118,7 +116,7 @@ const Notification = () => {
               <ListItem
                 key={index}
                 button
-                onClick={() => handleNotificationClick(n)} // On click, handle notification
+                onClick={() => handleNotificationClick(n)}
               >
                 <Avatar
                   src={

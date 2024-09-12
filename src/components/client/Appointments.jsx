@@ -14,7 +14,7 @@ const Appointments = () => {
 
       try {
         const data = await fetchAppointmentsByUserId(user._id);
-        console.log("API Response:", data); // Log the data to verify its structure
+        console.log("API Response:", data);
 
         const today = new Date().setHours(0, 0, 0, 0);
 
@@ -50,7 +50,6 @@ const Appointments = () => {
 
         setAppointments(sortedAppointments);
       } catch (err) {
-        setError(err.message);
       } finally {
         setLoading(false);
       }

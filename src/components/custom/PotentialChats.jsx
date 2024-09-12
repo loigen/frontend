@@ -1,36 +1,22 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import { ChatContext } from "../../context/ChatContext";
 import LoadingSpinner from "./LoadingSpinner";
 import { Tooltip } from "@mui/material";
-import axios from "axios";
+import { useAuth } from "../../context/AuthProvider"; // Import useAuth
 
 const PotentialChats = () => {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const { user: authUser, loading: authLoading, error: authError } = useAuth(); // Access auth context
+  const { potentialChats, createChat, onlineUsers } = useContext(ChatContext);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const response = await axios.get(
-          `https://backend-production-c8da.up.railway.app/user/profile`,
-          { withCredentials: true }
-        );
-        setUser(response.data.user);
-        setLoading(false);
-      } catch (error) {
-        setError("Error fetching profile.");
-        console.error("Error fetching profile:", error);
-        setLoading(false);
-      }
-    };
-    fetchProfile();
-  }, []);
-
-  const { potentialChats, createChat, onlineUsers } = useContext(ChatContext);
-
-  if (loading) {
+  if (authLoading) {
     return <LoadingSpinner />;
+  }
+
+  if (authError) {
+    return (
+      <div className="text-red-500 font-bold text-center">{authError}</div>
+    );
   }
 
   if (error) {
@@ -38,14 +24,19 @@ const PotentialChats = () => {
   }
 
   return (
-    <div className=" flex overflow-x-auto space-x-4 p-4">
+    <div className="flex overflow-x-auto space-x-4 p-4">
       {potentialChats &&
         potentialChats.map((u, index) => (
-          <Tooltip title={u.firstname}>
+          <Tooltip title={u.firstname} key={index}>
             <div
               className="single-user flex flex-col items-center flex-shrink-0"
-              key={index}
-              onClick={() => user && createChat(user._id, u._id)}
+              onClick={() => {
+                if (authUser) {
+                  createChat(authUser._id, u._id); // Use authenticated user to create chat
+                } else {
+                  setError("You must be logged in to start a chat.");
+                }
+              }}
             >
               <div className="relative">
                 <img
@@ -53,7 +44,9 @@ const PotentialChats = () => {
                   className="w-12 h-12 md:w-16 md:h-16 border-2 border-[#2c6975] rounded-full shadow-2xl"
                   alt={`${u.name}'s profile`}
                 />
-                {onlineUsers?.some((user) => user?.userId === u?._id) && (
+                {onlineUsers?.some(
+                  (onlineUser) => onlineUser?.userId === u?._id
+                ) && (
                   <span className="absolute bottom-0 right-0 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></span>
                 )}
               </div>
