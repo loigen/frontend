@@ -31,7 +31,7 @@ const Notification = () => {
     markNotificationAsRead,
     updateCurrentChat,
   } = useContext(ChatContext);
-  const { user, error } = useAuth(); // Use user and error from useAuth
+  const { user, error } = useAuth();
   const unreadNotifications = unreadNotificationsFunc(notifications);
   const modifiedNotifications = notifications.map((n) => {
     const sender = allUsers.find((user) => user._id === n.senderId);
@@ -40,9 +40,13 @@ const Notification = () => {
       senderName: sender?.firstname,
     };
   });
+  if (!user) {
+    return <Typography color="textSecondary">Loading user data...</Typography>;
+  }
 
-  const navigate = useNavigate();
-
+  if (error) {
+    return <Typography color="error">{error}</Typography>;
+  }
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
     setIsOpen(true);

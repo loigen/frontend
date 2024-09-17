@@ -28,7 +28,14 @@ export const AuthProvider = ({ children }) => {
       setLoading(false);
     }
   };
-
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      fetchProfile();
+    } else {
+      setLoading(false);
+    }
+  }, []);
   // Fetch profile
   const fetchProfile = async () => {
     setLoading(true);
@@ -47,15 +54,6 @@ export const AuthProvider = ({ children }) => {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      fetchProfile();
-    } else {
-      setLoading(false);
-    }
-  }, []);
 
   const logout = () => {
     localStorage.removeItem("token");

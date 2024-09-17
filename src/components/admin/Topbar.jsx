@@ -6,7 +6,6 @@ import { Notification } from "../custom";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
 import { Menu, MenuItem, Avatar, IconButton } from "@mui/material";
-import axios from "axios";
 import LogoutButton from "../LogoutButton";
 
 const Topbar = () => {
