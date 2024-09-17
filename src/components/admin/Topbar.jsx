@@ -4,9 +4,9 @@ import "../../styles/topbar.css";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { Notification } from "../custom";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthProvider";
 import { Menu, MenuItem, Avatar, IconButton } from "@mui/material";
 import axios from "axios";
-import { useAuth } from "../../context/AuthProvider";
 import LogoutButton from "../LogoutButton";
 
 const Topbar = () => {
@@ -40,21 +40,6 @@ const Topbar = () => {
   const handleProfileClick = () => {
     handleMenuClose();
     navigate("/AdminSettings");
-  };
-
-  const handleLogout = async () => {
-    try {
-      await axios.post(
-        `https://backend-production-c8da.up.railway.app/auth/logout`,
-        {},
-        { withCredentials: true }
-      );
-      localStorage.removeItem("token");
-
-      window.location.href = "/";
-    } catch (error) {
-      console.error("Error logging out:", error);
-    }
   };
 
   if (loading) {

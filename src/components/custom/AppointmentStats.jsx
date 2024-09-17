@@ -99,7 +99,9 @@ const AppointmentStats = () => {
                 </Typography>
               </div>
             ) : (
-              <Typography color="textSecondary">No appointments</Typography>
+              <Typography color="textSecondary">
+                No {status} appointments
+              </Typography>
             )}
           </CardContent>
         </Card>

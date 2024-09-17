@@ -1,48 +1,139 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
-import "../../styles/sidebar.css";
-import logo from "../../images/bigLogo.png";
-import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
-import EventAvailableIcon from "@mui/icons-material/EventAvailable";
+import { NavLink, useLocation } from "react-router-dom";
+import {
+  Box,
+  Drawer,
+  IconButton,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  useMediaQuery,
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import HomeIcon from "@mui/icons-material/Home";
+import BookIcon from "@mui/icons-material/Book";
 import SettingsIcon from "@mui/icons-material/Settings";
+import { ChevronLeft } from "@mui/icons-material";
+import logo from "../../images/bigLogo.png";
+import { styled, useTheme } from "@mui/material/styles";
+
+const drawerWidth = 240;
+
+const MiniDrawer = styled(Drawer)(({ theme, open }) => ({
+  width: open ? drawerWidth : 72,
+  transition: theme.transitions.create("width", {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.enteringScreen,
+  }),
+  overflowX: "hidden",
+  "& .MuiDrawer-paper": {
+    width: open ? drawerWidth : 72,
+    transition: theme.transitions.create("width", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
+}));
 
 const Sidebar = () => {
-  return (
-    <div className="sidebar flex flex-col items-center  bg-white shadow-2xl">
-      <div className="w-full object-cover p-4">
-        <img className="w-full" src={logo} alt="safeplace" />
-      </div>
-      <div className="w-full flex flex-col justify-between items-center flex-grow">
-        <ul className="links flex flex-col gap-6 w-full justify-center items-center">
-          <li>
-            <NavLink
-              to="/booking"
-              activeClassName="active"
-              className="sidebar-link"
-            >
-              <CalendarTodayIcon className="sidebar-icon" />
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to="/MR_JEB_BLOG"
-              activeClassName="active"
-              className="sidebar-link"
-            >
-              <EventAvailableIcon className="sidebar-icon" />
-            </NavLink>
-          </li>
+  const [open, setOpen] = useState(false);
+  const location = useLocation();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-          <NavLink
-            to="/clientSettings"
-            activeClassName="active"
-            className="sidebar-link"
-          >
-            <SettingsIcon className="sidebar-icon" />
-          </NavLink>
-        </ul>
-      </div>
-    </div>
+  const toggleDrawer = () => {
+    setOpen(!open);
+  };
+
+  const menuItems = [
+    {
+      text: "Appointments",
+      icon: <HomeIcon fontSize="large" />,
+      link: "/Booking",
+    },
+    {
+      text: "Blog",
+      icon: <BookIcon fontSize="large" />,
+      link: "/MR_JEB_BLOG",
+    },
+    {
+      text: "Settings",
+      icon: <SettingsIcon fontSize="large" />,
+      link: "/clientSettings",
+    },
+  ];
+
+  return (
+    <>
+      {isMobile && (
+        <IconButton onClick={toggleDrawer}>
+          <MenuIcon />
+        </IconButton>
+      )}
+
+      <MiniDrawer
+        variant={isMobile ? "temporary" : "permanent"}
+        open={open}
+        onClose={toggleDrawer}
+        ModalProps={{ keepMounted: true }}
+      >
+        <div className="flex items-center flex-col justify-between p-4">
+          <img className="w-full object-cover" src={logo} alt="safeplace" />
+          <Box sx={{ width: "100%" }} display="flex" justifyContent="end">
+            <IconButton onClick={toggleDrawer}>
+              {open ? <ChevronLeft /> : <MenuIcon />}
+            </IconButton>
+          </Box>
+        </div>
+
+        <List
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "1rem",
+          }}
+        >
+          {menuItems.map((item) => (
+            <ListItem
+              button
+              component={NavLink}
+              to={item.link}
+              key={item.text}
+              sx={{
+                width: "100%",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                gap: "1rem",
+                borderLeft:
+                  location.pathname === item.link
+                    ? "4px solid #2c6975"
+                    : "4px solid transparent",
+                backgroundColor:
+                  location.pathname === item.link
+                    ? "rgba(44, 105, 117, 0.1)"
+                    : "transparent",
+                fontWeight: location.pathname === item.link ? "bold" : "500",
+                "&:hover": {
+                  backgroundColor: "rgba(44, 105, 117, 0.2)",
+                },
+              }}
+              onClick={isMobile ? toggleDrawer : null}
+            >
+              <ListItemIcon
+                sx={{ minWidth: open ? "auto" : 56, fontWeight: "bold" }}
+              >
+                {item.icon}
+              </ListItemIcon>
+
+              {open && <p className="w-full">{item.text}</p>}
+            </ListItem>
+          ))}
+        </List>
+      </MiniDrawer>
+    </>
   );
 };
 

@@ -9,7 +9,6 @@ import {
   Paper,
   TablePagination,
   Menu,
-  
   MenuItem,
   IconButton,
   Typography,
@@ -19,7 +18,12 @@ import {
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import Swal from "sweetalert2";
 
-const PatientList = ({ patients, itemsPerPage, onPatientSelect }) => {
+const PatientList = ({
+  patients,
+  itemsPerPage,
+  onPatientSelect,
+  onMarkComplete,
+}) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(itemsPerPage);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -99,6 +103,8 @@ const PatientList = ({ patients, itemsPerPage, onPatientSelect }) => {
                         ? "#b71c1c" // Dark Red
                         : patient.status === "requested"
                         ? "#00bcd4" // Cyan
+                        : patient.status === "completed"
+                        ? "#4caf50" // Green for completed
                         : "#9e9e9e" // Gray
                     }
                   >
@@ -118,7 +124,9 @@ const PatientList = ({ patients, itemsPerPage, onPatientSelect }) => {
                   </Tooltip>
                   <Menu
                     anchorEl={anchorEl}
-                    open={Boolean(anchorEl)}
+                    open={
+                      Boolean(anchorEl) && selectedPatient?.id === patient.id
+                    }
                     onClose={handleMenuClose}
                     PaperProps={{
                       sx: {
@@ -131,22 +139,33 @@ const PatientList = ({ patients, itemsPerPage, onPatientSelect }) => {
                     <MenuItem onClick={handleViewDetails}>
                       View Details
                     </MenuItem>
-                    {patient.status === "accepted" && (
-                      <MenuItem
-                        onClick={() => {
-                          if (patient.meetLink) {
-                            window.open(patient.meetLink, "_blank");
-                          } else {
-                            Swal.fire(
-                              "Error",
-                              "Meeting link is not available",
-                              "error"
-                            );
-                          }
-                        }}
-                      >
-                        Go to Room
-                      </MenuItem>
+                    {selectedPatient?.status === "accepted" && (
+                      <>
+                        <MenuItem
+                          onClick={() => {
+                            if (selectedPatient.meetLink) {
+                              window.open(selectedPatient.meetLink, "_blank");
+                            } else {
+                              Swal.fire(
+                                "Error",
+                                "Meeting link is not available",
+                                "error"
+                              );
+                            }
+                            handleMenuClose();
+                          }}
+                        >
+                          Go to Room
+                        </MenuItem>
+                        <MenuItem
+                          onClick={() => {
+                            onMarkComplete(selectedPatient.id);
+                            handleMenuClose();
+                          }}
+                        >
+                          Mark as Complete
+                        </MenuItem>
+                      </>
                     )}
                   </Menu>
                 </TableCell>

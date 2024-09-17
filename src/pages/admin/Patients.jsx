@@ -8,6 +8,7 @@ import {
 } from "../../components/custom";
 import "../../styles/patient.css";
 import axios from "axios";
+import { markAppointmentAsCompleted } from "../../api/appointmentAPI/markAsComplete";
 
 const Patients = () => {
   const [patients, setPatients] = useState([]);
@@ -66,6 +67,41 @@ const Patients = () => {
       Swal.fire("Error", "Failed to process refund", "error");
     }
   };
+  const handleCompleteAppointment = async (appointmentId) => {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to mark this appointment as completed?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, complete it!",
+      cancelButtonText: "No, cancel!",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await markAppointmentAsCompleted(appointmentId);
+
+        setPatients((prevPatients) =>
+          prevPatients.map((patient) =>
+            patient.id === appointmentId
+              ? { ...patient, status: "completed" }
+              : patient
+          )
+        );
+
+        Swal.fire("Success", "Appointment marked as completed", "success").then(
+          () => {
+            window.location.reload();
+          }
+        );
+      } catch (error) {
+        console.error("Error completing appointment", error);
+        Swal.fire("Error", "Failed to complete appointment", "error");
+      }
+    }
+  };
 
   return (
     <div className="p-4">
@@ -88,6 +124,7 @@ const Patients = () => {
             onPatientSelect={handlePatientSelect}
             onToggleActionsList={handleToggleActionsList}
             activePatientIdList={activePatientIdList}
+            onMarkComplete={handleCompleteAppointment}
           />
         </div>
       </div>

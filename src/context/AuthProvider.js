@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
 
       localStorage.setItem("token", response.data.token);
       setUser(response.data);
-
+      await fetchProfile();
       setLoading(false);
     } catch (err) {
       setError(err.response?.data?.error || "Login failed");

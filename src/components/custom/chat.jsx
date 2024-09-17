@@ -2,8 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { ChatContext } from "../../context/ChatContext";
 import { LoadingSpinner, PotentialChats, ChatBox, UserChat } from "./index";
 import { Topbar } from "../custom";
-import pointing from "../../images/pointing.gif";
-import axios from "axios";
+
 import { AuthContext } from "../../context/AuthProvider";
 
 const Chat = () => {
