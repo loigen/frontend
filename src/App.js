@@ -12,7 +12,6 @@ import {
   UserPrivateRoute,
   RoleBasedPrivateRoute,
 } from "./PrivateRoute";
-import UserDashboard from "./pages/UserDashboard";
 import NotAuthorized from "./pages/NotAuthorized";
 import "./App.css";
 import { Login, ContactSupport } from "@mui/icons-material";
@@ -141,16 +140,6 @@ function App() {
             element={
               user ? (
                 <AdminPrivateRoute element={AdminSettings} />
-              ) : (
-                <Navigate to="/" />
-              )
-            }
-          />
-          <Route
-            path="/user-dashboard"
-            element={
-              user ? (
-                <UserPrivateRoute element={UserDashboard} />
               ) : (
                 <Navigate to="/" />
               )

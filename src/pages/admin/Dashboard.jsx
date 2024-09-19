@@ -1,9 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Topbar, Sidebar } from "../../components/admin";
-import MenuIcon from "@mui/icons-material/Menu";
-import CloseIcon from "@mui/icons-material/Close";
-import Drawer from "@mui/material/Drawer";
-import IconButton from "@mui/material/IconButton";
 
 const Dashboard = ({ children }) => {
   return (

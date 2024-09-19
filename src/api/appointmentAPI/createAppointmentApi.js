@@ -15,7 +15,10 @@ export const createAppointment = async (appointmentData) => {
     );
     return response;
   } catch (error) {
-    console.error("Error creating appointment:", error.response || error);
+    console.error(
+      "Error creating appointment:",
+      error.response?.data || error.message
+    );
     Swal.fire({
       icon: "error",
       title: "Error",

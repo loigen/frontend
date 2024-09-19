@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 export const AuthContext = createContext();
 
@@ -10,24 +11,6 @@ export const AuthProvider = ({ children }) => {
 
   const API_URL = "https://backend-production-c8da.up.railway.app";
 
-  // Login function
-  const login = async (email, password) => {
-    setLoading(true);
-    try {
-      const response = await axios.post(`${API_URL}/auth/login`, {
-        email,
-        password,
-      });
-
-      localStorage.setItem("token", response.data.token);
-      setUser(response.data);
-      await fetchProfile();
-      setLoading(false);
-    } catch (err) {
-      setError(err.response?.data?.error || "Login failed");
-      setLoading(false);
-    }
-  };
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -36,7 +19,7 @@ export const AuthProvider = ({ children }) => {
       setLoading(false);
     }
   }, []);
-  // Fetch profile
+
   const fetchProfile = async () => {
     setLoading(true);
     try {
@@ -48,9 +31,15 @@ export const AuthProvider = ({ children }) => {
       });
 
       setUser(response.data.user);
-      setLoading(false);
     } catch (err) {
+      Swal.fire({
+        icon: "error",
+        title: "Failed to Fetch Profile",
+        text:
+          err.response?.data?.error || "An error occurred. Please try again.",
+      });
       setError(err.response?.data?.error || "Failed to fetch profile");
+    } finally {
       setLoading(false);
     }
   };
@@ -64,23 +53,24 @@ export const AuthProvider = ({ children }) => {
     <AuthContext.Provider
       value={{
         user,
+        setUser,
         loading,
         error,
-        login,
         logout,
         fetchProfile,
+        setError,
+        setLoading,
       }}
     >
       {children}
     </AuthContext.Provider>
   );
 };
+
 export const useAuth = () => {
   const context = useContext(AuthContext);
-
   if (!context) {
     throw new Error("useAuth must be used within an AuthProvider");
   }
-
   return context;
 };

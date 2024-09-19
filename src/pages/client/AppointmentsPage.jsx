@@ -22,12 +22,15 @@ import {
   Select,
   Typography,
 } from "@mui/material";
-
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
+import "react-datepicker/dist/react-datepicker.css";
 const AppointmentsPage = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [appointmentType, setAppointmentType] = useState("");
   const [availableSlots, setAvailableSlots] = useState([]);
   const [selectedSlot, setSelectedSlot] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [agreementChecked, setAgreementChecked] = useState(false);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
@@ -36,7 +39,6 @@ const AppointmentsPage = () => {
   const [submitting, setSubmitting] = useState(false);
   const [price, setPrice] = useState(0);
   const [showContent, setShowContent] = useState(false);
-
   const handleCreateAppointment = () => {
     setShowContent(true);
   };
@@ -90,7 +92,19 @@ const AppointmentsPage = () => {
   useEffect(() => {
     loadAvailableSlots();
   }, []);
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+  };
 
+  const getAvailableSlotsForSelectedDate = () => {
+    const selectedDateStr = new Date(selectedDate).toLocaleDateString();
+    return availableSlots.filter(
+      (slot) => new Date(slot.date).toLocaleDateString() === selectedDateStr
+    );
+  };
+  const handleSlotClick = (slot) => {
+    setSelectedSlot(slot);
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -272,60 +286,62 @@ const AppointmentsPage = () => {
                 flexDirection: "column",
               }}
             >
-              <Grid container spacing={2}>
+              <Typography variant="body2" color="text.secondary">
+                Select Date
+              </Typography>
+              <Box
+                sx={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Calendar
+                  onChange={handleDateChange}
+                  value={selectedDate}
+                  minDate={new Date()}
+                  className="custom-calendar w-full"
+                />
+              </Box>
+              <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
+                Available Time Slots
+              </Typography>
+              <Box sx={{ mt: 1 }}>
                 {loading ? (
-                  <Typography variant="body2" color="text.secondary">
-                    Loading available slots...
-                  </Typography>
-                ) : availableSlots.length > 0 ? (
-                  availableSlots.map((slot) => (
-                    <Grid item xs={12} key={slot._id}>
-                      <Box
-                        sx={{
-                          p: 2,
-                          border: "1px solid",
-                          borderColor:
-                            selectedSlot && selectedSlot._id === slot._id
-                              ? "primary.main"
-                              : "gray.300",
-                          borderRadius: 1,
-                          backgroundColor:
-                            selectedSlot && selectedSlot._id === slot._id
-                              ? "background.paper"
-                              : "white",
-                          cursor: "pointer",
-                          "&:hover": {
-                            borderColor: "primary.main",
-                          },
-                        }}
-                        onClick={() =>
-                          setSelectedSlot(
-                            selectedSlot && selectedSlot._id === slot._id
-                              ? null
-                              : slot
-                          )
-                        }
-                      >
-                        <Typography>
-                          <strong>Date:</strong>{" "}
-                          {new Date(slot.date).toLocaleDateString()}
-                        </Typography>
-                        <Typography>
-                          <strong>Time:</strong> {slot.time}
-                        </Typography>
-                      </Box>
-                    </Grid>
-                  ))
+                  <LoadingSpinner />
                 ) : (
-                  <Typography
-                    variant="body2"
-                    align="center"
-                    color="text.secondary"
-                  >
-                    No available slots.
-                  </Typography>
+                  getAvailableSlotsForSelectedDate().map((slot, index) => (
+                    <Button
+                      key={slot._id}
+                      variant="outlined"
+                      sx={{
+                        mb: 1,
+                        mr: 1,
+                        backgroundColor:
+                          selectedSlot?._id === slot._id
+                            ? "#2C6975"
+                            : "transparent",
+                        color:
+                          selectedSlot?._id === slot._id ? "#fff" : "inherit",
+                        borderColor:
+                          selectedSlot?._id === slot._id
+                            ? "#2C6975"
+                            : "gray.300",
+                        "&:hover": {
+                          backgroundColor:
+                            selectedSlot?._id === slot._id
+                              ? "#1a4c5d"
+                              : "transparent",
+                        },
+                      }}
+                      onClick={() => handleSlotClick(slot)}
+                    >
+                      {slot.time}
+                    </Button>
+                  ))
                 )}
-              </Grid>
+              </Box>
             </Box>
             <Button
               variant="contained"
@@ -349,6 +365,7 @@ const AppointmentsPage = () => {
             </Button>
           </Box>
         );
+
       case 2:
         return (
           <div>

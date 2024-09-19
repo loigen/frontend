@@ -235,6 +235,7 @@ const LandingPage = () => {
         open={isLoginModalOpen}
         onClose={handleCloseLoginModal}
         handleOpenRegisterModal={handleOpenRegisterModal}
+        handleOpenLoginModal={handleOpenLoginModal}
       />
       <SignupModal
         open={isRegisterModalOpen}

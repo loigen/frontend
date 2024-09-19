@@ -55,7 +55,7 @@ const CanceledAppointments = () => {
       setUploading(true);
       setResponseMessage(null);
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/Appointments/api/appointments/update-with-bank-account`,
+        `https://backend-production-c8da.up.railway.app/Appointments/api/appointments/update-with-bank-account`,
         formData,
         { withCredentials: true }
       );

@@ -1,6 +1,7 @@
 /* Custom calendar styles */
 .custom-calendar {
   border: none;
+  width: 100%;
 }
 
 .custom-calendar .react-calendar__tile--active {

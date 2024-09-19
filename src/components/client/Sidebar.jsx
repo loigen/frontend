@@ -86,14 +86,17 @@ const Sidebar = () => {
             </IconButton>
           </Box>
           {open ? (
-            <Box display="flex" className="sm:flex-col md:flex-row">
+            <Box
+              display="flex"
+              className="sm:flex-col md:flex-row justify-start relative w-full"
+            >
               <img
                 className="w-[60%] h-[100%] object-cover"
                 src={logo}
                 alt="safeplace"
               />
               <img
-                className="w-[60%] h-[100%] object-cover"
+                className="w-[70%] h-[100%] object-cover absolute right-[-10%]"
                 src={textLogo}
                 alt="safeplace"
               />
@@ -109,6 +112,7 @@ const Sidebar = () => {
             flexDirection: "column",
             alignItems: "center",
             gap: "1rem",
+            overflow: "hidden",
           }}
         >
           {menuItems.map((item) => (

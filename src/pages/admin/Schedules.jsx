@@ -179,7 +179,7 @@ const Schedules = () => {
   return (
     <div className="mainContainer py-16 px-6 flex flex-row gap-[2%]  h-full">
       <div className="firstBox flex flex-col w-full h-full">
-        <div className="Calendar h-[100%] w-full gap-3 bg-white rounded-lg shadow-2xl flex flex-col items-center py-12">
+        <div className="Calendar h-[100%] w-full p-[5%] bg-white rounded-lg shadow-2xl flex flex-col items-center py-12">
           <Calendar
             onClickDay={handleDateChange}
             tileDisabled={tileDisabled}
@@ -239,7 +239,13 @@ const Schedules = () => {
         <Card sx={{ mt: 4, bgcolor: "white", boxShadow: 2, borderRadius: 2 }}>
           <CardContent>
             {freeSlots.length > 0 ? (
-              <List>
+              <List
+                sx={{
+                  maxHeight: "300px", // Set a fixed height or adjust as needed
+                  overflowY: "auto", // Ensure vertical scrolling
+                  overflowX: "hidden", // Hide horizontal scrolling
+                }}
+              >
                 {freeSlots.map((slot) => (
                   <ListItem
                     key={slot._id}
