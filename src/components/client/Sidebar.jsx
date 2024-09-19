@@ -88,7 +88,7 @@ const Sidebar = () => {
           {open ? (
             <Box display="flex" className="sm:flex-col md:flex-row">
               <img
-                className="w-[50%] h-[100%] object-cover"
+                className="w-[60%] h-[100%] object-cover"
                 src={logo}
                 alt="safeplace"
               />
