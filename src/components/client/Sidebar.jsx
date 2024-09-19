@@ -17,6 +17,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import { ChevronLeft } from "@mui/icons-material";
 import logo from "../../images/bigLogo.png";
 import { styled, useTheme } from "@mui/material/styles";
+import textLogo from "../../images/textLogo.png";
 
 const drawerWidth = 240;
 
@@ -79,12 +80,27 @@ const Sidebar = () => {
         ModalProps={{ keepMounted: true }}
       >
         <div className="flex items-center flex-col justify-between p-4">
-          <img className="w-full object-cover" src={logo} alt="safeplace" />
           <Box sx={{ width: "100%" }} display="flex" justifyContent="end">
             <IconButton onClick={toggleDrawer}>
-              {open ? <ChevronLeft /> : <MenuIcon />}
+              {open ? <MenuIcon /> : <MenuIcon />}
             </IconButton>
           </Box>
+          {open ? (
+            <Box display="flex" className="sm:flex-col md:flex-row">
+              <img
+                className="w-[50%] h-[100%] object-cover"
+                src={logo}
+                alt="safeplace"
+              />
+              <img
+                className="w-[60%] h-[100%] object-cover"
+                src={textLogo}
+                alt="safeplace"
+              />
+            </Box>
+          ) : (
+            <img className="w-full object-cover" src={logo} alt="safeplace" />
+          )}
         </div>
 
         <List
@@ -109,13 +125,13 @@ const Sidebar = () => {
                 gap: "1rem",
                 borderLeft:
                   location.pathname === item.link
-                    ? "4px solid #2c6975"
+                    ? "4px solid #68B2A0"
                     : "4px solid transparent",
                 backgroundColor:
-                  location.pathname === item.link
-                    ? "rgba(44, 105, 117, 0.1)"
-                    : "transparent",
+                  location.pathname === item.link ? "#2C6975" : "transparent",
                 fontWeight: location.pathname === item.link ? "bold" : "500",
+                color: location.pathname === item.link ? "white" : "black",
+
                 "&:hover": {
                   backgroundColor: "rgba(44, 105, 117, 0.2)",
                 },
@@ -123,7 +139,13 @@ const Sidebar = () => {
               onClick={isMobile ? toggleDrawer : null}
             >
               <ListItemIcon
-                sx={{ minWidth: open ? "auto" : 56, fontWeight: "bold" }}
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignContent: "center",
+                  minWidth: open ? "auto" : 56,
+                  color: location.pathname === item.link ? "white" : "#2C6975",
+                }}
               >
                 {item.icon}
               </ListItemIcon>
