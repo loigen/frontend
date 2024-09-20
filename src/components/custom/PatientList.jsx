@@ -23,6 +23,7 @@ const PatientList = ({
   itemsPerPage,
   onPatientSelect,
   onMarkComplete,
+  handleCancel,
 }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(itemsPerPage);
@@ -164,6 +165,14 @@ const PatientList = ({
                           }}
                         >
                           Mark as Complete
+                        </MenuItem>
+                        <MenuItem
+                          onClick={() => {
+                            handleCancel(selectedPatient.id);
+                            handleMenuClose();
+                          }}
+                        >
+                          Cancel
                         </MenuItem>
                       </>
                     )}

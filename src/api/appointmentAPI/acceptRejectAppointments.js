@@ -26,3 +26,16 @@ export const rejectAppointment = async (id) => {
     throw error;
   }
 };
+
+export const cancelAppointment = async (id) => {
+  try {
+    await axiosInstance.patch(
+      `https://backend-production-c8da.up.railway.app/Appointments/api/cancel/${id}`
+    );
+    Swal.fire("Success", "Appointment canceled successfully", "success");
+  } catch (error) {
+    console.error("Error cancelling appointment:", error);
+    Swal.fire("Error", "Failed to cancel the appointment", "error");
+    throw error;
+  }
+};

@@ -102,7 +102,37 @@ const Patients = () => {
       }
     }
   };
+  const handleCancel = async (appointmentId) => {
+    const confirmation = await Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, cancel it!",
+      cancelButtonText: "No!",
+    });
 
+    if (confirmation.isConfirmed) {
+      try {
+        await axios.patch(
+          `https://backend-production-c8da.up.railway.app/Appointments/api/cancel/${appointmentId}`
+        );
+        Swal.fire({
+          title: "Success",
+          text: "Successfully canceled!",
+          icon: "success",
+          confirmButtonText: "Close",
+        });
+      } catch (error) {
+        Swal.fire({
+          title: "Error",
+          text: "Failed to cancel the appointment.",
+          icon: "error",
+          confirmButtonText: "Close",
+        });
+      }
+    }
+  };
   return (
     <div className="p-4">
       {selectedPatient && (
@@ -125,6 +155,7 @@ const Patients = () => {
             onToggleActionsList={handleToggleActionsList}
             activePatientIdList={activePatientIdList}
             onMarkComplete={handleCompleteAppointment}
+            handleCancel={handleCancel}
           />
         </div>
       </div>
