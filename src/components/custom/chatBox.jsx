@@ -140,7 +140,7 @@ const ChatBox = () => {
                   maxWidth: "75%",
                   bgcolor:
                     message?.senderId === user?._id
-                      ? "#2c6975"
+                      ? "#2F4F4F"
                       : "background.paper",
                   color:
                     message?.senderId === user?._id ? "white" : "text.primary",
@@ -160,7 +160,6 @@ const ChatBox = () => {
                     width: "100%",
                   }}
                 >
-                  {/* Render message text with clickable links */}
                   <LinkifyMessage text={message.text} />
                 </Typography>
                 <Typography
