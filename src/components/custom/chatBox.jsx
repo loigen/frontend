@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import { useAuth } from "../../context/AuthProvider";
 
+// Component to detect and render clickable links in the message
 const LinkifyMessage = ({ text }) => {
   const urlPattern = /(https?:\/\/[^\s]+)/g;
 
@@ -26,7 +27,7 @@ const LinkifyMessage = ({ text }) => {
         href={part}
         target="_blank"
         rel="noopener noreferrer"
-        style={{ color: "#1976d2" }}
+        style={{ color: "#1976d2", textDecoration: "underline" }}
       >
         {part}
       </a>
@@ -45,9 +46,18 @@ const ChatBox = () => {
   const [textMessage, setTextMessage] = useState("");
   const scroll = useRef();
 
+  // Scroll to the latest message when the messages array changes
   useEffect(() => {
     scroll.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  // Send the message as plain text
+  const handleSendMessage = () => {
+    if (textMessage.trim()) {
+      sendTextMessage(textMessage, user, currentChat._id, setTextMessage);
+      setTextMessage("");
+    }
+  };
 
   if (error) {
     return (
@@ -73,13 +83,6 @@ const ChatBox = () => {
     );
   }
 
-  const handleSendMessage = () => {
-    if (textMessage.trim()) {
-      sendTextMessage(textMessage, user, currentChat._id, setTextMessage);
-      setTextMessage("");
-    }
-  };
-
   return (
     <Box
       display="flex"
@@ -94,7 +97,7 @@ const ChatBox = () => {
         <Toolbar>
           <Avatar
             src={recipientUser?.profilePicture}
-            alt={`${recipientUser?.name}'s profile`}
+            alt={`${recipientUser?.firstname} ${recipientUser?.lastname}'s profile`}
             sx={{ mr: 2 }}
           />
           <Typography variant="h6">
@@ -157,6 +160,7 @@ const ChatBox = () => {
                     width: "100%",
                   }}
                 >
+                  {/* Render message text with clickable links */}
                   <LinkifyMessage text={message.text} />
                 </Typography>
                 <Typography
@@ -180,13 +184,12 @@ const ChatBox = () => {
             You haven't sent a message to{" "}
             <strong>
               {recipientUser?.firstname} {recipientUser?.lastname}
-            </strong>{" "}
+            </strong>
             . Say hi!
           </Typography>
         )}
       </Box>
 
-      {/* Input Area */}
       <Box
         component="form"
         display="flex"
