@@ -16,7 +16,6 @@ import {
 } from "@mui/material";
 import { useAuth } from "../../context/AuthProvider";
 
-// Function to convert URLs in text to clickable links
 const LinkifyMessage = ({ text }) => {
   const urlPattern = /(https?:\/\/[^\s]+)/g;
 
@@ -27,7 +26,7 @@ const LinkifyMessage = ({ text }) => {
         href={part}
         target="_blank"
         rel="noopener noreferrer"
-        style={{ color: "#1976d2" }} // link styling
+        style={{ color: "#1976d2" }}
       >
         {part}
       </a>
@@ -138,7 +137,7 @@ const ChatBox = () => {
                   maxWidth: "75%",
                   bgcolor:
                     message?.senderId === user?._id
-                      ? "primary.main"
+                      ? "#2c6975"
                       : "background.paper",
                   color:
                     message?.senderId === user?._id ? "white" : "text.primary",
@@ -149,7 +148,6 @@ const ChatBox = () => {
                   textOverflow: "ellipsis",
                 }}
               >
-                {/* Use LinkifyMessage to render clickable links */}
                 <Typography
                   variant="body2"
                   sx={{
