@@ -14,8 +14,28 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import axios from "axios";
 import { useAuth } from "../../context/AuthProvider";
+
+// Function to convert URLs in text to clickable links
+const LinkifyMessage = ({ text }) => {
+  const urlPattern = /(https?:\/\/[^\s]+)/g;
+
+  return text.split(urlPattern).map((part, index) =>
+    urlPattern.test(part) ? (
+      <a
+        key={index}
+        href={part}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{ color: "#1976d2" }} // link styling
+      >
+        {part}
+      </a>
+    ) : (
+      part
+    )
+  );
+};
 
 const ChatBox = () => {
   const { user } = useAuth();
@@ -56,20 +76,7 @@ const ChatBox = () => {
 
   const handleSendMessage = () => {
     if (textMessage.trim()) {
-      let messageToSend = textMessage;
-
-      // Check if the text contains "https"
-      if (textMessage.includes("https")) {
-        // Use a regular expression to detect and wrap the URL in an <a> tag
-        const urlPattern = /(https?:\/\/[^\s]+)/g;
-        messageToSend = textMessage.replace(
-          urlPattern,
-          (url) => `<a href="${url}" target="_blank">${url}</a>`
-        );
-      }
-
-      // Send the message, whether it's plain text or contains a link
-      sendTextMessage(messageToSend, user, currentChat._id, setTextMessage);
+      sendTextMessage(textMessage, user, currentChat._id, setTextMessage);
       setTextMessage("");
     }
   };
@@ -142,6 +149,7 @@ const ChatBox = () => {
                   textOverflow: "ellipsis",
                 }}
               >
+                {/* Use LinkifyMessage to render clickable links */}
                 <Typography
                   variant="body2"
                   sx={{
@@ -151,7 +159,7 @@ const ChatBox = () => {
                     width: "100%",
                   }}
                 >
-                  {message.text}
+                  <LinkifyMessage text={message.text} />
                 </Typography>
                 <Typography
                   variant="caption"
