@@ -56,7 +56,20 @@ const ChatBox = () => {
 
   const handleSendMessage = () => {
     if (textMessage.trim()) {
-      sendTextMessage(textMessage, user, currentChat._id, setTextMessage);
+      let messageToSend = textMessage;
+
+      // Check if the text contains "https"
+      if (textMessage.includes("https")) {
+        // Use a regular expression to detect and wrap the URL in an <a> tag
+        const urlPattern = /(https?:\/\/[^\s]+)/g;
+        messageToSend = textMessage.replace(
+          urlPattern,
+          (url) => `<a href="${url}" target="_blank">${url}</a>`
+        );
+      }
+
+      // Send the message, whether it's plain text or contains a link
+      sendTextMessage(messageToSend, user, currentChat._id, setTextMessage);
       setTextMessage("");
     }
   };
