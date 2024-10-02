@@ -32,12 +32,6 @@ export const AuthProvider = ({ children }) => {
 
       setUser(response.data.user);
     } catch (err) {
-      Swal.fire({
-        icon: "error",
-        title: "Failed to Fetch Profile",
-        text:
-          err.response?.data?.error || "An error occurred. Please try again.",
-      });
       setError(err.response?.data?.error || "Failed to fetch profile");
     } finally {
       setLoading(false);

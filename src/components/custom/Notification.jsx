@@ -18,7 +18,6 @@ import {
   Link,
 } from "@mui/material";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
-import { useNavigate } from "react-router-dom";
 
 const Notification = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -72,7 +71,7 @@ const Notification = () => {
   };
 
   if (error) {
-    return <Typography color="error">{error}</Typography>;
+    return <Typography color="error">Loading...</Typography>;
   }
 
   return (

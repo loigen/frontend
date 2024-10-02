@@ -37,11 +37,6 @@ const Topbar = () => {
     setAnchorEl(null);
   };
 
-  const handleProfileClick = () => {
-    handleMenuClose();
-    navigate("/AdminSettings");
-  };
-
   if (loading) {
     return <LoadingSpinner />;
   }
@@ -94,7 +89,6 @@ const Topbar = () => {
               horizontal: "center",
             }}
           >
-            <MenuItem onClick={handleProfileClick}>Profile</MenuItem>
             <MenuItem>
               <LogoutButton />
             </MenuItem>
