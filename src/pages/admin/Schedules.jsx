@@ -239,42 +239,61 @@ const Schedules = () => {
         <Card sx={{ mt: 4, bgcolor: "white", boxShadow: 2, borderRadius: 2 }}>
           <CardContent>
             {freeSlots.length > 0 ? (
-              <List
-                sx={{
-                  maxHeight: "300px", // Set a fixed height or adjust as needed
-                  overflowY: "auto", // Ensure vertical scrolling
-                  overflowX: "hidden", // Hide horizontal scrolling
-                }}
-              >
-                {freeSlots.map((slot) => (
-                  <ListItem
-                    key={slot._id}
+              <>
+                {freeSlots.filter((slot) =>
+                  dayjs(slot.date).isSame(dayjs(selectedDate), "day")
+                ).length > 0 ? (
+                  <List
                     sx={{
-                      mb: 2,
-                      display: "flex",
-                      justifyContent: "space-between",
-                      p: 2,
-                      border: "1px solid #ddd",
-                      borderRadius: 1,
+                      maxHeight: "300px",
+                      overflowY: "auto",
+                      overflowX: "hidden",
                     }}
                   >
-                    <Typography sx={{ flexGrow: 1 }}>
-                      {dayjs(slot.date).format("YYYY-MM-DD")} at {slot.time}
-                    </Typography>
-                    <IconButton
-                      onClick={() => handleDeleteFreeSlot(slot._id)}
-                      sx={{ color: "#2c6975", ml: 2 }}
-                    >
-                      <Tooltip title="Delete Time Slot" arrow>
-                        <DeleteIcon />
-                      </Tooltip>
-                    </IconButton>
-                  </ListItem>
-                ))}
-              </List>
+                    {freeSlots
+                      .filter((slot) =>
+                        dayjs(slot.date).isSame(dayjs(selectedDate), "day")
+                      )
+                      .map((slot) => (
+                        <ListItem
+                          key={slot._id}
+                          sx={{
+                            mb: 2,
+                            display: "flex",
+                            justifyContent: "space-between",
+                            p: 2,
+                            border: "1px solid #ddd",
+                            borderRadius: 1,
+                          }}
+                        >
+                          <Typography sx={{ flexGrow: 1 }}>
+                            {dayjs(slot.date).format("YYYY-MM-DD")} at{" "}
+                            {slot.time}
+                          </Typography>
+                          <IconButton
+                            onClick={() => handleDeleteFreeSlot(slot._id)}
+                            sx={{ color: "#2c6975", ml: 2 }}
+                          >
+                            <Tooltip title="Delete Time Slot" arrow>
+                              <DeleteIcon />
+                            </Tooltip>
+                          </IconButton>
+                        </ListItem>
+                      ))}
+                  </List>
+                ) : (
+                  <Typography
+                    color="textSecondary"
+                    align="center"
+                    sx={{ p: 2 }}
+                  >
+                    No free slots available for {selectedDate.toDateString()}.
+                  </Typography>
+                )}
+              </>
             ) : (
               <Typography color="textSecondary" align="center" sx={{ p: 2 }}>
-                No Time slots today
+                No free slots today
               </Typography>
             )}
           </CardContent>
