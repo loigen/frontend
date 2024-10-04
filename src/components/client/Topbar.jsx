@@ -3,17 +3,14 @@ import LoadingSpinner from "../custom/LoadingSpinner";
 import "../../styles/topbar.css";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { Notification } from "../custom";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
 import { Menu, MenuItem, Avatar, IconButton } from "@mui/material";
-import axios from "axios";
 import LogoutButton from "../LogoutButton";
 
 const Topbar = () => {
   const { user, loading } = useAuth();
   const [anchorEl, setAnchorEl] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
-  const navigate = useNavigate();
   const open = Boolean(anchorEl);
 
   useEffect(() => {
@@ -50,7 +47,7 @@ const Topbar = () => {
       <div className="flex flex-row w-full justify-end gap-10">
         <ul className="flex flex-row gap-4 md:gap-6 items-center">
           <li>
-            <Notification />
+            <Notification user={user} />
           </li>
         </ul>
         <div className="profilePart flex items-center gap-4 md:gap-6">

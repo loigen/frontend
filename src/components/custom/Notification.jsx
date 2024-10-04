@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import { ChatContext } from "../../context/ChatContext";
-import { useAuth } from "../../context/AuthProvider"; // Import useAuth
 import { unreadNotificationsFunc } from "../../utils/unreadNotifications";
 import moment from "moment";
 import {
@@ -19,7 +18,7 @@ import {
 } from "@mui/material";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 
-const Notification = () => {
+const Notification = ({ user }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const {
@@ -30,7 +29,6 @@ const Notification = () => {
     markNotificationAsRead,
     updateCurrentChat,
   } = useContext(ChatContext);
-  const { user, error } = useAuth();
   const unreadNotifications = unreadNotificationsFunc(notifications);
   const modifiedNotifications = notifications.map((n) => {
     const sender = allUsers.find((user) => user._id === n.senderId);
@@ -39,13 +37,11 @@ const Notification = () => {
       senderName: sender?.firstname,
     };
   });
+
   if (!user) {
     return <Typography color="textSecondary">Loading user data...</Typography>;
   }
 
-  if (error) {
-    return <Typography color="error">{error}</Typography>;
-  }
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
     setIsOpen(true);
@@ -69,10 +65,6 @@ const Notification = () => {
     markNotificationAsRead(n, userChats, user, notifications);
     handleMenuClose();
   };
-
-  if (error) {
-    return <Typography color="error">Loading...</Typography>;
-  }
 
   return (
     <div>
