@@ -22,7 +22,6 @@ import axios from "axios";
 import validator from "validator";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
-import { fullWidth } from "validator/lib/isFullWidth";
 
 const validateSignupData = (
   firstname,
@@ -34,8 +33,7 @@ const validateSignupData = (
   sex,
   Profession,
   EducationBackground,
-  Religion,
-  Age
+  Religion
 ) => {
   if (
     !firstname ||
@@ -47,8 +45,7 @@ const validateSignupData = (
     !sex ||
     !Profession ||
     !EducationBackground ||
-    !Religion ||
-    !Age
+    !Religion
   ) {
     return "All fields are required";
   }
@@ -61,16 +58,29 @@ const validateSignupData = (
   if (!validator.isISO8601(birthdate, { strict: true })) {
     return "Invalid birthdate";
   }
+
+  const birthDateObj = new Date(birthdate);
+  let age = new Date().getFullYear() - birthDateObj.getFullYear();
+  const monthDiff = new Date().getMonth() - birthDateObj.getMonth();
+  if (
+    monthDiff < 0 ||
+    (monthDiff === 0 && new Date().getDate() < birthDateObj.getDate())
+  ) {
+    age--;
+  }
+
+  if (age < 15) {
+    return "You must be at least 15 years old";
+  }
+
   if (!["Male", "Female"].includes(sex)) {
     return "Sex must be either 'Male' or 'Female'";
-  }
-  if (!Number.isInteger(Age) || Age <= 0) {
-    return "Invalid age";
   }
   return null;
 };
 
 const SignupModal = ({ open, onClose, handleOpenLoginModal }) => {
+  const [passwordsMatch, setPasswordsMatch] = useState(false);
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [middleName, setMiddleName] = useState("");
@@ -82,14 +92,13 @@ const SignupModal = ({ open, onClose, handleOpenLoginModal }) => {
   const [Profession, setProfession] = useState("");
   const [EducationBackground, setEducationBackground] = useState("");
   const [Religion, setReligion] = useState("");
-  const [Age, setAge] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [agreement, setAgreement] = useState(false);
   const [step, setStep] = useState(1);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [passwordMatch, setPasswordMatch] = useState(true);
+
   const [passwordValidations, setPasswordValidations] = useState({
     minLength: false,
     specialChar: false,
@@ -103,13 +112,11 @@ const SignupModal = ({ open, onClose, handleOpenLoginModal }) => {
         ? !(
             firstname &&
             lastname &&
-            middleName &&
             birthdate &&
             sex &&
             Profession &&
             EducationBackground &&
-            Religion &&
-            Age
+            Religion
           )
         : !(email && password && repeatPassword && agreement)
     );
@@ -117,18 +124,15 @@ const SignupModal = ({ open, onClose, handleOpenLoginModal }) => {
     step,
     firstname,
     lastname,
-    middleName,
     birthdate,
     sex,
     Profession,
     EducationBackground,
     Religion,
-    Age,
     email,
     password,
     repeatPassword,
     agreement,
-    passwordMatch,
   ]);
 
   const handlePasswordChange = (e) => {
@@ -141,14 +145,14 @@ const SignupModal = ({ open, onClose, handleOpenLoginModal }) => {
       upperCase: /[A-Z]/.test(newPassword),
       number: /[0-9]/.test(newPassword),
     });
-    setPasswordMatch(newPassword === repeatPassword);
+    setPasswordsMatch(newPassword === repeatPassword);
   };
 
   const handleRepeatPasswordChange = (e) => {
     const newRepeatPassword = e.target.value;
     setRepeatPassword(newRepeatPassword);
 
-    setPasswordMatch(password === newRepeatPassword);
+    setPasswordsMatch(password === newRepeatPassword);
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -164,8 +168,7 @@ const SignupModal = ({ open, onClose, handleOpenLoginModal }) => {
       sex,
       Profession,
       EducationBackground,
-      Religion,
-      Age
+      Religion
     );
 
     if (validationError) {
@@ -191,7 +194,6 @@ const SignupModal = ({ open, onClose, handleOpenLoginModal }) => {
           Profession,
           EducationBackground,
           Religion,
-          Age,
         }
       );
 
@@ -398,25 +400,6 @@ const SignupModal = ({ open, onClose, handleOpenLoginModal }) => {
                   margin="normal"
                   required
                 />
-                <TextField
-                  sx={{
-                    "& .MuiOutlinedInput-root": {
-                      "&:hover fieldset": {
-                        borderColor: "#4e8e9b",
-                      },
-                      "&.Mui-focused fieldset": {
-                        borderColor: "#2c6975",
-                      },
-                    },
-                  }}
-                  label="Age"
-                  type="number"
-                  value={Age}
-                  onChange={(e) => setAge(parseInt(e.target.value))}
-                  fullWidth
-                  margin="normal"
-                  required
-                />
               </Box>
             )}
             {step === 2 && (
@@ -565,21 +548,19 @@ const SignupModal = ({ open, onClose, handleOpenLoginModal }) => {
                   label="Repeat Password"
                   type="password"
                   value={repeatPassword}
-                  onChange={(e) => setRepeatPassword(e.target.value)}
+                  onChange={handleRepeatPasswordChange}
                   fullWidth
                   margin="normal"
                   required
                 />
                 <Alert
-                  severity={passwordMatch ? "success" : "error"}
-                  icon={passwordMatch ? <CheckCircleIcon /> : <CancelIcon />}
+                  severity={passwordsMatch ? "success" : "error"}
+                  icon={passwordsMatch ? <CheckCircleIcon /> : <CancelIcon />}
                   sx={{
-                    mt: 2,
-                    backgroundColor: passwordMatch ? "#e6f7e9" : "#fdecea",
-                    color: passwordMatch ? "#1e4620" : "#5f2120",
+                    backgroundColor: passwordsMatch ? "#e6f7e9" : "#fdecea",
                   }}
                 >
-                  {passwordMatch ? "Password match" : "Password do not match!"}
+                  {passwordsMatch ? "Password Match" : "Password do not match"}
                 </Alert>
                 <FormControlLabel
                   control={
