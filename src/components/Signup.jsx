@@ -19,6 +19,53 @@ import {
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import axios from "axios";
+import validator from "validator";
+
+const validateSignupData = (
+  firstname,
+  lastname,
+  email,
+  password,
+  repeatPassword,
+  birthdate,
+  sex,
+  Profession,
+  EducationBackground,
+  Religion,
+  Age
+) => {
+  if (
+    !firstname ||
+    !lastname ||
+    !email ||
+    !password ||
+    !repeatPassword ||
+    !birthdate ||
+    !sex ||
+    !Profession ||
+    !EducationBackground ||
+    !Religion ||
+    !Age
+  ) {
+    return "All fields are required";
+  }
+  if (password !== repeatPassword) {
+    return "Passwords do not match";
+  }
+  if (!validator.isEmail(email)) {
+    return "Invalid email";
+  }
+  if (!validator.isISO8601(birthdate, { strict: true })) {
+    return "Invalid birthdate";
+  }
+  if (!["Male", "Female"].includes(sex)) {
+    return "Sex must be either 'Male' or 'Female'";
+  }
+  if (!Number.isInteger(Age) || Age <= 0) {
+    return "Invalid age";
+  }
+  return null;
+};
 
 const SignupModal = ({ open, onClose, handleOpenLoginModal }) => {
   const [firstname, setFirstname] = useState("");
@@ -29,6 +76,10 @@ const SignupModal = ({ open, onClose, handleOpenLoginModal }) => {
   const [repeatPassword, setRepeatPassword] = useState("");
   const [birthdate, setBirthdate] = useState("");
   const [sex, setSex] = useState("");
+  const [Profession, setProfession] = useState("");
+  const [EducationBackground, setEducationBackground] = useState("");
+  const [Religion, setReligion] = useState("");
+  const [Age, setAge] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
@@ -37,30 +88,21 @@ const SignupModal = ({ open, onClose, handleOpenLoginModal }) => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   useEffect(() => {
-    if (step === 1) {
-      if (
-        firstname.trim() &&
-        lastname.trim() &&
-        middleName.trim() &&
-        birthdate.trim() &&
-        sex
-      ) {
-        setIsButtonDisabled(false);
-      } else {
-        setIsButtonDisabled(true);
-      }
-    } else if (step === 2) {
-      if (
-        email.trim() &&
-        password.trim() &&
-        repeatPassword.trim() &&
-        agreement
-      ) {
-        setIsButtonDisabled(false);
-      } else {
-        setIsButtonDisabled(true);
-      }
-    }
+    setIsButtonDisabled(
+      step === 1
+        ? !(
+            firstname &&
+            lastname &&
+            middleName &&
+            birthdate &&
+            sex &&
+            Profession &&
+            EducationBackground &&
+            Religion &&
+            Age
+          )
+        : !(email && password && repeatPassword && agreement)
+    );
   }, [
     step,
     firstname,
@@ -68,6 +110,10 @@ const SignupModal = ({ open, onClose, handleOpenLoginModal }) => {
     middleName,
     birthdate,
     sex,
+    Profession,
+    EducationBackground,
+    Religion,
+    Age,
     email,
     password,
     repeatPassword,
@@ -78,8 +124,22 @@ const SignupModal = ({ open, onClose, handleOpenLoginModal }) => {
     e.preventDefault();
     setError("");
 
-    if (password !== repeatPassword) {
-      setError("Passwords do not match");
+    const validationError = validateSignupData(
+      firstname,
+      lastname,
+      email,
+      password,
+      repeatPassword,
+      birthdate,
+      sex,
+      Profession,
+      EducationBackground,
+      Religion,
+      Age
+    );
+
+    if (validationError) {
+      setError(validationError);
       setSnackbarOpen(true);
       return;
     }
@@ -98,6 +158,10 @@ const SignupModal = ({ open, onClose, handleOpenLoginModal }) => {
           repeatPassword,
           birthdate,
           sex,
+          Profession,
+          EducationBackground,
+          Religion,
+          Age,
         }
       );
 
@@ -250,22 +314,95 @@ const SignupModal = ({ open, onClose, handleOpenLoginModal }) => {
                     />
                   </RadioGroup>
                 </FormControl>
-                <Button
-                  type="button"
-                  onClick={handleNext}
-                  disabled={isButtonDisabled}
-                  variant="contained"
-                  color="primary"
-                >
-                  Next
-                </Button>
+                <TextField
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "&:hover fieldset": {
+                        borderColor: "#4e8e9b",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "#2c6975",
+                      },
+                    },
+                  }}
+                  label="Profession"
+                  value={Profession}
+                  onChange={(e) => setProfession(e.target.value)}
+                  fullWidth
+                  margin="normal"
+                  required
+                />
+                <TextField
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "&:hover fieldset": {
+                        borderColor: "#4e8e9b",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "#2c6975",
+                      },
+                    },
+                  }}
+                  label="Education Background"
+                  value={EducationBackground}
+                  onChange={(e) => setEducationBackground(e.target.value)}
+                  fullWidth
+                  margin="normal"
+                  required
+                />
+                <TextField
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "&:hover fieldset": {
+                        borderColor: "#4e8e9b",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "#2c6975",
+                      },
+                    },
+                  }}
+                  label="Religion"
+                  value={Religion}
+                  onChange={(e) => setReligion(e.target.value)}
+                  fullWidth
+                  margin="normal"
+                  required
+                />
+                <TextField
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "&:hover fieldset": {
+                        borderColor: "#4e8e9b",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "#2c6975",
+                      },
+                    },
+                  }}
+                  label="Age"
+                  type="number"
+                  value={Age}
+                  onChange={(e) => setAge(parseInt(e.target.value))}
+                  fullWidth
+                  margin="normal"
+                  required
+                />
               </Box>
             )}
-
             {step === 2 && (
               <Box>
                 <TextField
-                  label="Email Address"
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "&:hover fieldset": {
+                        borderColor: "#4e8e9b",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "#2c6975",
+                      },
+                    },
+                  }}
+                  label="Email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -274,6 +411,16 @@ const SignupModal = ({ open, onClose, handleOpenLoginModal }) => {
                   required
                 />
                 <TextField
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "&:hover fieldset": {
+                        borderColor: "#4e8e9b",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "#2c6975",
+                      },
+                    },
+                  }}
                   label="Password"
                   type="password"
                   value={password}
@@ -283,6 +430,16 @@ const SignupModal = ({ open, onClose, handleOpenLoginModal }) => {
                   required
                 />
                 <TextField
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "&:hover fieldset": {
+                        borderColor: "#4e8e9b",
+                      },
+                      "&.Mui-focused fieldset": {
+                        borderColor: "#2c6975",
+                      },
+                    },
+                  }}
                   label="Repeat Password"
                   type="password"
                   value={repeatPassword}
@@ -291,51 +448,47 @@ const SignupModal = ({ open, onClose, handleOpenLoginModal }) => {
                   margin="normal"
                   required
                 />
-                <Box display="flex" alignItems="center" marginY={2}>
-                  <Checkbox
-                    checked={agreement}
-                    onChange={() => setAgreement(!agreement)}
-                  />
-                  <Typography variant="body2">
-                    I agree to the Terms of Use and Privacy Policy
-                  </Typography>
-                </Box>
-                <Button
-                  type="button"
-                  onClick={handlePrev}
-                  variant="outlined"
-                  color="primary"
-                >
-                  Previous
-                </Button>
-                <Button
-                  type="submit"
-                  disabled={isButtonDisabled}
-                  variant="contained"
-                  color="primary"
-                  sx={{ marginLeft: 2 }}
-                >
-                  {loading ? "Signing up..." : "Create Account"}
-                </Button>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={agreement}
+                      onChange={(e) => setAgreement(e.target.checked)}
+                    />
+                  }
+                  label="I agree to the Terms and Conditions"
+                />
               </Box>
+            )}
+            {error && (
+              <Snackbar
+                open={snackbarOpen}
+                autoHideDuration={6000}
+                onClose={handleCloseSnackbar}
+              >
+                <Alert onClose={handleCloseSnackbar} severity="error">
+                  {error}
+                </Alert>
+              </Snackbar>
             )}
           </Box>
         </DialogContent>
+        <DialogActions>
+          {step === 2 && (
+            <Button onClick={handlePrev} color="primary">
+              Back
+            </Button>
+          )}
+          <Button
+            type="submit"
+            onClick={step === 2 ? handleSubmit : handleNext}
+            color="primary"
+            disabled={isButtonDisabled}
+            variant="contained"
+          >
+            {step === 1 ? "Next" : loading ? "Loading..." : "Sign Up"}
+          </Button>
+        </DialogActions>
       </Dialog>
-
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={6000}
-        onClose={handleCloseSnackbar}
-      >
-        <Alert
-          onClose={handleCloseSnackbar}
-          severity="error"
-          sx={{ width: "100%" }}
-        >
-          {error}
-        </Alert>
-      </Snackbar>
     </>
   );
 };
