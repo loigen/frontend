@@ -118,7 +118,7 @@ const SignupModal = ({ open, onClose, handleOpenLoginModal }) => {
             EducationBackground &&
             Religion
           )
-        : !(email && password && repeatPassword && agreement)
+        : !(email && password && repeatPassword && agreement && passwordsMatch)
     );
   }, [
     step,
@@ -133,6 +133,7 @@ const SignupModal = ({ open, onClose, handleOpenLoginModal }) => {
     password,
     repeatPassword,
     agreement,
+    passwordsMatch,
   ]);
 
   const handlePasswordChange = (e) => {
