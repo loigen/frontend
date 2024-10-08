@@ -20,6 +20,9 @@ import {
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import axios from "axios";
 import validator from "validator";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CancelIcon from "@mui/icons-material/Cancel";
+import { fullWidth } from "validator/lib/isFullWidth";
 
 const validateSignupData = (
   firstname,
@@ -86,6 +89,13 @@ const SignupModal = ({ open, onClose, handleOpenLoginModal }) => {
   const [agreement, setAgreement] = useState(false);
   const [step, setStep] = useState(1);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [passwordMatch, setPasswordMatch] = useState(true);
+  const [passwordValidations, setPasswordValidations] = useState({
+    minLength: false,
+    specialChar: false,
+    upperCase: false,
+    number: false,
+  });
 
   useEffect(() => {
     setIsButtonDisabled(
@@ -118,8 +128,28 @@ const SignupModal = ({ open, onClose, handleOpenLoginModal }) => {
     password,
     repeatPassword,
     agreement,
+    passwordMatch,
   ]);
 
+  const handlePasswordChange = (e) => {
+    const newPassword = e.target.value;
+    setPassword(newPassword);
+
+    setPasswordValidations({
+      minLength: newPassword.length >= 8,
+      specialChar: /[!@#$%^&*(),.?":{}|<>]/.test(newPassword),
+      upperCase: /[A-Z]/.test(newPassword),
+      number: /[0-9]/.test(newPassword),
+    });
+    setPasswordMatch(newPassword === repeatPassword);
+  };
+
+  const handleRepeatPasswordChange = (e) => {
+    const newRepeatPassword = e.target.value;
+    setRepeatPassword(newRepeatPassword);
+
+    setPasswordMatch(password === newRepeatPassword);
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -424,11 +454,103 @@ const SignupModal = ({ open, onClose, handleOpenLoginModal }) => {
                   label="Password"
                   type="password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={handlePasswordChange}
                   fullWidth
                   margin="normal"
                   required
                 />
+                {/* Password validation checks */}
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  gap={0.1}
+                  sx={{ mt: 2 }}
+                >
+                  <Typography variant="subtitle1">
+                    Password must contain:
+                  </Typography>
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    sx={{
+                      mt: 1,
+                      p: 1,
+                      backgroundColor: passwordValidations.minLength
+                        ? "#e6f7e9"
+                        : "#fdecea",
+                    }}
+                  >
+                    {passwordValidations.minLength ? (
+                      <CheckCircleIcon color="success" />
+                    ) : (
+                      <CancelIcon color="error" />
+                    )}
+                    <Typography sx={{ ml: 1 }}>
+                      At least 8 characters
+                    </Typography>
+                  </Box>
+
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    sx={{
+                      mt: 1,
+                      p: 1,
+                      backgroundColor: passwordValidations.specialChar
+                        ? "#e6f7e9"
+                        : "#fdecea",
+                    }}
+                  >
+                    {passwordValidations.specialChar ? (
+                      <CheckCircleIcon color="success" />
+                    ) : (
+                      <CancelIcon color="error" />
+                    )}
+                    <Typography sx={{ ml: 1 }}>
+                      At least 1 special character
+                    </Typography>
+                  </Box>
+
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    sx={{
+                      mt: 1,
+                      p: 1,
+                      backgroundColor: passwordValidations.upperCase
+                        ? "#e6f7e9"
+                        : "#fdecea",
+                    }}
+                  >
+                    {passwordValidations.upperCase ? (
+                      <CheckCircleIcon color="success" />
+                    ) : (
+                      <CancelIcon color="error" />
+                    )}
+                    <Typography sx={{ ml: 1 }}>
+                      At least 1 uppercase letter
+                    </Typography>
+                  </Box>
+
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    sx={{
+                      mt: 1,
+                      p: 1,
+                      backgroundColor: passwordValidations.number
+                        ? "#e6f7e9"
+                        : "#fdecea",
+                    }}
+                  >
+                    {passwordValidations.number ? (
+                      <CheckCircleIcon color="success" />
+                    ) : (
+                      <CancelIcon color="error" />
+                    )}
+                    <Typography sx={{ ml: 1 }}>At least 1 number</Typography>
+                  </Box>
+                </Box>
                 <TextField
                   sx={{
                     "& .MuiOutlinedInput-root": {
@@ -448,47 +570,94 @@ const SignupModal = ({ open, onClose, handleOpenLoginModal }) => {
                   margin="normal"
                   required
                 />
+                <Alert
+                  severity={passwordMatch ? "success" : "error"}
+                  icon={passwordMatch ? <CheckCircleIcon /> : <CancelIcon />}
+                  sx={{
+                    mt: 2,
+                    backgroundColor: passwordMatch ? "#e6f7e9" : "#fdecea",
+                    color: passwordMatch ? "#1e4620" : "#5f2120",
+                  }}
+                >
+                  {passwordMatch ? "Password match" : "Password do not match!"}
+                </Alert>
                 <FormControlLabel
                   control={
                     <Checkbox
                       checked={agreement}
                       onChange={(e) => setAgreement(e.target.checked)}
+                      sx={{
+                        "&.Mui-checked": {
+                          color: "#2c6975",
+                        },
+                      }}
+                      required
                     />
                   }
-                  label="I agree to the Terms and Conditions"
+                  label="I agree to the terms and conditions"
+                  sx={{ mt: 2 }}
                 />
               </Box>
             )}
-            {error && (
-              <Snackbar
-                open={snackbarOpen}
-                autoHideDuration={6000}
-                onClose={handleCloseSnackbar}
-              >
-                <Alert onClose={handleCloseSnackbar} severity="error">
-                  {error}
-                </Alert>
-              </Snackbar>
-            )}
           </Box>
         </DialogContent>
-        <DialogActions>
-          {step === 2 && (
-            <Button onClick={handlePrev} color="primary">
-              Back
+        <DialogActions sx={{ justifyContent: "space-between", mx: 3 }}>
+          <Button
+            onClick={step === 2 ? handlePrev : onClose}
+            variant="outlined"
+            disabled={loading}
+            sx={{
+              color: "#2c6975",
+              borderColor: "#2c6975",
+              "&:hover": {
+                backgroundColor: "#d5e7e8",
+                borderColor: "#2c6975",
+              },
+            }}
+          >
+            {step === 2 ? "Previous" : "Cancel"}
+          </Button>
+          {step === 1 ? (
+            <Button
+              onClick={handleNext}
+              variant="contained"
+              sx={{
+                backgroundColor: "#2c6975",
+                "&:hover": {
+                  backgroundColor: "#4e8e9b",
+                },
+              }}
+              disabled={isButtonDisabled}
+            >
+              Next
+            </Button>
+          ) : (
+            <Button
+              onClick={handleSubmit}
+              variant="contained"
+              sx={{
+                backgroundColor: "#2c6975",
+                "&:hover": {
+                  backgroundColor: "#4e8e9b",
+                },
+              }}
+              disabled={loading || isButtonDisabled}
+            >
+              {loading ? "Signing up..." : "Sign Up"}
             </Button>
           )}
-          <Button
-            type="submit"
-            onClick={step === 2 ? handleSubmit : handleNext}
-            color="primary"
-            disabled={isButtonDisabled}
-            variant="contained"
-          >
-            {step === 1 ? "Next" : loading ? "Loading..." : "Sign Up"}
-          </Button>
         </DialogActions>
       </Dialog>
+
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={5000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert onClose={handleCloseSnackbar} severity="error">
+          {error}
+        </Alert>
+      </Snackbar>
     </>
   );
 };
