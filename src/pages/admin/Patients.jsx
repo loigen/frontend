@@ -9,7 +9,15 @@ import {
 import "../../styles/patient.css";
 import axios from "axios";
 import { markAppointmentAsCompleted } from "../../api/appointmentAPI/markAsComplete";
-import { FormControl, InputLabel, Select, MenuItem, Box } from "@mui/material";
+import {
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Box,
+  TextField,
+  Alert,
+} from "@mui/material";
 import Reschedule from "../../components/admin/Reschedule";
 
 const dateRanges = [
@@ -35,6 +43,7 @@ const Patients = () => {
   const [itemsPerPage] = useState(5);
   const [dateRange, setDateRange] = useState("allTime");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [searchQuery, setSearchQuery] = useState(""); // Search query state
   const [isRescheduleOpen, setIsRescheduleOpen] = useState(false);
 
   useEffect(() => {
@@ -80,11 +89,18 @@ const Patients = () => {
         );
       }
 
+      // Filter by search query
+      if (searchQuery) {
+        filtered = filtered.filter((patient) =>
+          patient.name.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+      }
+
       setFilteredPatients(filtered);
     };
 
     filterPatients();
-  }, [dateRange, statusFilter, patients]);
+  }, [dateRange, statusFilter, searchQuery, patients]);
 
   const handlePatientSelect = (patient) => {
     setSelectedPatient(patient);
@@ -190,6 +206,7 @@ const Patients = () => {
       }
     }
   };
+
   const openRescheduleModal = (patient) => {
     setSelectedPatient(patient);
     setIsRescheduleOpen(true);
@@ -220,7 +237,6 @@ const Patients = () => {
         </div>
         <div className="flex-1">
           <Box display="flex" flexDirection="row" gap={2}>
-            {" "}
             <FormControl variant="outlined" className="mr-4">
               <InputLabel id="dateRange-label">Select Date Range</InputLabel>
               <Select
@@ -236,7 +252,7 @@ const Patients = () => {
                 ))}
               </Select>
             </FormControl>
-            <FormControl variant="outlined" className="mr-4">
+            <FormControl variant="outlined" className="mr-4 flex-1">
               <InputLabel id="statusFilter-label">Select Status</InputLabel>
               <Select
                 labelId="statusFilter-label"
@@ -251,19 +267,44 @@ const Patients = () => {
                 ))}
               </Select>
             </FormControl>
+            {/* Search Bar */}
+            <TextField
+              label="Search Patients"
+              variant="outlined"
+              onChange={(e) => setSearchQuery(e.target.value)}
+              value={searchQuery}
+              className="mr-4"
+              sx={{ width: "70%" }}
+            />
           </Box>
           <br />
-          <PatientList
-            patients={filteredPatients}
-            currentPage={currentPage}
-            itemsPerPage={itemsPerPage}
-            onPatientSelect={handlePatientSelect}
-            onToggleActionsList={handleToggleActionsList}
-            activePatientIdList={activePatientIdList}
-            onMarkComplete={handleCompleteAppointment}
-            handleCancel={handleCancel}
-            openRescheduleModal={openRescheduleModal}
-          />
+          {/* Empty State Handling */}
+          {filteredPatients.length === 0 ? (
+            <Alert
+              severity="error"
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <p className="text-center">
+                No patients found matching your criteria.
+              </p>
+            </Alert>
+          ) : (
+            <PatientList
+              patients={filteredPatients}
+              currentPage={currentPage}
+              itemsPerPage={itemsPerPage}
+              onPatientSelect={handlePatientSelect}
+              onToggleActionsList={handleToggleActionsList}
+              activePatientIdList={activePatientIdList}
+              onMarkComplete={handleCompleteAppointment}
+              handleCancel={handleCancel}
+              openRescheduleModal={openRescheduleModal}
+            />
+          )}
         </div>
       </div>
     </div>
