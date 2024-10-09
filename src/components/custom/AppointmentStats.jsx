@@ -21,6 +21,8 @@ const AppointmentStats = () => {
     accepted: [],
     completed: [],
     canceled: [],
+    rejected: [],
+    rescheduled: [],
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -31,30 +33,28 @@ const AppointmentStats = () => {
 
   useEffect(() => {
     const getAppointments = async () => {
+      setLoading(true);
       try {
         const data = await fetchPatients(dateRange);
-
         const categorizedAppointments = {
           pending: data.filter((app) => app.status === "pending"),
           accepted: data.filter((app) => app.status === "accepted"),
           completed: data.filter((app) => app.status === "completed"),
           canceled: data.filter((app) => app.status === "canceled"),
+          rejected: data.filter((app) => app.status === "rejected"),
+          rescheduled: data.filter((app) => app.status === "rescheduled"),
         };
 
         setAppointments(categorizedAppointments);
-        setLoading(false);
       } catch (error) {
         setError("Failed to fetch appointment data");
+      } finally {
         setLoading(false);
       }
     };
 
     getAppointments();
   }, [dateRange]);
-
-  const handleDateRangeChange = (event) => {
-    setDateRange(event.target.value);
-  };
 
   if (loading) return <LoadingSpinner />;
   if (error)
@@ -83,7 +83,7 @@ const AppointmentStats = () => {
   const renderStatusSection = (status) => {
     const count = appointments[status].length;
     return (
-      <Grid item xs={12} md={6} lg={3} key={status}>
+      <Grid item xs={12} md={6} lg={4} key={status}>
         <Card sx={{ backgroundColor: "#fff" }}>
           <CardContent>
             <Typography variant="h6" gutterBottom color="#2c6975">
@@ -120,47 +120,16 @@ const AppointmentStats = () => {
         >
           Appointment Statistics
         </Typography>
-        <FormControl
-          className="w-1/4"
-          margin="normal"
-          fullWidth={isMobile}
-          sx={{
-            "& .MuiOutlinedInput-root": {
-              "& fieldset": {
-                borderColor: "#2c6975",
-              },
-              "&:hover fieldset": {
-                borderColor: "#2c6975",
-              },
-              "&.Mui-focused fieldset": {
-                borderColor: "#2c6975",
-              },
-            },
-            "& .MuiInputLabel-root": {
-              color: "#2c6975",
-            },
-            "& .MuiSelect-icon": {
-              color: "#2c6975",
-            },
-          }}
-        >
-          <InputLabel id="date-range-label">Date Range</InputLabel>
-          <Select
-            labelId="date-range-label"
-            value={dateRange}
-            onChange={handleDateRangeChange}
-            label="Date Range"
-          >
-            <MenuItem value="Week">Week</MenuItem>
-            <MenuItem value="Month">Month</MenuItem>
-            <MenuItem value="Year">Year</MenuItem>
-          </Select>
-        </FormControl>
       </div>
       <Grid container spacing={2}>
-        {["pending", "accepted", "completed", "canceled"].map(
-          renderStatusSection
-        )}
+        {[
+          "pending",
+          "accepted",
+          "completed",
+          "canceled",
+          "rejected",
+          "rescheduled",
+        ].map(renderStatusSection)}
       </Grid>
     </div>
   );

@@ -17,6 +17,7 @@ import {
 } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import Swal from "sweetalert2";
+import { updateAppointmentStatusToRescheduled } from "../../api/appointmentAPI/updateAppointmentStatusToRescheduled"; // Adjust the import path as needed
 
 const PatientList = ({
   patients,
@@ -24,6 +25,7 @@ const PatientList = ({
   onPatientSelect,
   onMarkComplete,
   handleCancel,
+  openRescheduleModal,
 }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(itemsPerPage);
@@ -52,6 +54,20 @@ const PatientList = ({
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setCurrentPage(0);
+  };
+
+  const handleReschedule = async (appointmentId) => {
+    try {
+      await updateAppointmentStatusToRescheduled(appointmentId);
+      Swal.fire("Success", "Appointment rescheduled successfully!", "success");
+      // Optionally refresh the patients list here
+    } catch (error) {
+      Swal.fire(
+        "Error",
+        error.message || "Failed to reschedule appointment",
+        "error"
+      );
+    }
   };
 
   return (
@@ -106,6 +122,10 @@ const PatientList = ({
                         ? "#00bcd4" // Cyan
                         : patient.status === "completed"
                         ? "#4caf50" // Green for completed
+                        : patient.status === "rescheduled"
+                        ? "#ff9800" // Orange for rescheduled
+                        : patient.status === "ReqRescheduled"
+                        ? "#ff9800" // Orange for ReqRescheduled
                         : "#9e9e9e" // Gray
                     }
                   >
@@ -140,8 +160,12 @@ const PatientList = ({
                     <MenuItem onClick={handleViewDetails}>
                       View Details
                     </MenuItem>
-                    {selectedPatient?.status === "accepted" && (
+                    {(selectedPatient?.status === "accepted" ||
+                      selectedPatient?.status === "rescheduled") && (
                       <>
+                        <MenuItem onClick={() => openRescheduleModal(patient)}>
+                          Reschedule
+                        </MenuItem>
                         <MenuItem
                           onClick={() => {
                             if (selectedPatient.meetLink) {
@@ -175,6 +199,29 @@ const PatientList = ({
                           Cancel
                         </MenuItem>
                       </>
+                    )}
+                    {selectedPatient?.status === "ReqRescheduled" && (
+                      <MenuItem
+                        onClick={async () => {
+                          try {
+                            await handleReschedule(selectedPatient.id);
+                            Swal.fire(
+                              "Success",
+                              "Appointment approved successfully!",
+                              "success"
+                            );
+                          } catch (error) {
+                            Swal.fire(
+                              "Error",
+                              error.message || "Failed to approve appointment",
+                              "error"
+                            );
+                          }
+                          handleMenuClose();
+                        }}
+                      >
+                        Approve
+                      </MenuItem>
                     )}
                   </Menu>
                 </TableCell>

@@ -31,7 +31,9 @@
   margin-bottom: 1rem;
   scroll-snap-type: x mandatory;
 }
-
+.swal2-container {
+  z-index: 2000 !important;
+}
 .single-user {
   color: white;
   cursor: pointer;

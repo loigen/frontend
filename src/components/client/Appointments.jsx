@@ -1,12 +1,26 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { fetchAppointmentsByUserId } from "../../api/appointmentAPI/fetchAppointmentsByUserId";
 import { useAuth } from "../../context/AuthProvider";
+import Reschedule from "./Reschedule";
 
 const Appointments = () => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { user } = useAuth();
+
+  const [openReschedule, setOpenReschedule] = useState(false);
+  const [selectedAppointmentId, setSelectedAppointmentId] = useState(null);
+
+  const handleOpenReschedule = (appointmentId) => {
+    setSelectedAppointmentId(appointmentId);
+    setOpenReschedule(true);
+  };
+
+  const handleCloseReschedule = () => {
+    setOpenReschedule(false);
+    setSelectedAppointmentId(null);
+  };
 
   useEffect(() => {
     const getAppointments = async () => {
@@ -70,11 +84,13 @@ const Appointments = () => {
         {appointments.length === 0 ? (
           <p>No appointments found.</p>
         ) : (
-          <ul className="flex flex-col gap-5 w-full ">
+          <ul className="flex flex-col gap-5 w-full">
             {appointments.map((appointment) => {
               const statusBgColor =
                 appointment.status === "pending"
                   ? "bg-orange-500"
+                  : appointment.status === "rescheduled"
+                  ? "bg-yellow-500" // You can customize the color for "rescheduled" if desired
                   : "bg-[#2C6975]";
 
               return (
@@ -83,7 +99,7 @@ const Appointments = () => {
                   style={{ borderLeft: "5px solid #2C6975" }}
                   className="shadow-2xl w-full rounded-md p-2"
                 >
-                  <div className="w-full flex justify-end ">
+                  <div className="w-full flex justify-end">
                     <p className={`p-1 text-slate-50 rounded ${statusBgColor}`}>
                       {appointment.status}
                     </p>
@@ -105,12 +121,34 @@ const Appointments = () => {
                       </a>
                     </div>
                   )}
+
+                  {/* Add Reschedule Button conditionally */}
+                  {(appointment.status === "rescheduled" ||
+                    appointment.status === "accepted") && (
+                    <div className="flex justify-end mt-3">
+                      <button
+                        className="bg-blue-500 text-white py-2 px-5 rounded-md"
+                        onClick={() => handleOpenReschedule(appointment._id)}
+                      >
+                        Reschedule
+                      </button>
+                    </div>
+                  )}
                 </li>
               );
             })}
           </ul>
         )}
       </div>
+
+      {/* Reschedule Modal */}
+      {selectedAppointmentId && (
+        <Reschedule
+          appointmentId={selectedAppointmentId}
+          open={openReschedule}
+          onClose={handleCloseReschedule}
+        />
+      )}
     </div>
   );
 };

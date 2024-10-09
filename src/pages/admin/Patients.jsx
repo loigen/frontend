@@ -9,19 +9,40 @@ import {
 import "../../styles/patient.css";
 import axios from "axios";
 import { markAppointmentAsCompleted } from "../../api/appointmentAPI/markAsComplete";
+import { FormControl, InputLabel, Select, MenuItem, Box } from "@mui/material";
+import Reschedule from "../../components/admin/Reschedule";
+
+const dateRanges = [
+  { label: "Last 7 Days", value: "last7days" },
+  { label: "Last 30 Days", value: "last30days" },
+  { label: "This Month", value: "thisMonth" },
+  { label: "All Time", value: "allTime" },
+];
+
+const statuses = [
+  { label: "All", value: "all" },
+  { label: "Accepted", value: "accepted" },
+  { label: "Completed", value: "completed" },
+  { label: "Canceled", value: "canceled" },
+];
 
 const Patients = () => {
   const [patients, setPatients] = useState([]);
+  const [filteredPatients, setFilteredPatients] = useState([]);
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [activePatientIdList, setActivePatientIdList] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
+  const [dateRange, setDateRange] = useState("allTime");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [isRescheduleOpen, setIsRescheduleOpen] = useState(false);
 
   useEffect(() => {
     const fetchPatients = async () => {
       try {
         const data = await getPatientData();
         setPatients(data);
+        setFilteredPatients(data);
       } catch (error) {
         console.error("Error fetching patients:", error);
         Swal.fire("Error", "Failed to fetch patient data", "error");
@@ -30,6 +51,40 @@ const Patients = () => {
 
     fetchPatients();
   }, []);
+
+  useEffect(() => {
+    const filterPatients = () => {
+      const now = new Date();
+      let filtered = patients;
+
+      // Filter by date range
+      if (dateRange !== "allTime") {
+        let dateCondition;
+        if (dateRange === "last7days") {
+          dateCondition = new Date(now.setDate(now.getDate() - 7));
+        } else if (dateRange === "last30days") {
+          dateCondition = new Date(now.setDate(now.getDate() - 30));
+        } else if (dateRange === "thisMonth") {
+          dateCondition = new Date(now.getFullYear(), now.getMonth(), 1);
+        }
+
+        filtered = filtered.filter(
+          (patient) => new Date(patient.date) >= dateCondition
+        );
+      }
+
+      // Filter by status
+      if (statusFilter !== "all") {
+        filtered = filtered.filter(
+          (patient) => patient.status === statusFilter
+        );
+      }
+
+      setFilteredPatients(filtered);
+    };
+
+    filterPatients();
+  }, [dateRange, statusFilter, patients]);
 
   const handlePatientSelect = (patient) => {
     setSelectedPatient(patient);
@@ -67,6 +122,7 @@ const Patients = () => {
       Swal.fire("Error", "Failed to process refund", "error");
     }
   };
+
   const handleCompleteAppointment = async (appointmentId) => {
     const result = await Swal.fire({
       title: "Are you sure?",
@@ -102,6 +158,7 @@ const Patients = () => {
       }
     }
   };
+
   const handleCancel = async (appointmentId) => {
     const confirmation = await Swal.fire({
       title: "Are you sure?",
@@ -133,22 +190,71 @@ const Patients = () => {
       }
     }
   };
+  const openRescheduleModal = (patient) => {
+    setSelectedPatient(patient);
+    setIsRescheduleOpen(true);
+  };
+
+  const closeRescheduleModal = () => {
+    setIsRescheduleOpen(false);
+    setSelectedPatient(null);
+  };
+
   return (
     <div className="p-4">
-      {selectedPatient && (
+      {selectedPatient && !isRescheduleOpen && (
         <PatientDetails
           patient={selectedPatient}
           onClose={handleCloseModal}
           handleRefund={handleRefund}
         />
       )}
+      <Reschedule
+        appointmentId={selectedPatient?.id}
+        onClose={closeRescheduleModal}
+        open={isRescheduleOpen}
+      />
       <div className="flex flex-col lg:flex-col gap-4">
-        <div className="flex-1 ">
+        <div className="flex-1">
           <AppointmentStats />
         </div>
         <div className="flex-1">
+          <Box display="flex" flexDirection="row" gap={2}>
+            {" "}
+            <FormControl variant="outlined" className="mr-4">
+              <InputLabel id="dateRange-label">Select Date Range</InputLabel>
+              <Select
+                labelId="dateRange-label"
+                value={dateRange}
+                onChange={(e) => setDateRange(e.target.value)}
+                label="Select Date Range"
+              >
+                {dateRanges.map((range) => (
+                  <MenuItem key={range.value} value={range.value}>
+                    {range.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <FormControl variant="outlined" className="mr-4">
+              <InputLabel id="statusFilter-label">Select Status</InputLabel>
+              <Select
+                labelId="statusFilter-label"
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                label="Select Status"
+              >
+                {statuses.map((status) => (
+                  <MenuItem key={status.value} value={status.value}>
+                    {status.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
+          <br />
           <PatientList
-            patients={patients}
+            patients={filteredPatients}
             currentPage={currentPage}
             itemsPerPage={itemsPerPage}
             onPatientSelect={handlePatientSelect}
@@ -156,6 +262,7 @@ const Patients = () => {
             activePatientIdList={activePatientIdList}
             onMarkComplete={handleCompleteAppointment}
             handleCancel={handleCancel}
+            openRescheduleModal={openRescheduleModal}
           />
         </div>
       </div>

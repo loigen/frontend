@@ -233,6 +233,7 @@ const Schedules = () => {
             selectedDate={selectedDate}
             initialStartTime={freeSchedules[selectedDate.toDateString()] || []}
             onTimeChange={handleTimeChange}
+            showSaveButton={true}
           />
         </div>
 

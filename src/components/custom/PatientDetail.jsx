@@ -78,11 +78,7 @@ const PatientDetails = ({ patient, onClose, handleRefund }) => {
         >
           {patient.status}
         </Typography>
-        <Box
-          display="flex"
-          flexDirection={{ xs: "column", md: "row" }} // Adjust layout based on screen size
-          gap={2}
-        >
+        <Box display="flex" flexDirection={{ xs: "column", md: "row" }} gap={2}>
           <Box
             sx={{
               display: "flex",
