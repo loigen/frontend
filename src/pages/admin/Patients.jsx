@@ -92,7 +92,7 @@ const Patients = () => {
       // Filter by search query
       if (searchQuery) {
         filtered = filtered.filter((patient) =>
-          patient.name.toLowerCase().includes(searchQuery.toLowerCase())
+          patient.name.includes(searchQuery.toLowerCase())
         );
       }
 

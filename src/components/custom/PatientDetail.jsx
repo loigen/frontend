@@ -1,14 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
 import { Close as CloseIcon } from "@mui/icons-material";
+import axios from "axios";
+import UserAppointments from "./userhistory"; // Update with the actual path
 
 const PatientDetails = ({ patient, onClose, handleRefund }) => {
   const [refundFile, setRefundFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
+  const [note, setNote] = useState(""); // State for note input
+  const [showAppointments, setShowAppointments] = useState(false); // State to toggle appointments view
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -31,6 +35,23 @@ const PatientDetails = ({ patient, onClose, handleRefund }) => {
     setPreviewUrl(null);
   };
 
+  // Function to handle adding a note to the appointment
+  const handleAddNote = async () => {
+    try {
+      const response = await axios.put(
+        `https://backend-production-c8da.up.railway.app/Appointments/api/${patient.id}/note`,
+        {
+          note,
+        }
+      );
+      alert(response.data.message); // Display success message
+      setNote(""); // Clear the note input after submission
+    } catch (error) {
+      console.error("Error adding note:", error);
+      alert("Failed to add note. Please try again."); // Display error message
+    }
+  };
+
   return (
     <Modal
       open={!!patient}
@@ -51,6 +72,8 @@ const PatientDetails = ({ patient, onClose, handleRefund }) => {
           mt: 8,
           position: "relative",
           overflowY: "auto",
+          display: "flex",
+          flexDirection: "column",
         }}
       >
         <IconButton
@@ -78,16 +101,58 @@ const PatientDetails = ({ patient, onClose, handleRefund }) => {
         >
           {patient.status}
         </Typography>
-        <Box display="flex" flexDirection={{ xs: "column", md: "row" }} gap={2}>
+
+        {!patient.note ? ( // Only show this section if there is no existing note
+          <Box sx={{ mb: 4 }}>
+            <Typography variant="subtitle1" sx={{ mb: 1 }}>
+              Add a Note:
+            </Typography>
+            <textarea
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+              placeholder="Write your note here..."
+              style={{
+                width: "100%",
+                height: 100,
+                borderRadius: 4,
+                border: "1px solid #ccc",
+                padding: 8,
+              }}
+            />
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleAddNote}
+              sx={{ mt: 2 }}
+            >
+              Add Note
+            </Button>
+          </Box>
+        ) : (
+          <Box sx={{ mb: 4 }}>
+            <Typography variant="subtitle1" sx={{ mb: 1 }}>
+              Existing Note:
+            </Typography>
+            <Typography>{patient.note}</Typography>
+          </Box>
+        )}
+
+        <Box
+          display="flex"
+          flexDirection={{ xs: "column", md: "row" }}
+          flexGrow={1}
+        >
           <Box
             sx={{
+              flex: 1,
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
+              justifyContent: "center",
               mb: 2,
             }}
           >
-            {patient.qrCode && (
+            {patient.qrCode ? (
               <Box
                 sx={{
                   mb: 2,
@@ -109,7 +174,7 @@ const PatientDetails = ({ patient, onClose, handleRefund }) => {
                   alt="QR Code"
                   style={{
                     width: "100%",
-                    maxWidth: 500, // Limit max width
+                    maxWidth: 500,
                     height: "auto",
                     border: "1px solid #000",
                     borderRadius: 4,
@@ -117,17 +182,22 @@ const PatientDetails = ({ patient, onClose, handleRefund }) => {
                   }}
                 />
               </Box>
+            ) : (
+              "No QR Code Available"
             )}
           </Box>
+
           <Box
             sx={{
+              flex: 1,
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
+              justifyContent: "center",
               textAlign: "center",
             }}
           >
-            <Box sx={{ textAlign: "center", mb: 4 }}>
+            <Box sx={{ mb: 4 }}>
               <Box
                 sx={{
                   mb: 2,
@@ -137,7 +207,10 @@ const PatientDetails = ({ patient, onClose, handleRefund }) => {
                 }}
               >
                 <img
-                  src={patient.avatar || "https://via.placeholder.com/150"}
+                  src={
+                    patient.user.profilePicture ||
+                    "https://via.placeholder.com/150"
+                  }
                   alt="Avatar"
                   style={{ width: 100, height: 100, borderRadius: "50%" }}
                 />
@@ -147,7 +220,7 @@ const PatientDetails = ({ patient, onClose, handleRefund }) => {
                 className="capitalize"
                 sx={{ fontWeight: "bold" }}
               >
-                {patient.name}
+                {`${patient.user.firstname} ${patient.user.lastname}`}
               </Typography>
             </Box>
 
@@ -159,6 +232,7 @@ const PatientDetails = ({ patient, onClose, handleRefund }) => {
             >
               About
             </Typography>
+
             <Box
               sx={{
                 textAlign: "center",
@@ -168,7 +242,7 @@ const PatientDetails = ({ patient, onClose, handleRefund }) => {
             >
               <Typography>{patient.time || "N/A"}</Typography>
               <Typography>{patient.date || "N/A"}</Typography>
-              <Typography>{patient.email || "N/A"}</Typography>
+              <Typography>{patient.user.email || "N/A"}</Typography>
               <Typography className="capitalize">
                 {patient.typeOfCounseling || "N/A"}
               </Typography>
@@ -179,6 +253,7 @@ const PatientDetails = ({ patient, onClose, handleRefund }) => {
                 sx={{
                   textAlign: "center",
                   mt: 4,
+                  flexGrow: 1,
                 }}
               >
                 <input
@@ -240,6 +315,31 @@ const PatientDetails = ({ patient, onClose, handleRefund }) => {
             )}
           </Box>
         </Box>
+
+        <Box sx={{ mt: 4 }}>
+          <Button
+            variant="outlined"
+            color="secondary"
+            onClick={() => setShowAppointments(true)} // Show appointments
+            sx={{ mr: 2 }}
+          >
+            View All Appointments
+          </Button>
+        </Box>
+
+        {showAppointments && (
+          <Box sx={{ mt: 4 }}>
+            <UserAppointments userId={patient.user.id} />
+            <Button
+              variant="outlined"
+              color="secondary"
+              onClick={() => setShowAppointments(false)} // Hide appointments
+              sx={{ mt: 2 }}
+            >
+              Close Appointments
+            </Button>
+          </Box>
+        )}
       </Box>
     </Modal>
   );
