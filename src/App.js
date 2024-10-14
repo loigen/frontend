@@ -34,6 +34,7 @@ import {
   LoginModal,
 } from "./components";
 import { PatientDetails, Reset, Chat } from "./components/custom";
+import LoginPage from "./components/AdminLogin";
 
 function App() {
   const { user, loading } = useContext(AuthContext); // Extract user from AuthContext
@@ -44,16 +45,14 @@ function App() {
     <ChatContextProvider user={user}>
       <Router>
         <Routes>
-          <Route path="/login" element={<LoginModal />} />
           <Route exact path="/" element={<LandingPage />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/guestBlog" element={<BlogGuestPage />} />
-          <Route path="/signup" element={<Signup />} />
           <Route path="/patients/:id" element={<PatientDetails />} />
           <Route path="/Services" element={<Services />} />
           <Route path="/forgot-password" element={<Reset />} />
-
+          <Route path="/AdminForm" element={<LoginPage />} />
           {/* Private Routes for All Authenticated Users */}
           <Route
             path="/MR_JEB_BLOG"
