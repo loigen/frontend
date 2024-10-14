@@ -16,7 +16,13 @@ import { useAuth } from "../../context/AuthProvider";
 import {
   Box,
   Button,
+  Checkbox,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   Divider,
+  FormControlLabel,
   Grid,
   MenuItem,
   Select,
@@ -39,6 +45,7 @@ const AppointmentsPage = () => {
   const [submitting, setSubmitting] = useState(false);
   const [price, setPrice] = useState(0);
   const [showContent, setShowContent] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const handleCreateAppointment = () => {
     setShowContent(true);
   };
@@ -197,20 +204,14 @@ const AppointmentsPage = () => {
     }
   };
   const handleNext = () => {
-    if (currentStep === 1 && (!appointmentType || !selectedSlot)) {
+    if (
+      currentStep === 1 &&
+      (!appointmentType || !selectedSlot || !agreementChecked)
+    ) {
       Swal.fire({
         icon: "warning",
         title: "Incomplete Information",
-        text: "Please select an appointment type and time slot.",
-        color: "red",
-      });
-      return;
-    }
-    if (currentStep === 2 && !agreementChecked) {
-      Swal.fire({
-        icon: "warning",
-        title: "Agreement Required",
-        text: "Please agree to the terms and conditions.",
+        text: "Please select an appointment type and time slot and agreement",
         color: "red",
       });
       return;
@@ -254,13 +255,11 @@ const AppointmentsPage = () => {
                 </Typography>
                 <Select
                   id="appointmentType"
+                  labelId="appointmentType-label"
                   value={appointmentType}
                   onChange={(e) => setAppointmentType(e.target.value)}
+                  displayEmpty
                   sx={{
-                    mt: 1,
-                    width: "50%",
-                    px: 2,
-                    py: 1,
                     borderColor: "gray.300",
                     borderRadius: 1,
                     "&:focus": {
@@ -270,7 +269,9 @@ const AppointmentsPage = () => {
                   }}
                   required
                 >
-                  <MenuItem value="">Select</MenuItem>
+                  <MenuItem value="" disabled>
+                    Select Appointment Type
+                  </MenuItem>
                   <MenuItem value="consultation">Consultation</MenuItem>
                   <MenuItem value="followup">Follow-Up</MenuItem>
                   <MenuItem value="checkup">Check-Up</MenuItem>
@@ -342,6 +343,25 @@ const AppointmentsPage = () => {
                   ))
                 )}
               </Box>
+              <Box display="flex" flexDirection="row">
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={agreementChecked}
+                      onChange={(e) => setAgreementChecked(e.target.checked)}
+                      color="primary"
+                    />
+                  }
+                  label="I agree to the terms and conditions"
+                />
+                <Button
+                  variant="text"
+                  sx={{ textTransform: "lowercase", px: 0 }}
+                  onClick={handleOpenDialog}
+                >
+                  view agreement
+                </Button>
+              </Box>
             </Box>
             <Button
               variant="contained"
@@ -367,86 +387,6 @@ const AppointmentsPage = () => {
         );
 
       case 2:
-        return (
-          <div>
-            <div className="bg-[#2C6975] py-10"></div>
-            <div className="mb-4 p-3 text-justify flex flex-col gap-1 justify-center items-center">
-              <h1 className="font-semibold text-xl w-full">Agreement</h1>
-              <hr className="border border-[#2C6975] w-full" />
-              <p className="text-xs text-gray-600 text-justify">
-                Before proceeding to the payment process, please review the
-                following rules and regulations regarding the collection of your
-                information.
-              </p>
-              <ol className="pl-4 p-2">
-                <li className=" text-sm ">
-                  1. Data Privacy: Your personal information will be collected
-                  and used solely for the purpose of scheduling and confirming
-                  your appointment with Dr. Jeb.
-                </li>
-                <li className=" text-sm ">
-                  <span>2. Confidentiality: </span>
-                  <p>
-                    All data provided will be kept confidential and will not be
-                    shared with third parties without your consent.
-                  </p>
-                </li>
-                <li className=" text-sm ">
-                  <span>3. Accuracy: </span>
-                  <p>
-                    {" "}
-                    Ensure that the information you provide is accurate and
-                    up-to-date to facilitate a smooth booking process.
-                  </p>
-                </li>
-                <li className="text-sm ">
-                  <span>4. Security: </span>
-                  <p>
-                    We employ secure methods to protect your data during
-                    collection and storage.
-                  </p>
-                </li>
-                <li className=" text-sm ">
-                  <span>5. Consent: </span>
-                  <p>
-                    By providing your information, you consent to its use as
-                    outlined in our privacy policy.
-                  </p>
-                </li>
-              </ol>
-              <p className="text-sm">
-                By proceeding to the payment process, you acknowledge that you
-                have read and agree to these terms.
-              </p>
-              <label className="flex items-center w-full">
-                <input
-                  type="checkbox"
-                  checked={agreementChecked}
-                  onChange={(e) => setAgreementChecked(e.target.checked)}
-                  className="mr-2"
-                />
-                <span>I agree to the terms and conditions.</span>
-              </label>
-            </div>
-            <div className="w-full flex justify-center gap-2 p-2 items-center">
-              <button
-                type="button"
-                onClick={handleBack}
-                className="btn btn-secondary bg-[#2C6975] py-1 px-6 text-white rounded-md"
-              >
-                Back
-              </button>
-              <button
-                type="button"
-                onClick={handleNext}
-                className="btn btn-primary bg-[#2C6975] py-1 px-6 text-white rounded-md"
-              >
-                Next
-              </button>
-            </div>
-          </div>
-        );
-      case 3:
         return (
           <div className="p-2">
             <div className="mb-4 flex flex-col gap-2 p-2">
@@ -512,7 +452,7 @@ const AppointmentsPage = () => {
             </div>
           </div>
         );
-      case 4:
+      case 3:
         return (
           <Box
             sx={{
@@ -627,6 +567,13 @@ const AppointmentsPage = () => {
   if (loading) {
     return <LoadingSpinner />;
   }
+  const handleOpenDialog = () => {
+    setDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
+  };
 
   return (
     <div className="flex flex-col md:flex-row p-10 justify-between gap-10">
@@ -668,6 +615,57 @@ const AppointmentsPage = () => {
         )}
       </form>
       <Appointments />
+      <Dialog open={dialogOpen} onClose={handleCloseDialog}>
+        <DialogTitle>Agreement</DialogTitle>
+        <DialogContent>
+          <div className="mb-4 p-3 text-justify flex flex-col gap-1 justify-center items-center">
+            <p className="text-xs text-gray-600 text-justify">
+              Before proceeding to the payment process, please review the
+              following rules and regulations regarding the collection of your
+              information.
+            </p>
+            <ol className="pl-4 p-2">
+              <li className="text-sm">
+                1. Data Privacy: Your personal information will be collected and
+                used solely for the purpose of scheduling and confirming your
+                appointment with Dr. Jeb.
+              </li>
+              <li className="text-sm">
+                <span>2. Confidentiality: </span>
+                <p>
+                  All data provided will be kept confidential and will not be
+                  shared with third parties without your consent.
+                </p>
+              </li>
+              <li className="text-sm">
+                <span>3. Accuracy: </span>
+                <p>
+                  Ensure that the information you provide is accurate and
+                  up-to-date to facilitate a smooth booking process.
+                </p>
+              </li>
+              <li className="text-sm">
+                <span>4. Security: </span>
+                <p>
+                  We employ secure methods to protect your data during
+                  collection and storage.
+                </p>
+              </li>
+              <li className="text-sm">
+                <span>5. Consent: </span>
+                <p>
+                  By providing your information, you consent to its use as
+                  outlined in our privacy policy.
+                </p>
+              </li>
+            </ol>
+            <p className="text-sm">
+              By proceeding to the payment process, you acknowledge that you
+              have read and agree to these terms.
+            </p>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
