@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import emailjs from "emailjs-com";
 
 export default class Reset extends Component {
   constructor(props) {
@@ -30,39 +29,14 @@ export default class Reset extends Component {
       .then((data) => {
         if (data.status === "success") {
           this.setState({ submitted: true });
-          this.sendEmail(email, data.link);
         } else {
-          alert(data.status);
+          alert("Error: " + data.message);
         }
       })
       .catch((error) => {
         console.error("Error:", error);
         alert("An error occurred. Please try again.");
       });
-  }
-
-  sendEmail(email, link) {
-    console.log(link);
-    const templateParams = {
-      user_email: email,
-      reset_link: link,
-    };
-
-    emailjs
-      .send(
-        "service_hpvcujb",
-        "template_r7aw2c2",
-        templateParams,
-        "rJ5kPXerBg9bonHix"
-      )
-      .then(
-        (result) => {
-          console.log("Email sent successfully:", result.text);
-        },
-        (error) => {
-          console.error("Error sending email:", error.text);
-        }
-      );
   }
 
   render() {

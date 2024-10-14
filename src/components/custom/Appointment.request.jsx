@@ -72,8 +72,8 @@ const AppointmentRequest = () => {
   const sendEmailNotification = async (appointment) => {
     try {
       const response = await emailjs.send(
-        "service_hpvcujb",
-        "template_uwrgbem",
+        "service_j8to979",
+        "template_ipb5cz3",
         {
           to_email: appointment.email,
           meet_link: appointment.meetLink,
