@@ -240,7 +240,7 @@ const AppointmentsPage = () => {
           >
             <Box sx={{ mb: 4, width: "100%" }}>
               <Typography variant="h6" align="center">
-                Create Appointment
+                Book Appointment
               </Typography>
               <Box
                 sx={{
@@ -606,10 +606,18 @@ const AppointmentsPage = () => {
           >
             <Button
               variant="contained"
-              color="primary"
               onClick={handleCreateAppointment}
+              sx={{
+                borderRadius: "50px", // Rounded radius
+                backgroundColor: "#2C6975", // Background color
+                color: "white", // Text color (change as needed)
+                padding: "10px, 20px",
+                "&:hover": {
+                  backgroundColor: "#358898", // Hover background color
+                },
+              }}
             >
-              Create Appointment
+              Book Appointment
             </Button>
           </Box>
         )}
