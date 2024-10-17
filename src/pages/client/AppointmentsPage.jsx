@@ -576,7 +576,7 @@ const AppointmentsPage = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row p-10 justify-between gap-10">
+    <div className="flex flex-col md:flex-row p-10 justify-between gap-10 ">
       <div className="w-full mb-4 md:mb-0">
         <CanceledAppointments />
         <br />

@@ -43,8 +43,8 @@ const Topbar = () => {
   }
 
   return (
-    <div className="topbarComponent flex flex-row justify-between shadow-md p-3 h-16 md:h-20">
-      <div className="flex flex-row w-full justify-end gap-10">
+    <div className="topbarComponent flex flex-row justify-between p-3 h-16 md:h-20">
+      <div className="flex flex-row w-full justify-end gap-10 drop-shadow-lg	">
         <ul className="flex flex-row gap-4 md:gap-6 items-center">
           <li>
             <Notification user={user} />
@@ -52,7 +52,13 @@ const Topbar = () => {
         </ul>
         <div className="profilePart flex items-center gap-4 md:gap-6">
           {!isMobile && (
-            <p className="name capitalize font-bold text-xs md:text-sm">
+            <p
+              className="name capitalize font-bold text-xs md:text-sm "
+              style={{
+                color: "#2C6975", // Change text color
+                fontWeight: 500, // Set font weight to 500
+              }}
+            >
               {user.firstname} {user.lastname}
             </p>
           )}

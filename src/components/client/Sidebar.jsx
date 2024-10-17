@@ -7,19 +7,23 @@ import {
   List,
   ListItem,
   ListItemIcon,
-  ListItemText,
   useMediaQuery,
 } from "@mui/material";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import MenuIcon from "@mui/icons-material/Menu";
-import HomeIcon from "@mui/icons-material/Home";
 import BookIcon from "@mui/icons-material/Book";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { ChevronLeft } from "@mui/icons-material";
-import logo from "../../images/bigLogo.png";
 import { styled, useTheme } from "@mui/material/styles";
-import textLogo from "../../images/textLogo.png";
+import logo from "../../images/safeplacelogo.png";
 
 const drawerWidth = 240;
+
+// Styled IconButton for hover effect
+const StyledIconButton = styled(IconButton)(({ theme }) => ({
+  "&:hover": {
+    backgroundColor: "rgba(44, 105, 117, 0.13)", // Background color on hover
+  },
+}));
 
 const MiniDrawer = styled(Drawer)(({ theme, open }) => ({
   width: open ? drawerWidth : 72,
@@ -34,6 +38,9 @@ const MiniDrawer = styled(Drawer)(({ theme, open }) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
+    border: "none", // Remove the border
+    boxShadow: "2px 2px 10px rgba(0, 0, 0, 0.2)", // Add drop shadow
+    padding: "16px", // Add padding inside the drawer
   },
 }));
 
@@ -50,17 +57,17 @@ const Sidebar = () => {
   const menuItems = [
     {
       text: "Appointments",
-      icon: <HomeIcon fontSize="large" />,
+      icon: <CalendarTodayIcon />,
       link: "/Booking",
     },
     {
       text: "Blog",
-      icon: <BookIcon fontSize="large" />,
+      icon: <BookIcon />,
       link: "/MR_JEB_BLOG",
     },
     {
       text: "Settings",
-      icon: <SettingsIcon fontSize="large" />,
+      icon: <SettingsIcon />,
       link: "/clientSettings",
     },
   ];
@@ -68,9 +75,14 @@ const Sidebar = () => {
   return (
     <>
       {isMobile && (
-        <IconButton onClick={toggleDrawer}>
-          <MenuIcon />
-        </IconButton>
+        <StyledIconButton onClick={toggleDrawer}>
+          <MenuIcon
+            sx={{
+              color: "#2C6975", // Custom color
+              fontSize: "24px", // Optional: adjust size
+            }}
+          />
+        </StyledIconButton>
       )}
 
       <MiniDrawer
@@ -81,29 +93,47 @@ const Sidebar = () => {
       >
         <div className="flex items-center flex-col justify-between p-4">
           <Box sx={{ width: "100%" }} display="flex" justifyContent="end">
-            <IconButton onClick={toggleDrawer}>
-              {open ? <MenuIcon /> : <MenuIcon />}
-            </IconButton>
-          </Box>
-          {open ? (
-            <Box
-              display="flex"
-              className="sm:flex-col md:flex-row justify-start relative w-full"
+            <StyledIconButton
+              onClick={toggleDrawer}
+              sx={{
+                position: open ? "absolute" : "relative",
+                top: open ? "9px" : "0",
+                right: open ? "9px" : "50%",
+                transform: open ? "none" : "translateX(50%)", // Centering when closed
+              }}
             >
+              <MenuIcon
+                sx={{
+                  color: "#2C6975", // Custom color
+                  fontSize: "32px", // Optional: adjust size
+                }}
+              />
+            </StyledIconButton>
+          </Box>
+          <Box
+            display="flex"
+            justifyContent="center" // Centering the logo
+            alignItems="center" // Optional: vertical alignment
+            sx={{ width: "100%", marginTop: "30px" }} // Add top margin
+          >
+            {open ? (
               <img
-                className="w-[60%] h-[100%] object-cover"
+                className="w-[70%] h-auto object-cover" // Use h-auto to maintain aspect ratio
                 src={logo}
                 alt="safeplace"
               />
+            ) : (
               <img
-                className="w-[70%] h-[100%] object-cover absolute right-[-10%]"
-                src={textLogo}
+                src={logo}
                 alt="safeplace"
+                style={{
+                  width: open ? "70%" : "50px", // Use 50px width when closed
+                  height: "auto", // Maintain aspect ratio
+                  transition: "width 0.3s ease", // Smooth transition on open/close
+                }}
               />
-            </Box>
-          ) : (
-            <img className="w-full object-cover" src={logo} alt="safeplace" />
-          )}
+            )}
+          </Box>
         </div>
 
         <List
@@ -111,7 +141,7 @@ const Sidebar = () => {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            gap: "1rem",
+            gap: "2px", // 3px gap between each link
             overflow: "hidden",
           }}
         >
@@ -129,15 +159,21 @@ const Sidebar = () => {
                 gap: "1rem",
                 borderLeft:
                   location.pathname === item.link
-                    ? "4px solid #68B2A0"
-                    : "4px solid transparent",
+                    ? "3px solid #68B2A0" // Border color for active link
+                    : "none",
+                borderRadius: "8px", // Rounded corners
                 backgroundColor:
-                  location.pathname === item.link ? "#2C6975" : "transparent",
-                fontWeight: location.pathname === item.link ? "bold" : "500",
-                color: location.pathname === item.link ? "white" : "black",
-
+                  location.pathname === item.link
+                    ? "#2C6975" // Background color for active link
+                    : "transparent",
+                color: location.pathname === item.link ? "white" : "#2C6975", // Default text color
+                transition: "background-color 0.3s ease, color 0.3s ease", // Smooth transition for background and text color
                 "&:hover": {
-                  backgroundColor: "rgba(44, 105, 117, 0.2)",
+                  backgroundColor: "#2C6975", // Background color on hover
+                  color: "white", // Text color on hover
+                  "& .MuiListItemIcon-root": {
+                    color: "white", // Change icon color to white on hover
+                  },
                 },
               }}
               onClick={isMobile ? toggleDrawer : null}
@@ -153,8 +189,11 @@ const Sidebar = () => {
               >
                 {item.icon}
               </ListItemIcon>
-
-              {open && <p className="w-full">{item.text}</p>}
+              {open && (
+                <span style={{ fontWeight: "500", width: "100%" }}>
+                  {item.text}
+                </span>
+              )}{" "}
             </ListItem>
           ))}
         </List>
