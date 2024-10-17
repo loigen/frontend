@@ -3,10 +3,11 @@ import "../../styles/footer.css";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import PhoneIcon from "@mui/icons-material/Phone";
 import logo from "../../images/logo.png";
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import InstagramIcon from '@mui/icons-material/Instagram';
-import WhatsAppIcon from '@mui/icons-material/WhatsApp';
-import FacebookIcon from '@mui/icons-material/Facebook';
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import InstagramIcon from "@mui/icons-material/Instagram";
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -38,12 +39,13 @@ const Footer = () => {
               </div>
               <h2>0956 554 0992</h2>
             </div>
+            <Link to="/adminform">Signin as Admin</Link>
           </div>
         </div>
         <div className="subscribe">
           <div className="inputfield">
             {" "}
-            <input type="text" placeholder="Example@gmail.com"/>
+            <input type="text" placeholder="Example@gmail.com" />
             <button>SUBSCRIBE</button>
           </div>
         </div>
@@ -51,19 +53,27 @@ const Footer = () => {
       <div className="left">
         <div className="title">Keep Connected</div>
         <div className="info">
-          <div><LinkedInIcon/></div>
+          <div>
+            <LinkedInIcon />
+          </div>
           <div>LinkedIn</div>
-        </div >
+        </div>
         <div className="info">
-          <div><InstagramIcon/></div>
+          <div>
+            <InstagramIcon />
+          </div>
           <div>Instagram</div>
         </div>
         <div className="info">
-          <div><WhatsAppIcon/></div>
+          <div>
+            <WhatsAppIcon />
+          </div>
           <div>Whats App</div>
         </div>
         <div className="info">
-          <div><FacebookIcon/></div>
+          <div>
+            <FacebookIcon />
+          </div>
           <div>Facebook</div>
         </div>
       </div>
