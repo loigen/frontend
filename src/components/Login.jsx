@@ -19,7 +19,6 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import logo from "../images/bigLogo.png";
 import { useAuth } from "../context/AuthProvider";
 import Swal from "sweetalert2";
-import { data } from "autoprefixer";
 
 const API_URL = "https://backend-production-c8da.up.railway.app";
 
@@ -129,7 +128,7 @@ const LoginModal = ({
       } else {
         Swal.fire({
           icon: "error",
-          title: "Login Failed",
+          title: "Access Denied",
           text: errorMessage,
         });
       }
