@@ -77,7 +77,6 @@ const LoginModal = ({
       setUser(response.data);
       await fetchProfile();
 
-      // Check if the user role is admin
       if (response.data.role === "admin") {
         Swal.fire({
           icon: "error",
@@ -85,10 +84,9 @@ const LoginModal = ({
           text: "Admins are not allowed to log in.",
         });
         setLoading(false);
-        return; // Exit the function to prevent further actions
+        return;
       }
 
-      // Proceed with storing user data and local storage
       if (rememberMe) {
         localStorage.setItem("rememberMe", true);
         localStorage.setItem("rememberedEmail", email);
