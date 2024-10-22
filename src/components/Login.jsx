@@ -77,6 +77,18 @@ const LoginModal = ({
       setUser(response.data);
       await fetchProfile();
 
+      // Check if the user role is admin
+      if (response.data.role === "admin") {
+        Swal.fire({
+          icon: "error",
+          title: "Access Denied",
+          text: "Admins are not allowed to log in.",
+        });
+        setLoading(false);
+        return; // Exit the function to prevent further actions
+      }
+
+      // Proceed with storing user data and local storage
       if (rememberMe) {
         localStorage.setItem("rememberMe", true);
         localStorage.setItem("rememberedEmail", email);
@@ -86,6 +98,14 @@ const LoginModal = ({
         localStorage.removeItem("rememberedEmail");
         localStorage.removeItem("rememberedPassword");
       }
+
+      const userRole = response.data.role;
+      if (userRole === "user") {
+        navigate("/booking");
+      } else {
+        navigate("/home");
+      }
+      onClose();
     } catch (error) {
       const errorMessage =
         error.response?.data?.error || "An error occurred. Please try again.";
