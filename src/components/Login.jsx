@@ -128,7 +128,7 @@ const LoginModal = ({
       } else {
         Swal.fire({
           icon: "error",
-          title: "Access Denied",
+          title: "Admin user, please use the admin login form!",
           text: errorMessage,
         });
       }
