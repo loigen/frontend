@@ -28,13 +28,15 @@
 }
 
 .buttons-container button.active {
-  background-color: #007bff;
+  background-color: #2C6975;
+  border-radius: 3px;
   box-shadow: 1px 5px 5px gray;
   color: white;
 }
 
 .buttons-container button:not(.active):hover {
-  background-color: #e0e0e0;
+  background-color: rgba(44, 105, 117, 0.13)
+  ;
 }
 
 .legend-container {

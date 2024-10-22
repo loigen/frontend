@@ -9,8 +9,8 @@ const AvailabilityCard = ({ availableSlots, totalSlots }) => {
     datasets: [
       {
         data: [availableSlots, totalSlots - availableSlots],
-        backgroundColor: ["#68b2ad", "#a1cec4"],
-        hoverBackgroundColor: ["#27AE60", "#A9DFBF"],
+        backgroundColor: ["rgba(104, 178, 173, 0.38)", "#68B2A0"],
+        hoverBackgroundColor: ["rgba(104, 178, 173, 0.80)", "#2C6975"],
       },
     ],
   };
@@ -28,15 +28,27 @@ const AvailabilityCard = ({ availableSlots, totalSlots }) => {
   };
 
   return (
-    <div className=" p-4  w-full max-w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-4">
-      <div className="w-full md:w-full flex items-center justify-center">
-        <Doughnut data={data} options={options} />
+    <div className=" p-4  w-full max-w-full mx-auto flex flex-col md:flex-row items-center justify-center gap-3">
+      <div className="flex items-center justify-center w-full">
+        <div style={{ width: "100%", height: "0", paddingBottom: "65%" }}>
+          <Doughnut
+            data={data}
+            options={{
+              ...options,
+              responsive: true,
+              maintainAspectRatio: false, // Allow height to be determined by width
+            }}
+          />
+        </div>
       </div>
-      <div className="w-full h-full flex flex-col gap-3 items-center justify-center">
-        <h4 className="text-xl md:text-2xl font-bold">
+      <div className="w-full h-full flex flex-col gap-3 items-center justify-center ">
+        <h4
+          className="text-xl md:text-1xl font-bold font-poppins ml-15"
+          style={{ color: "rgba(0, 0, 0, 0.78)" }}
+        >
           Availability this Week
         </h4>
-        <div className="text-xl w-[60%] md:text-2xl font-bold flex items-center gap-2 justify-around">
+        <div className="text-xl md:text-2xl font-bold flex items-center gap-2 justify-around w-full md:w-3/4 lg:w-1/2">
           <div className="flex items-center">
             <span className="text-2xl md:text-4xl">{availableSlots}</span> /
             <span className="text-base md:text-xl font-normal">

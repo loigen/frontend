@@ -13,29 +13,53 @@ const HighestWeeklyAppointments = () => {
 
   if (!data || !data.count) {
     return (
-      <div className="flex flex-row w-full gap-3 px-10 items-center">
-        <div className="iconContainer health">
-          <MedicalServicesIcon id="icons" />
+      <div className="w-full max-w-[333px] h-[119px]  p-4 rounded-lg flex items-center justify-center">
+        <div className="relative w-16 h-16 rounded overflow-hidden">
+          <MedicalServicesIcon
+            sx={{
+              color: "#2C6975",
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              fontSize: "45px",
+              backgroundColor: "rgba(164, 205, 195, 0.27)",
+              padding: "4px",
+              borderRadius: "3px",
+            }}
+          />
         </div>
-        <div className="flex w-full flex-col">
-          <p className="flex items-center justify-center h-full w-fit text-left text-2xl">
+        <div className="flex flex-col items-start justify-center ml-4">
+          <p className="flex items-center justify-center h-full w-fit text-left text-1xl font-poppins">
             No data
           </p>
-          <p>Weekly Appointment</p>
+          <p className="text-sm capitalize font-poppins">Weekly Appointment</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="w-full bg-white p-2 rounded-md flex justify-center items-center">
+    <div className="w-full p-2  flex justify-center items-center">
       <div className="flex flex-row gap-3 justify-center  items-center w-full">
-        <div className="iconContainer health">
-          <MedicalServicesIcon id="icons" />
+        <div className="relative w-16 h-16 rounded overflow-hidden">
+          <MedicalServicesIcon
+            sx={{
+              color: "#2C6975",
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              fontSize: "45px",
+              backgroundColor: "rgba(164, 205, 195, 0.27)",
+              padding: "4px",
+              borderRadius: "3px",
+            }}
+          />
         </div>
-        <div>
-          <b className="text-5xl">{data.count}</b>
-          <p>Weekly Appointment</p>
+        <div className="flex flex-col items-start justify-center ml-4">
+          <b className="flex items-center justify-center h-full w-fit text-left text-1xl font-poppins">{data.count}</b>
+          <p className="text-sm capitalize font-poppins">Weekly Appointment</p>
         </div>
       </div>
     </div>

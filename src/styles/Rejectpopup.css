@@ -1,0 +1,83 @@
+/* Confirm button styles */
+.btn-confirm {
+  background-color: #358898;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 20px;
+  transition: background-color 0.3s;
+}
+
+.custom-swal-popup .btn-confirm:hover {
+  background-color: #2a6f6e;
+}
+
+/* Cancel button styles */
+.custom-swal-popup .btn-cancel {
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 20px;
+  transition: background-color 0.3s;
+  margin-right: 10px;
+}
+
+.custom-swal-popup .btn-cancel:hover {
+  background-color: #d32f2f;
+}
+
+/* Success button styles */
+.btn-success {
+  background-color: #2C6975;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 20px;
+  transition: background-color 0.3s;
+}
+
+.btn-success:hover {
+  background-color: #388e3c;
+}
+
+/* Error button styles */
+.btn-error {
+  background-color: #9d5e5a;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 20px;
+  transition: background-color 0.3s;
+}
+
+.btn-error:hover {
+  background-color: #9d5e5a;
+}
+
+/* Popup box styles */
+.custom-swal-popup {
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+}
+
+/* Title styling */
+.custom-swal-title {
+  font-size: 24px;
+  font-weight: medium;
+  color: #000000;
+  font-family: "poppins";
+}
+
+/* Icon styling */
+.custom-swal-popup .custom-swal-icon {
+  font-size: 20px;
+  color: #9d5e5a;
+}
+
+/* Content text styling */
+.custom-swal-popup .custom-swal-content {
+  font-size: 16px;
+  color: #333;
+}
