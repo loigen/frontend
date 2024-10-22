@@ -17,7 +17,7 @@ const Dashboard = ({ children }) => {
             height: "90vh",
             appearance: "none",
             overflowX: "hidden",
-            backgroundColor: "#d9f4f9",
+            backgroundColor: "#E9F1EF",
           }}
         >
           {children}

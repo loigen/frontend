@@ -11,6 +11,7 @@ const Topbar = () => {
   const { user, loading } = useAuth();
   const [anchorEl, setAnchorEl] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [isHovered, setIsHovered] = useState(false); // State for hover
   const open = Boolean(anchorEl);
 
   useEffect(() => {
@@ -43,8 +44,8 @@ const Topbar = () => {
   }
 
   return (
-    <div className="topbarComponent flex flex-row justify-between shadow-md p-3 h-16 md:h-20">
-      <div className="flex flex-row w-full justify-end gap-10">
+    <div className="topbarComponent flex flex-row justify-between p-3 h-16 md:h-20">
+      <div className="flex flex-row w-full justify-end gap-10 drop-shadow-lg">
         <ul className="flex flex-row gap-4 md:gap-6 items-center">
           <li>
             <Notification user={user} />
@@ -52,7 +53,13 @@ const Topbar = () => {
         </ul>
         <div className="profilePart flex items-center gap-4 md:gap-6">
           {!isMobile && (
-            <p className="name capitalize font-bold text-xs md:text-sm">
+            <p
+              className="name capitalize font-bold text-xs md:text-sm"
+              style={{
+                color: "#2C6975", // Change text color
+                fontWeight: 500, // Set font weight to 500
+              }}
+            >
               {user.firstname} {user.lastname}
             </p>
           )}
@@ -60,9 +67,9 @@ const Topbar = () => {
             <Avatar
               alt={`${user.firstname} ${user.lastname}`}
               src={user.profilePicture}
-              sx={{ width: 40, height: 40 }}
+              sx={{ width: 45, height: 45 }}
             />
-            <KeyboardArrowDownIcon />
+            <KeyboardArrowDownIcon sx={{ color: "#2C6975" }} />
           </IconButton>
           <Menu
             anchorEl={anchorEl}
@@ -86,8 +93,11 @@ const Topbar = () => {
               horizontal: "center",
             }}
           >
-            <MenuItem>
-              <LogoutButton />
+            <MenuItem
+              onMouseEnter={() => setIsHovered(true)} // Set hover state to true
+              onMouseLeave={() => setIsHovered(false)} // Reset hover state
+            >
+              <LogoutButton isHovered={isHovered} onClose={handleMenuClose} />
             </MenuItem>
           </Menu>
         </div>

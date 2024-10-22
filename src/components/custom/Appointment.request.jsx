@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import InfoIcon from "@mui/icons-material/Info";
 import Swal from "sweetalert2";
 import { LoadingSpinner, MeetLinkModal } from "./index";
 import emailjs, { send } from "emailjs-com";
 import axios from "axios";
+import CloseIcon from "@mui/icons-material/Close";
+import "../../styles/Rejectpopup.css"
 
 const AppointmentRequest = () => {
   const [selectedAppointment, setSelectedAppointment] = useState(null);
@@ -16,6 +17,7 @@ const AppointmentRequest = () => {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [appointmentToAccept, setAppointmentToAccept] = useState(null);
+  const [isHovered, setIsHovered] = useState(false);
 
   const handleShowDetails = (appointment) => {
     setSelectedAppointment(appointment);
@@ -38,8 +40,18 @@ const AppointmentRequest = () => {
       showCancelButton: true,
       confirmButtonText: "Yes, reject it!",
       cancelButtonText: "No, cancel!",
+      customClass: {
+        confirmButton: "btn-confirm",  // Your custom class for the confirm button
+        cancelButton: "btn-cancel",    // Your custom class for the cancel button
+        popup: "custom-swal-popup",    // Your custom class for the popup
+        title: "custom-swal-title",    // Custom class for the title
+        icon: "custom-swal-icon",      // Custom class for the icon
+        content: "custom-swal-content",// Custom class for the content
+      },
+      buttonsStyling: false, // Set to false to apply custom styles
+      reverseButtons: true,   // Puts cancel button on the left
     });
-
+  
     if (confirmation.isConfirmed) {
       try {
         await axios.patch(
@@ -49,21 +61,31 @@ const AppointmentRequest = () => {
           `https://backend-production-c8da.up.railway.app/schedules/updateByDateTime`,
           { date, time }
         );
+  
         setAppointments((prevAppointments) =>
           prevAppointments.filter((app) => app._id !== id)
         );
+  
         Swal.fire({
           title: "Success",
           text: "Successfully declined!",
           icon: "success",
           confirmButtonText: "Close",
+          customClass: {
+            confirmButton: "btn-success",  // Custom success button styling
+          },
+          buttonsStyling: false,  // Apply your custom styles
         });
       } catch (error) {
         Swal.fire({
           title: "Error",
           text: "Failed to reject the appointment.",
           icon: "error",
-          confirmButtonText: "Close",
+          confirmButtonText: "Okay",
+          customClass: {
+            confirmButton: "btn-error",  // Custom error button styling
+          },
+          buttonsStyling: false,
         });
       }
     }
@@ -179,11 +201,12 @@ const AppointmentRequest = () => {
 
   return (
     <div className="thirdBox w-full mt-4 bg-white p-4 shadow-2xl">
-      <h2 className="text-xl text-center uppercase font-mono">
+      <h2 className="text-xl text-center uppercase font-mono" style={{color: "rgba(0,0,0,0.78)"}}>
         Patient Requests for Approval
       </h2>
+
       {appointments.length === 0 ? (
-        <div className="text-center flex justify-center items-center text-gray-500 p-10 h-full w-full">
+        <div className="text-center flex justify-center items-center text-gray-500 p-10 h-full w-full font-poppins">
           No Appointment Request
         </div>
       ) : (
@@ -209,14 +232,14 @@ const AppointmentRequest = () => {
             return (
               <li
                 key={appointment._id}
-                className="mt-4 p-4 bg-gray-100 border rounded shadow-md list-none"
+                className="mt-4 p-4 rounded shadow-lg list-none w-full font-poppins"
               >
-                <div className="flex justify-between items-center">
-                  <span className="text-[#2c6975] font-semibold">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                  <span className="text-[#2c6975] font-normal font-poppins">
                     <strong>{isToday ? "TODAY" : dayOfWeek}</strong>{" "}
                     {formattedDate}
                   </span>
-                  <div className="flex items-center">
+                  <div className="flex items-center gap-2 font-poppins">
                     <button
                       onClick={() => handleShowDetails(appointment)}
                       className="text-gray-400 hover:text-[#2c6975] mr-2"
@@ -231,30 +254,48 @@ const AppointmentRequest = () => {
                           appointment.time
                         )
                       }
-                      className="text-red-600 hover:text-red-800"
+                      className="rounded-full p-1"
+                      style={{
+                        color: "#2C6975",
+                        backgroundColor: isHovered
+                          ? "rgba(104, 178, 160, 0.25)"
+                          : "rgba(104, 178, 160, 0.19)",
+                      }}
+                      onMouseEnter={() => setIsHovered(true)}
+                      onMouseLeave={() => setIsHovered(false)}
                     >
-                      <HighlightOffIcon />
+                      <CloseIcon />
                     </button>
                   </div>
                 </div>
-                <div className="flex gap-2">
-                  <p className="mt-2 uppercase">
-                    <strong>{appointment.firstname}</strong>
+                <div className="flex flex-col sm:flex-row gap-2 mt-2">
+                  <p className="uppercase font-semibold text-[#54595E]">
+                    {appointment.firstname}
                   </p>
-                  <p className="mt-2 uppercase">
-                    <strong> {appointment.lastname}</strong>
+                  <p className="uppercase font-semibold text-[#54595E]">
+                    {appointment.lastname}
                   </p>
                 </div>
                 <p className="mt-2 text-gray-700 capitalize">
                   {appointment.appointmentType}
                 </p>
-                <p className="mt-2">
-                  <strong>{appointment.time}</strong>
-                </p>
+                <p className="mt-2 font-semibold">{formattedTime}</p>
                 <div className="mt-4 flex justify-end">
                   <button
                     onClick={() => handleAccept(appointment)}
-                    className="bg-[#2c6975] text-white font-semibold px-10 py-2 rounded hover:bg-[#1f4f5f]"
+                    className="text-white font-semibold shadow-md transition-colors"
+                    style={{
+                      backgroundColor: "#2C6975",
+                      borderRadius: "20px",
+                      width: "98px",
+                      height: "35px",
+                    }}
+                    onMouseEnter={(e) =>
+                      (e.target.style.backgroundColor = "#358898")
+                    }
+                    onMouseLeave={(e) =>
+                      (e.target.style.backgroundColor = "#2C6975")
+                    }
                   >
                     Accept
                   </button>
@@ -267,7 +308,8 @@ const AppointmentRequest = () => {
 
       {selectedAppointment && (
         <div
-          className="fixed inset-0 bg-gray-800 bg-opacity-70 flex justify-center items-center z-50"
+          className="fixed inset-0 flex justify-center items-center z-50"
+          style={{ backgroundColor: "rgba(233, 241, 239, 0.83)" }}
           onClick={handleCloseDetails}
         >
           <div

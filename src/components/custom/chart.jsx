@@ -52,6 +52,7 @@ const WorkloadChart = () => {
 
   const [view, setView] = useState("weekly");
 
+  // Fetch appointment data
   useEffect(() => {
     const getData = async () => {
       try {
@@ -135,6 +136,7 @@ const WorkloadChart = () => {
       getData();
     }
   }, [view]);
+
   useEffect(() => {
     const getData = async () => {
       try {
@@ -144,7 +146,7 @@ const WorkloadChart = () => {
         setyearlyAppointments(datasets.completed);
         setyearlyCancelledAppointments(datasets.canceled);
       } catch (error) {
-        console.error("Error loading monthly data:", error);
+        console.error("Error loading yearly data:", error);
       }
     };
 
@@ -152,6 +154,7 @@ const WorkloadChart = () => {
       getData();
     }
   }, [view]);
+
   const dataSets = {
     weekly: {
       labels: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
@@ -195,7 +198,7 @@ const WorkloadChart = () => {
         {
           label: "Canceled",
           data: monthlyCancelledAppointments,
-          backgroundColor: "#FF543E",
+          backgroundColor: "#9D5E5A",
         },
       ],
     },
@@ -223,7 +226,7 @@ const WorkloadChart = () => {
         {
           label: "Canceled",
           data: yearlyCancelledAppointments,
-          backgroundColor: "#FF543E",
+          backgroundColor: "#9D5E5A",
         },
       ],
     },
@@ -231,6 +234,7 @@ const WorkloadChart = () => {
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false, // Ensures the chart maintains a responsive height
     plugins: {
       legend: {
         position: "top",
@@ -250,6 +254,21 @@ const WorkloadChart = () => {
       },
     },
   };
+
+  useEffect(() => {
+    const handleResize = () => {
+      // This will force the chart to redraw when the window resizes
+      const chartInstance = document.querySelector(".chartjs-render-monitor");
+      if (chartInstance) {
+        chartInstance.style.width = `${window.innerWidth}px`;
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <div className="workload-container shadow-2xl">
@@ -274,7 +293,7 @@ const WorkloadChart = () => {
             Yearly
           </button>
         </div>
-        <div className="legend-container">
+        <div className="legend-container" style={{ position: 'relative', height: '400px' }}>
           <Bar data={dataSets[view]} options={options} />
         </div>
       </div>
