@@ -128,8 +128,8 @@ const LoginModal = ({
       } else {
         Swal.fire({
           icon: "error",
-          title: "Admin user, please use the admin login form!",
-          text: errorMessage,
+          title: "Not Allowed!",
+          text: "Admin user, please use the admin login form!",
         });
       }
     } finally {
