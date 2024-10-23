@@ -1,4 +1,187 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import Completed from "../../components/custom/Completed";
+import Canceled from "../../components/custom/Canceled";
+import Rejected from "../../components/custom/Rejected";
+import Refunded from "../../components/custom/Refunded";
+import Default from "../../components/custom/DefaultViewClient";
+import BookAppoint from "../../components/custom/BookAppointment";
+const AppointmentDashboard = () => {
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef(null); // Create a ref for the dropdown
+  const [currentView, setCurrentView] = useState("default");
+  // Separate state variables for each button's hover state
+  const [isHoveredCompleted, setIsHoveredCompleted] = useState(false);
+  const [isHoveredCanceled, setIsHoveredCanceled] = useState(false);
+  const [isHoveredRejected, setIsHoveredRejected] = useState(false);
+  const [isHoveredRefunded, setIsHoveredRefunded] = useState(false);
+  const [isHoveredoption, setIsHoveredoption] = useState(false);
+
+  const handleViewChange = (view) => {
+    setCurrentView(view);
+  };
+
+  // Close the dropdown if clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownRef]);
+  return (
+    <>
+      {currentView === "bookappoint" && (
+        <BookAppoint onBackToActive={() => handleViewChange("default")} />
+      )}
+
+      {/* Header Navigation */}
+      {currentView !== "bookappoint" && (
+        <div className="min-h-screen bg-[#E9F1EF] p-8">
+          {/* Header Navigation */}
+          <div className="flex justify-between items-center mb-8">
+            <button
+              className="bg-[#2C6975] text-white px-6 py-2 rounded-full font-poppins pt-4 pb-4 pl-10 pr-10 transition duration-300 ease-in-out hover:bg-[#358898] hover:shadow-lg "
+              onClick={() => handleViewChange("bookappoint")}
+            >
+              Book Appointment
+            </button>
+            <div className="relative">
+              <div className="hidden md:flex space-x-4">
+                <button
+                  className="px-4 py-2 rounded-full transition duration-300 ease-in-out"
+                  style={{
+                    backgroundColor:
+                      currentView === "completed" || isHoveredCompleted
+                        ? "rgba(44, 105, 117, 0.13)" // Active or hovered background
+                        : "#E9F1EF", // Default background color
+                    color: "#2C6975",
+                  }}
+                  onMouseEnter={() => setIsHoveredCompleted(true)}
+                  onMouseLeave={() => setIsHoveredCompleted(false)}
+                  onClick={() => handleViewChange("completed")}
+                >
+                  Completed
+                </button>
+
+                <button
+                  className="px-4 py-2 rounded-full transition duration-300 ease-in-out"
+                  style={{
+                    backgroundColor:
+                      currentView === "canceled" || isHoveredCanceled
+                        ? "rgba(44, 105, 117, 0.13)" // Active or hovered background
+                        : "#E9F1EF", // Default background color
+                    color: "#2C6975",
+                  }}
+                  onMouseEnter={() => setIsHoveredCanceled(true)}
+                  onMouseLeave={() => setIsHoveredCanceled(false)}
+                  onClick={() => handleViewChange("canceled")}
+                >
+                  Canceled
+                </button>
+
+                <button
+                  className="px-4 py-2 rounded-full transition duration-300 ease-in-out"
+                  style={{
+                    backgroundColor:
+                      currentView === "rejected" || isHoveredRejected
+                        ? "rgba(44, 105, 117, 0.13)" // Active or hovered background
+                        : "#E9F1EF", // Default background color
+                    color: "#2C6975",
+                  }}
+                  onMouseEnter={() => setIsHoveredRejected(true)}
+                  onMouseLeave={() => setIsHoveredRejected(false)}
+                  onClick={() => handleViewChange("rejected")}
+                >
+                  Rejected
+                </button>
+                <button
+                  className="px-4 py-2 rounded-full transition duration-300 ease-in-out"
+                  style={{
+                    backgroundColor:
+                      currentView === "refunded" || isHoveredRefunded
+                        ? "rgba(44, 105, 117, 0.13)" // Active or hovered background
+                        : "#E9F1EF", // Default background color
+                    color: "#2C6975",
+                  }}
+                  onMouseEnter={() => setIsHoveredRefunded(true)}
+                  onMouseLeave={() => setIsHoveredRefunded(false)}
+                  onClick={() => handleViewChange("refunded")}
+                >
+                  Refunded
+                </button>
+              </div>
+
+              {/* Dropdown for smaller screens */}
+              <div className="md:hidden">
+                <button
+                  onClick={() => setShowDropdown(!showDropdown)}
+                  className="px-4 py-2 rounded-full transition duration-300 ease-in-out"
+                  style={{
+                    backgroundColor: isHoveredoption
+                      ? "rgba(44, 105, 117, 0.13)"
+                      : "#E9F1EF",
+                    color: "#2C6975",
+                  }}
+                  onMouseEnter={() => setIsHoveredoption(true)}
+                  onMouseLeave={() => setIsHoveredoption(false)}
+                >
+                  More Options
+                </button>
+                {showDropdown && (
+                  <div
+                    ref={dropdownRef}
+                    className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg z-10"
+                  >
+                    <button className="block w-full text-left px-4 py-2 hover:bg-gray-100">
+                      Completed
+                    </button>
+                    <button className="block w-full text-left px-4 py-2 hover:bg-gray-100">
+                      Canceled
+                    </button>
+                    <button className="block w-full text-left px-4 py-2 hover:bg-gray-100">
+                      Rejected
+                    </button>
+                    <button className="block w-full text-left px-4 py-2 hover:bg-gray-100">
+                      Refunded
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+          {/* Cards Section */}
+          {currentView === "completed" && (
+            <Completed onBackToActive={() => handleViewChange("default")} />
+          )}
+          {currentView === "canceled" && (
+            <Canceled onBackToActive={() => handleViewChange("default")} />
+          )}
+          {currentView === "rejected" && (
+            <Rejected onBackToActive={() => handleViewChange("default")} />
+          )}
+          {currentView === "refunded" && (
+            <Refunded onBackToActive={() => handleViewChange("default")} />
+          )}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Render Active or Completed Appointments */}
+            {currentView === "default" && <Default />}
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
+
+export default AppointmentDashboard;
+
+{
+  /*import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import { fetchAvailableSlots } from "../../api/schedulesAPI/fetchAvailableSlots";
 import { createAppointment } from "../../api/appointmentAPI/createAppointmentApi";
@@ -679,3 +862,5 @@ const AppointmentsPage = () => {
 };
 
 export default AppointmentsPage;
+*/
+}

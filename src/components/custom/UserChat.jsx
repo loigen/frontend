@@ -67,7 +67,7 @@ const UserChat = ({ chat, user }) => {
 
   return (
     <div
-      className="flex items-center justify-between p-4 hover:bg-gray-100 cursor-pointer transition-colors rounded-lg"
+      className="flex items-center justify-between p-4 hover:bg-[#E9F1EF] cursor-pointer transition-colors rounded-lg"
       role="button"
       onClick={() => {
         if (thisUserNotifications?.length > 0) {
@@ -111,7 +111,7 @@ const UserChat = ({ chat, user }) => {
           </span>
         )}
         <button
-          className="ml-4 text-red-500 hover:text-red-700"
+          className="ml-4 text-[#D0A9A7] hover:text-[#9D5E5A]"
           onClick={(e) => {
             e.stopPropagation();
             confirmDelete();

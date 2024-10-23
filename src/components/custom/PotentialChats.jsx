@@ -24,10 +24,47 @@ const PotentialChats = () => {
   }
 
   return (
-    <div className="flex overflow-x-auto space-x-4 p-4">
+    <div
+      className="flex overflow-x-auto space-x-4 p-4 bg-[#FFFFFF]"
+      style={{
+        maxHeight: "400px",
+        scrollbarWidth: "thin", // For Firefox
+        scrollbarColor: "#68B2A0 #F0F0F0", // For Firefox
+      }}
+    >
       {potentialChats &&
         potentialChats.map((u, index) => (
-          <Tooltip title={u.firstname} key={index}>
+          <Tooltip
+            title={u.firstname}
+            key={index}
+            arrow
+            sx={{
+              color: "#2C6975",
+            }}
+            PopperProps={{
+              modifiers: [
+                {
+                  name: "arrow",
+                  options: {
+                    padding: 5, // optional padding for the arrow
+                  },
+                },
+              ],
+            }}
+            componentsProps={{
+              tooltip: {
+                sx: {
+                  bgcolor: "#68B2A0", // Set the background color
+                  color: "#fff", // Set the text color to white
+                },
+              },
+              arrow: {
+                sx: {
+                  color: "#68B2A0", // Set the arrow color
+                },
+              },
+            }}
+          >
             <div
               className="single-user flex flex-col items-center flex-shrink-0"
               onClick={() => {
@@ -41,7 +78,7 @@ const PotentialChats = () => {
               <div className="relative">
                 <img
                   src={u.profilePicture}
-                  className="w-12 h-12 md:w-16 md:h-16 border-2 border-[#2c6975] rounded-full shadow-2xl"
+                  className="w-10 h-10 md:w-10 md:h-10 border-2 border-[#2c6975] rounded-full shadow-2xl"
                   alt={`${u.name}'s profile`}
                 />
                 {onlineUsers?.some(
@@ -56,6 +93,25 @@ const PotentialChats = () => {
             </div>
           </Tooltip>
         ))}
+      <style jsx>{`
+        /* Custom Scrollbar Styles */
+        .flex::-webkit-scrollbar {
+          height: 8px; /* Set the height of the scrollbar */
+        }
+
+        .flex::-webkit-scrollbar-track {
+          background: #F0F0F0; /* Track color */
+        }
+
+        .flex::-webkit-scrollbar-thumb {
+          background-color: #68B2A0; /* Thumb color */
+          border-radius: 10px; /* Rounded corners */
+        }
+
+        .flex::-webkit-scrollbar-thumb:hover {
+          background-color: #1F4D4F; /* Darker thumb on hover */
+        }
+      `}</style>
     </div>
   );
 };
