@@ -1,15 +1,27 @@
-
-import React from 'react';
+import React from "react";
 
 const CompletedAppointments = ({ onBackToActive }) => {
   return (
     <div className="min-h-screen p-8 bg-gray-50">
       {/* Back Button */}
       <div className="mb-6">
-        <button className="text-[#2C6975] flex items-center"           onClick={onBackToActive}
+        <button
+          className="text-[#2C6975] flex items-center"
+          onClick={onBackToActive}
         >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5 mr-1"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M15 19l-7-7 7-7"
+            />
           </svg>
           BACK
         </button>
@@ -38,8 +50,19 @@ const CompletedAppointments = ({ onBackToActive }) => {
               <td className="p-4">450</td>
               <td className="p-4 text-right">
                 <button className="text-gray-500">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 12h12M6 12l-3 3m3-3l-3-3" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M6 12h12M6 12l-3 3m3-3l-3-3"
+                    />
                   </svg>
                 </button>
               </td>
@@ -51,8 +74,19 @@ const CompletedAppointments = ({ onBackToActive }) => {
               <td className="p-4">450</td>
               <td className="p-4 text-right">
                 <button className="text-gray-500">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 12h12M6 12l-3 3m3-3l-3-3" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M6 12h12M6 12l-3 3m3-3l-3-3"
+                    />
                   </svg>
                 </button>
               </td>

@@ -180,687 +180,474 @@ const AppointmentDashboard = () => {
 
 export default AppointmentDashboard;
 
-{
-  /*import React, { useState, useEffect } from "react";
-import Swal from "sweetalert2";
-import { fetchAvailableSlots } from "../../api/schedulesAPI/fetchAvailableSlots";
-import { createAppointment } from "../../api/appointmentAPI/createAppointmentApi";
-import { updateSlotStatus } from "../../api/schedulesAPI/updateSlotStatus";
-import { LoadingSpinner } from "../../components/custom";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { FaCloudUploadAlt } from "react-icons/fa";
-import {
-  CanceledAppointments,
-  RejectedAppointments,
-  RefundedAppointments,
-  Appointments,
-} from "../../components/client";
-import { useAuth } from "../../context/AuthProvider";
-import {
-  Box,
-  Button,
-  Checkbox,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Divider,
-  FormControlLabel,
-  Grid,
-  MenuItem,
-  Select,
-  Typography,
-} from "@mui/material";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
-import "react-datepicker/dist/react-datepicker.css";
-const AppointmentsPage = () => {
-  const [currentStep, setCurrentStep] = useState(1);
-  const [appointmentType, setAppointmentType] = useState("");
-  const [availableSlots, setAvailableSlots] = useState([]);
-  const [selectedSlot, setSelectedSlot] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [agreementChecked, setAgreementChecked] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const { user } = useAuth();
-  const [file, setFile] = useState(null);
-  const [filePreview, setFilePreview] = useState(null);
-  const [submitting, setSubmitting] = useState(false);
-  const [price, setPrice] = useState(0);
-  const [showContent, setShowContent] = useState(false);
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const handleCreateAppointment = () => {
-    setShowContent(true);
-  };
-  const [formData, setFormData] = useState({
-    firstname: "",
-    lastname: "",
-    email: "",
-    role: "",
-    sex: "",
-  });
+// import React, { useState, useEffect, useRef } from "react";
+// import Swal from "sweetalert2";
+// import { fetchAvailableSlots } from "../../api/schedulesAPI/fetchAvailableSlots";
+// import { createAppointment } from "../../api/appointmentAPI/createAppointmentApi";
+// import { updateSlotStatus } from "../../api/schedulesAPI/updateSlotStatus";
+// import { LoadingSpinner } from "../../components/custom";
+// import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+// import {
+//   Box,
+//   Button,
+//   Checkbox,
+//   FormControlLabel,
+//   Grid,
+//   MenuItem,
+//   Select,
+//   Typography,
+// } from "@mui/material";
+// import Calendar from "react-calendar";
+// import "react-calendar/dist/Calendar.css";
+// import { useAuth } from "../../context/AuthProvider";
+// import CompletedAppointments from "../../components/custom/Completed";
+// import {
+//   Appointments,
+//   CanceledAppointments,
+//   RefundedAppointments,
+//   RejectedAppointments,
+// } from "../../components/client";
 
-  const appointmentTypes = [
-    { value: "", label: "Select an appointment type" },
-    { value: "consultation", label: "Consultation", price: 50 },
-    { value: "followup", label: "Follow-Up", price: 30 },
-    { value: "checkup", label: "Check-Up", price: 40 },
-  ];
+// const AppointmentsPage = () => {
+//   const [showDropdown, setShowDropdown] = useState(false);
+//   const dropdownRef = useRef(null); // Create a ref for the dropdown
+//   const [currentView, setCurrentView] = useState("default");
+//   const [isHoveredCompleted, setIsHoveredCompleted] = useState(false);
+//   const [isHoveredCanceled, setIsHoveredCanceled] = useState(false);
+//   const [isHoveredRejected, setIsHoveredRejected] = useState(false);
+//   const [isHoveredRefunded, setIsHoveredRefunded] = useState(false);
+//   const [isHoveredoption, setIsHoveredoption] = useState(false);
+//   const [appointmentType, setAppointmentType] = useState("");
+//   const [availableSlots, setAvailableSlots] = useState([]);
+//   const [selectedSlot, setSelectedSlot] = useState(null);
+//   const [selectedDate, setSelectedDate] = useState(new Date());
+//   const [agreementChecked, setAgreementChecked] = useState(false);
+//   const [loading, setLoading] = useState(true);
+//   const [submitting, setSubmitting] = useState(false);
+//   const [file, setFile] = useState(null);
+//   const [filePreview, setFilePreview] = useState(null);
+//   const [price, setPrice] = useState(0);
+//   const { user } = useAuth(); // Assuming user comes from a context
+//   const [showContent, setShowContent] = useState(false);
+//   const appointmentTypes = [
+//     { value: "", label: "Select an appointment type" },
+//     { value: "consultation", label: "Consultation", price: 50 },
+//     { value: "followup", label: "Follow-Up", price: 30 },
+//     { value: "checkup", label: "Check-Up", price: 40 },
+//   ];
 
-  useEffect(() => {
-    const selectedType = appointmentTypes.find(
-      (type) => type.value === appointmentType
-    );
-    if (selectedType) {
-      setPrice(selectedType.price);
-    }
-  }, [appointmentType]);
+//   useEffect(() => {
+//     const selectedType = appointmentTypes.find(
+//       (type) => type.value === appointmentType
+//     );
+//     if (selectedType) {
+//       setPrice(selectedType.price);
+//     }
+//   }, [appointmentType]);
 
-  useEffect(() => {
-    const loadUserProfile = async () => {
-      try {
-        const { firstname, lastname, email, role, profilePicture, sex } = user;
-        setFormData({ firstname, lastname, email, role, profilePicture, sex });
-      } catch (error) {
-        console.error("Error loading user profile:", error);
-      }
-    };
+//   const loadAvailableSlots = async () => {
+//     try {
+//       const slots = await fetchAvailableSlots();
+//       setAvailableSlots(slots);
+//     } catch (error) {
+//       console.error("Error loading available slots:", error);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
 
-    loadUserProfile();
-  }, []);
+//   useEffect(() => {
+//     loadAvailableSlots();
+//   }, []);
 
-  const loadAvailableSlots = async () => {
-    try {
-      const slots = await fetchAvailableSlots();
-      setAvailableSlots(slots);
-    } catch (error) {
-      console.error("Error loading available slots:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-  useEffect(() => {
-    loadAvailableSlots();
-  }, []);
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-  };
+//   const handleDateChange = (date) => {
+//     setSelectedDate(date);
+//   };
 
-  const getAvailableSlotsForSelectedDate = () => {
-    const selectedDateStr = new Date(selectedDate).toLocaleDateString();
-    return availableSlots.filter(
-      (slot) => new Date(slot.date).toLocaleDateString() === selectedDateStr
-    );
-  };
-  const handleSlotClick = (slot) => {
-    setSelectedSlot(slot);
-  };
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+//   const getAvailableSlotsForSelectedDate = () => {
+//     const selectedDateStr = new Date(selectedDate).toLocaleDateString();
+//     return availableSlots.filter(
+//       (slot) => new Date(slot.date).toLocaleDateString() === selectedDateStr
+//     );
+//   };
 
-    if (!selectedSlot) {
-      Swal.fire({
-        icon: "warning",
-        title: "No Slot Selected",
-        text: "Please select a time slot.",
-        color: "red",
-      });
-      return;
-    }
-    if (!agreementChecked) {
-      Swal.fire({
-        icon: "warning",
-        title: "Agreement Required",
-        text: "Please agree to the terms and conditions.",
-        color: "red",
-      });
-      return;
-    }
-    setSubmitting(true);
+//   const handleSlotClick = (slot) => {
+//     setSelectedSlot(slot);
+//   };
 
-    try {
-      const appointmentData = new FormData();
-      appointmentData.append("date", selectedSlot.date);
-      appointmentData.append("time", selectedSlot.time);
-      appointmentData.append("appointmentType", appointmentType);
-      appointmentData.append("userId", user._id);
-      appointmentData.append("firstname", user.firstname);
-      appointmentData.append("lastname", user.lastname);
-      appointmentData.append("email", user.email);
-      appointmentData.append("role", user.role);
-      appointmentData.append("avatar", user.profilePicture);
-      appointmentData.append("sex", user.sex);
+//   const handleFileChange = (e) => {
+//     const file = e.target.files[0];
+//     setFile(file);
 
-      if (file) {
-        appointmentData.append("receipt", file);
-      }
+//     if (file) {
+//       const reader = new FileReader();
+//       reader.onloadend = () => {
+//         setFilePreview(reader.result);
+//       };
+//       reader.readAsDataURL(file);
+//     } else {
+//       setFilePreview(null);
+//     }
+//   };
 
-      const response = await createAppointment(appointmentData);
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
 
-      const patchResponse = await updateSlotStatus(selectedSlot._id, "pending");
+//     if (!selectedSlot) {
+//       Swal.fire({
+//         icon: "warning",
+//         title: "No Slot Selected",
+//         text: "Please select a time slot.",
+//         color: "red",
+//       });
+//       return;
+//     }
 
-      if (patchResponse.status === 200) {
-        Swal.fire({
-          icon: "success",
-          title: "Appointment Created",
-          text: "Your appointment has been scheduled successfully!",
-          willClose: () => {
-            window.location.reload();
-          },
-        });
+//     if (!agreementChecked) {
+//       Swal.fire({
+//         icon: "warning",
+//         title: "Agreement Required",
+//         text: "Please agree to the terms and conditions.",
+//         color: "red",
+//       });
+//       return;
+//     }
 
-        setAppointmentType("");
-        setSelectedSlot(null);
-        setFile(null);
-        setFilePreview(null);
-        setCurrentStep(1);
-        await loadAvailableSlots();
+//     setSubmitting(true);
 
-        const updatedSlots = await fetchAvailableSlots();
-        setAvailableSlots(updatedSlots);
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "Failed to update slot status.",
-        });
-      }
-    } catch (error) {
-      console.error("Error creating appointment:", error);
-    } finally {
-      setSubmitting(false);
-    }
-  };
+//     try {
+//       const appointmentData = new FormData();
+//       appointmentData.append("date", selectedSlot.date);
+//       appointmentData.append("time", selectedSlot.time);
+//       appointmentData.append("appointmentType", appointmentType);
+//       appointmentData.append("userId", user._id);
+//       appointmentData.append("firstname", user.firstname);
+//       appointmentData.append("lastname", user.lastname);
+//       appointmentData.append("email", user.email);
+//       appointmentData.append("role", user.role);
+//       appointmentData.append("avatar", user.profilePicture);
+//       appointmentData.append("sex", user.sex);
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    setFile(file);
+//       if (file) {
+//         appointmentData.append("receipt", file);
+//       }
 
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFilePreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-    } else {
-      setFilePreview(null);
-    }
-  };
-  const handleNext = () => {
-    if (
-      currentStep === 1 &&
-      (!appointmentType || !selectedSlot || !agreementChecked)
-    ) {
-      Swal.fire({
-        icon: "warning",
-        title: "Incomplete Information",
-        text: "Please select an appointment type and time slot and agreement",
-        color: "red",
-      });
-      return;
-    }
-    setCurrentStep((prevStep) => prevStep + 1);
-  };
-  const handleBack = () => {
-    setCurrentStep((prevStep) => prevStep - 1);
-  };
-  const renderStepContent = () => {
-    const isNextButtonDisabled =
-      currentStep === 1 && availableSlots.length === 0;
+//       const response = await createAppointment(appointmentData);
+//       await updateSlotStatus(selectedSlot._id, "pending");
 
-    switch (currentStep) {
-      case 1:
-        return (
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "100%",
-              p: 2,
-            }}
-          >
-            <Box sx={{ mb: 4, width: "100%" }}>
-              <Typography variant="h6" align="center">
-                Book Appointment
-              </Typography>
-              <Box
-                sx={{
-                  mt: 2,
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "flex-start",
-                }}
-              >
-                <Typography variant="body2" color="text.secondary">
-                  Appointment Type
-                </Typography>
-                <Select
-                  id="appointmentType"
-                  labelId="appointmentType-label"
-                  value={appointmentType}
-                  onChange={(e) => setAppointmentType(e.target.value)}
-                  displayEmpty
-                  sx={{
-                    borderColor: "gray.300",
-                    borderRadius: 1,
-                    "&:focus": {
-                      borderColor: "primary.main",
-                      boxShadow: "0 0 0 2px rgba(66, 153, 225, 0.5)",
-                    },
-                  }}
-                  required
-                >
-                  <MenuItem value="" disabled>
-                    Select Appointment Type
-                  </MenuItem>
-                  <MenuItem value="consultation">Consultation</MenuItem>
-                  <MenuItem value="followup">Follow-Up</MenuItem>
-                  <MenuItem value="checkup">Check-Up</MenuItem>
-                </Select>
-              </Box>
-            </Box>
-            <Box
-              sx={{
-                mb: 4,
-                width: "100%",
-                height: "100%",
-                display: "flex",
-                flexDirection: "column",
-              }}
-            >
-              <Typography variant="body2" color="text.secondary">
-                Select Date
-              </Typography>
-              <Box
-                sx={{
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Calendar
-                  onChange={handleDateChange}
-                  value={selectedDate}
-                  minDate={new Date()}
-                  className="custom-calendar w-full"
-                />
-              </Box>
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
-                Available Time Slots
-              </Typography>
-              <Box sx={{ mt: 1 }}>
-                {loading ? (
-                  <LoadingSpinner />
-                ) : (
-                  getAvailableSlotsForSelectedDate().map((slot, index) => (
-                    <Button
-                      key={slot._id}
-                      variant="outlined"
-                      sx={{
-                        mb: 1,
-                        mr: 1,
-                        backgroundColor:
-                          selectedSlot?._id === slot._id
-                            ? "#2C6975"
-                            : "transparent",
-                        color:
-                          selectedSlot?._id === slot._id ? "#fff" : "inherit",
-                        borderColor:
-                          selectedSlot?._id === slot._id
-                            ? "#2C6975"
-                            : "gray.300",
-                        "&:hover": {
-                          backgroundColor:
-                            selectedSlot?._id === slot._id
-                              ? "#1a4c5d"
-                              : "transparent",
-                        },
-                      }}
-                      onClick={() => handleSlotClick(slot)}
-                    >
-                      {slot.time}
-                    </Button>
-                  ))
-                )}
-              </Box>
-              <Box display="flex" flexDirection="row">
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={agreementChecked}
-                      onChange={(e) => setAgreementChecked(e.target.checked)}
-                      color="primary"
-                    />
-                  }
-                  label="I agree to the terms and conditions"
-                />
-                <Button
-                  variant="text"
-                  sx={{ textTransform: "lowercase", px: 0 }}
-                  onClick={handleOpenDialog}
-                >
-                  view agreement
-                </Button>
-              </Box>
-            </Box>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleNext}
-              sx={{
-                mt: 2,
-                px: 4,
-                py: 1,
-                borderRadius: 1,
-                backgroundColor: "#2C6975",
-                "&:hover": {
-                  backgroundColor: "#1a4c5d",
-                },
-                opacity: isNextButtonDisabled ? 0.5 : 1,
-                cursor: isNextButtonDisabled ? "not-allowed" : "pointer",
-              }}
-              disabled={isNextButtonDisabled}
-            >
-              Next
-            </Button>
-          </Box>
-        );
+//       Swal.fire({
+//         icon: "success",
+//         title: "Appointment Created",
+//         text: "Your appointment has been scheduled successfully!",
+//         willClose: () => {
+//           window.location.reload();
+//         },
+//       });
 
-      case 2:
-        return (
-          <div className="p-2">
-            <div className="mb-4 flex flex-col gap-2 p-2">
-              <div className="p-4 border border-gray-300 rounded-md shadow-lg">
-                <p className="flex gap-2">
-                  <b className="">STEP 1:</b>
-                  Choose a payment method below.
-                </p>
-                <p>QR Code Image</p>
-              </div>
-              <div className="p-4 border border-gray-300 rounded-md shadow-lg">
-                <p className="">
-                  <b className="">STEP 2:</b> {""}
-                  Pay the right amount and take a screenshot/picture of the
-                  proof of payment.
-                </p>
-              </div>
-              <div className="p-4 border border-gray-300 rounded-md shadow-lg">
-                <p className="text-gray-700">
-                  <b className="">STEP 3:</b> {""}
-                  Upload your proof of payment below to successfully book an
-                  appointment.
-                </p>
-                <br />
-                <label className="flex items-center justify-center w-full cursor-pointer relative">
-                  <input
-                    type="file"
-                    onChange={handleFileChange}
-                    className="absolute inset-0 opacity-0 cursor-pointer"
-                  />
-                  <div className="flex items-center justify-center bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300">
-                    <FaCloudUploadAlt className="mr-2" />
-                    <span>Choose File</span>
-                  </div>
-                </label>
-                <div className="flex justify-center">
-                  {filePreview && (
-                    <img
-                      src={filePreview}
-                      alt="Receipt Preview"
-                      className="mt-4 border border-gray-300 rounded-md"
-                      style={{ width: "300px", height: "auto" }}
-                    />
-                  )}
-                </div>
-              </div>
-            </div>
-            <div className="flex justify-center w-full gap-2">
-              <button
-                type="button"
-                onClick={handleBack}
-                className="btn btn-secondary bg-[#2C6975] py-1 px-6 text-white rounded-md"
-              >
-                Back
-              </button>
-              <button
-                type="button"
-                onClick={handleNext}
-                className="btn btn-primary bg-[#2C6975] py-1 px-6 text-white rounded-md"
-              >
-                Next
-              </button>
-            </div>
-          </div>
-        );
-      case 3:
-        return (
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              height: "100%",
-              p: 2,
-            }}
-          >
-            <Button
-              startIcon={<ArrowBackIcon />}
-              sx={{
-                alignSelf: "flex-start",
-                color: "#2C6975",
-                textAlign: "left",
-                mb: 2,
-              }}
-              onClick={handleBack}
-            >
-              Back
-            </Button>
-            <Typography
-              variant="h6"
-              sx={{
-                color: "#2C6975",
-                fontWeight: "bold",
-                textAlign: "center",
-                mb: 2,
-              }}
-            >
-              Confirm and Schedule your appointment
-            </Typography>
-            <Box
-              sx={{
-                width: "100%",
-                maxWidth: 600,
-                p: 4,
-                borderRadius: 1,
-                bgcolor: "white",
-              }}
-            >
-              <Typography variant="body1" sx={{ mb: 2 }}>
-                <strong>Name:</strong> {formData.firstname} {formData.lastname}
-              </Typography>
-              <Typography variant="body1" sx={{ mb: 2 }}>
-                <strong>Email:</strong> {formData.email}
-              </Typography>
-              <Typography variant="body1" sx={{ mb: 2 }}>
-                <strong>Appointment Type:</strong> {appointmentType}
-              </Typography>
-              <Typography variant="body1" sx={{ mb: 2 }}>
-                <strong>Date:</strong>{" "}
-                {selectedSlot
-                  ? new Date(selectedSlot.date).toLocaleDateString()
-                  : ""}
-              </Typography>
-              <Typography variant="body1" sx={{ mb: 2 }}>
-                <strong>Time:</strong> {selectedSlot ? selectedSlot.time : ""}
-              </Typography>
-              {filePreview && (
-                <img
-                  src={filePreview}
-                  alt="Receipt Preview"
-                  style={{
-                    width: "300px",
-                    height: "auto",
-                    marginTop: "16px",
-                    border: "1px solid #d1d1d1",
-                    borderRadius: "8px",
-                  }}
-                />
-              )}
-            </Box>
-            <Box
-              sx={{
-                width: "100%",
-                display: "flex",
-                justifyContent: "flex-end",
-                p: 2,
-              }}
-            >
-              <Typography variant="body1" sx={{ mb: 2 }}>
-                <strong>Payment = </strong> PHP {price}
-              </Typography>
-            </Box>
-            <Divider sx={{ my: 2 }} />
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                height: "100%",
-              }}
-            >
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleSubmit}
-                disabled={submitting}
-                sx={{ mt: 2 }}
-              >
-                {submitting ? "Submitting..." : "Schedule Appointment"}
-              </Button>
-            </Box>
-          </Box>
-        );
-      default:
-        return null;
-    }
-  };
-  if (loading) {
-    return <LoadingSpinner />;
-  }
-  const handleOpenDialog = () => {
-    setDialogOpen(true);
-  };
+//       // Reset form fields
+//       setAppointmentType("");
+//       setSelectedSlot(null);
+//       setFile(null);
+//       setFilePreview(null);
+//       await loadAvailableSlots();
+//     } catch (error) {
+//       console.error("Error creating appointment:", error);
+//       Swal.fire({
+//         icon: "error",
+//         title: "Error",
+//         text: "Failed to create appointment. Please try again.",
+//       });
+//     } finally {
+//       setSubmitting(false);
+//     }
+//   };
 
-  const handleCloseDialog = () => {
-    setDialogOpen(false);
-  };
+//   // Close the dropdown if clicking outside
+//   useEffect(() => {
+//     const handleClickOutside = (event) => {
+//       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+//         setShowDropdown(false);
+//       }
+//     };
 
-  return (
-    <div className="flex flex-col md:flex-row p-10 justify-between gap-10 ">
-      <div className="w-full mb-4 md:mb-0">
-        <CanceledAppointments />
-        <br />
-        <RejectedAppointments />
-        <br />
-        <RefundedAppointments />
-      </div>
-      <form
-        className="bg-white w-full shadow-2xl rounded-md mb-4 md:mb-0"
-        onSubmit={(e) => e.preventDefault()}
-      >
-        {showContent ? (
-          loading ? (
-            <LoadingSpinner />
-          ) : (
-            renderStepContent()
-          )
-        ) : (
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              height: "100%",
-              width: "100%",
-            }}
-          >
-            <Button
-              variant="contained"
-              onClick={handleCreateAppointment}
-              sx={{
-                borderRadius: "50px", // Rounded radius
-                backgroundColor: "#2C6975", // Background color
-                color: "white", // Text color (change as needed)
-                padding: "10px, 20px",
-                "&:hover": {
-                  backgroundColor: "#358898", // Hover background color
-                },
-              }}
-            >
-              Book Appointment
-            </Button>
-          </Box>
-        )}
-      </form>
-      <Appointments />
-      <Dialog open={dialogOpen} onClose={handleCloseDialog}>
-        <DialogTitle>Agreement</DialogTitle>
-        <DialogContent>
-          <div className="mb-4 p-3 text-justify flex flex-col gap-1 justify-center items-center">
-            <p className="text-xs text-gray-600 text-justify">
-              Before proceeding to the payment process, please review the
-              following rules and regulations regarding the collection of your
-              information.
-            </p>
-            <ol className="pl-4 p-2">
-              <li className="text-sm">
-                1. Data Privacy: Your personal information will be collected and
-                used solely for the purpose of scheduling and confirming your
-                appointment with Dr. Jeb.
-              </li>
-              <li className="text-sm">
-                <span>2. Confidentiality: </span>
-                <p>
-                  All data provided will be kept confidential and will not be
-                  shared with third parties without your consent.
-                </p>
-              </li>
-              <li className="text-sm">
-                <span>3. Accuracy: </span>
-                <p>
-                  Ensure that the information you provide is accurate and
-                  up-to-date to facilitate a smooth booking process.
-                </p>
-              </li>
-              <li className="text-sm">
-                <span>4. Security: </span>
-                <p>
-                  We employ secure methods to protect your data during
-                  collection and storage.
-                </p>
-              </li>
-              <li className="text-sm">
-                <span>5. Consent: </span>
-                <p>
-                  By providing your information, you consent to its use as
-                  outlined in our privacy policy.
-                </p>
-              </li>
-            </ol>
-            <p className="text-sm">
-              By proceeding to the payment process, you acknowledge that you
-              have read and agree to these terms.
-            </p>
-          </div>
-        </DialogContent>
-      </Dialog>
-    </div>
-  );
-};
+//     document.addEventListener("mousedown", handleClickOutside);
 
-export default AppointmentsPage;
-*/
-}
+//     return () => {
+//       document.removeEventListener("mousedown", handleClickOutside);
+//     };
+//   }, [dropdownRef]);
+//   const handleViewChange = (view) => {
+//     setCurrentView(view);
+//   };
+//   return (
+//     <>
+//       {showContent === true ? (
+//         <>
+//           {" "}
+//           <Button
+//             onClick={() => setShowContent(false)}
+//             sx={{ position: "absolute" }}
+//           >
+//             Close Booking
+//           </Button>
+//           <Box
+//             display="flex"
+//             flexDirection="row"
+//             justifyContent="space-between"
+//             gap={1}
+//             sx={{ margin: "auto", padding: 2 }}
+//             fullWidth
+//           >
+//             <br />
+//             <br />
+//             <br />
+//             {/* Step 1: Select Appointment Type */}
+//             <Box sx={{ mb: 3, flex: 1 }}>
+//               <Typography variant="h6">
+//                 Step 1: Select Appointment Type
+//               </Typography>
+//               <Box
+//                 sx={{
+//                   border: "1px solid #ccc",
+//                   borderRadius: "4px",
+//                   padding: "8px",
+//                   cursor: "pointer",
+//                 }}
+//               >
+//                 <Typography
+//                   variant="body1"
+//                   sx={{ color: appointmentType ? "black" : "grey" }}
+//                 >
+//                   {appointmentType || "Select Appointment Type"}
+//                 </Typography>
+//               </Box>
+//               <Box sx={{ mt: 1 }}>
+//                 {appointmentTypes.slice(1).map((type) => (
+//                   <Box
+//                     key={type.value}
+//                     onClick={() => setAppointmentType(type.value)}
+//                     sx={{
+//                       padding: "8px",
+//                       backgroundColor:
+//                         appointmentType === type.value
+//                           ? "#e0e0e0"
+//                           : "transparent",
+//                       cursor: "pointer",
+//                       "&:hover": {
+//                         backgroundColor: "#f0f0f0",
+//                       },
+//                     }}
+//                   >
+//                     {type.label}
+//                   </Box>
+//                 ))}
+//               </Box>
+//             </Box>
+
+//             {/* Step 2: Select Date and Time */}
+//             <Box sx={{ mb: 3, flex: 1 }}>
+//               <Typography variant="h6">Step 2: Select Date and Time</Typography>
+//               <Calendar
+//                 onChange={handleDateChange}
+//                 value={selectedDate}
+//                 minDate={new Date()}
+//               />
+//               <Typography variant="body2">Available Time Slots</Typography>
+//               <Box>
+//                 {loading ? (
+//                   <LoadingSpinner />
+//                 ) : (
+//                   getAvailableSlotsForSelectedDate().map((slot) => (
+//                     <Button
+//                       key={slot._id}
+//                       variant="outlined"
+//                       onClick={() => handleSlotClick(slot)}
+//                       sx={{ margin: "5px" }}
+//                     >
+//                       {slot.time}
+//                     </Button>
+//                   ))
+//                 )}
+//               </Box>
+//             </Box>
+
+//             {/* Step 3: Upload Proof of Payment */}
+//             <Box sx={{ mb: 3, flex: 1 }}>
+//               <Typography variant="h6">
+//                 Step 3: Upload Proof of Payment
+//               </Typography>
+//               <FormControlLabel
+//                 control={
+//                   <Checkbox
+//                     checked={agreementChecked}
+//                     onChange={(e) => setAgreementChecked(e.target.checked)}
+//                     color="primary"
+//                   />
+//                 }
+//                 label="I agree to the terms and conditions"
+//               />
+//               <label>
+//                 <input type="file" onChange={handleFileChange} />
+//                 <span>Choose File</span>
+//               </label>
+//               {filePreview && (
+//                 <img
+//                   src={filePreview}
+//                   alt="Receipt Preview"
+//                   style={{ width: "300px", height: "auto", marginTop: "10px" }}
+//                 />
+//               )}
+//               <Button
+//                 variant="contained"
+//                 onClick={handleSubmit}
+//                 disabled={submitting}
+//                 fullWidth
+//               >
+//                 {submitting ? "Submitting..." : "Submit Appointment"}
+//               </Button>
+//             </Box>
+//           </Box>
+//         </>
+//       ) : (
+//         <Box>
+//           <Button
+//             onClick={() => {
+//               setShowContent(true);
+//             }}
+//           >
+//             Start Booking
+//           </Button>
+//           <div className="hidden md:flex w-full justify-end">
+//             <button
+//               className="px-4 py-2 rounded-full transition duration-300 ease-in-out"
+//               style={{
+//                 backgroundColor:
+//                   currentView === "completed" || isHoveredCompleted
+//                     ? "rgba(44, 105, 117, 0.13)" // Active or hovered background
+//                     : "#E9F1EF", // Default background color
+//                 color: "#2C6975",
+//               }}
+//               onMouseEnter={() => setIsHoveredCompleted(true)}
+//               onMouseLeave={() => setIsHoveredCompleted(false)}
+//               onClick={() => handleViewChange("completed")}
+//             >
+//               Completed
+//             </button>
+
+//             <button
+//               className="px-4 py-2 rounded-full transition duration-300 ease-in-out"
+//               style={{
+//                 backgroundColor:
+//                   currentView === "canceled" || isHoveredCanceled
+//                     ? "rgba(44, 105, 117, 0.13)" // Active or hovered background
+//                     : "#E9F1EF", // Default background color
+//                 color: "#2C6975",
+//               }}
+//               onMouseEnter={() => setIsHoveredCanceled(true)}
+//               onMouseLeave={() => setIsHoveredCanceled(false)}
+//               onClick={() => handleViewChange("canceled")}
+//             >
+//               Canceled
+//             </button>
+
+//             <button
+//               className="px-4 py-2 rounded-full transition duration-300 ease-in-out"
+//               style={{
+//                 backgroundColor:
+//                   currentView === "rejected" || isHoveredRejected
+//                     ? "rgba(44, 105, 117, 0.13)" // Active or hovered background
+//                     : "#E9F1EF", // Default background color
+//                 color: "#2C6975",
+//               }}
+//               onMouseEnter={() => setIsHoveredRejected(true)}
+//               onMouseLeave={() => setIsHoveredRejected(false)}
+//               onClick={() => handleViewChange("rejected")}
+//             >
+//               Rejected
+//             </button>
+//             <button
+//               className="px-4 py-2 rounded-full transition duration-300 ease-in-out"
+//               style={{
+//                 backgroundColor:
+//                   currentView === "refunded" || isHoveredRefunded
+//                     ? "rgba(44, 105, 117, 0.13)" // Active or hovered background
+//                     : "#E9F1EF", // Default background color
+//                 color: "#2C6975",
+//               }}
+//               onMouseEnter={() => setIsHoveredRefunded(true)}
+//               onMouseLeave={() => setIsHoveredRefunded(false)}
+//               onClick={() => handleViewChange("refunded")}
+//             >
+//               Refunded
+//             </button>
+//           </div>
+//           <div className="md:hidden">
+//             <button
+//               onClick={() => setShowDropdown(!showDropdown)}
+//               className="px-4 py-2 rounded-full transition duration-300 ease-in-out"
+//               style={{
+//                 backgroundColor: isHoveredoption
+//                   ? "rgba(44, 105, 117, 0.13)"
+//                   : "#E9F1EF",
+//                 color: "#2C6975",
+//               }}
+//               onMouseEnter={() => setIsHoveredoption(true)}
+//               onMouseLeave={() => setIsHoveredoption(false)}
+//             >
+//               More Options
+//             </button>
+//             {showDropdown && (
+//               <div
+//                 ref={dropdownRef}
+//                 className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg z-10"
+//               >
+//                 <button className="block w-full text-left px-4 py-2 hover:bg-gray-100">
+//                   Completed
+//                 </button>
+//                 <button className="block w-full text-left px-4 py-2 hover:bg-gray-100">
+//                   Canceled
+//                 </button>
+//                 <button className="block w-full text-left px-4 py-2 hover:bg-gray-100">
+//                   Rejected
+//                 </button>
+//                 <button className="block w-full text-left px-4 py-2 hover:bg-gray-100">
+//                   Refunded
+//                 </button>
+//               </div>
+//             )}
+//           </div>
+//           {currentView === "completed" && (
+//             <CompletedAppointments
+//               onBackToActive={() => handleViewChange("default")}
+//             />
+//           )}
+//           {currentView === "canceled" && (
+//             <CanceledAppointments
+//               onBackToActive={() => handleViewChange("default")}
+//             />
+//           )}
+//           {currentView === "rejected" && (
+//             <RejectedAppointments
+//               onBackToActive={() => handleViewChange("default")}
+//             />
+//           )}
+//           {currentView === "refunded" && (
+//             <RefundedAppointments
+//               onBackToActive={() => handleViewChange("default")}
+//             />
+//           )}
+//           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+//             {/* Render Active or Completed Appointments */}
+//             {currentView === "default" && (
+//               <>
+//                 <Appointments />
+//               </>
+//             )}
+//           </div>
+//         </Box>
+//       )}
+//     </>
+//   );
+// };
+
+// export default AppointmentsPage;
