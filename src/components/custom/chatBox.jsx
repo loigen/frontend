@@ -69,7 +69,7 @@ const ChatBox = () => {
 
   if (!currentChat) {
     return (
-      <Typography color="textSecondary" align="center">
+      <Typography color="#2C6975" align="center">
         No Conversation Selected
       </Typography>
     );
@@ -77,7 +77,7 @@ const ChatBox = () => {
 
   if (!recipientUser) {
     return (
-      <Typography color="textSecondary" align="center">
+      <Typography color="#2C6975" align="center">
         Loading recipient information...
       </Typography>
     );
@@ -88,12 +88,17 @@ const ChatBox = () => {
       display="flex"
       flexDirection="column"
       height="100%"
-      bgcolor="background.paper"
+      bgcolor="#E9F1EF"
       borderRadius={1}
       boxShadow={3}
     >
       {/* Topbar */}
-      <AppBar position="static" color="primary">
+      <AppBar
+        sx={{
+          position: "static",
+          backgroundColor: "#68B2A0",
+        }}
+      >
         <Toolbar>
           <Avatar
             src={recipientUser?.profilePicture}
@@ -140,7 +145,7 @@ const ChatBox = () => {
                   maxWidth: "75%",
                   bgcolor:
                     message?.senderId === user?._id
-                      ? "#2F4F4F"
+                      ? "#68B2A0"
                       : "background.paper",
                   color:
                     message?.senderId === user?._id ? "white" : "text.primary",
@@ -179,7 +184,7 @@ const ChatBox = () => {
             </Box>
           ))
         ) : (
-          <Typography color="textSecondary" align="center">
+          <Typography color="#2C6975" align="center">
             You haven't sent a message to{" "}
             <strong>
               {recipientUser?.firstname} {recipientUser?.lastname}
@@ -196,25 +201,31 @@ const ChatBox = () => {
         justifyContent="center"
         p={2}
         borderTop={1}
-        borderColor="divider"
-        bgcolor="background.paper"
+        borderColor="rgba(44, 105, 117)"
+        bgcolor="#E9F1EF"
         sx={{ width: "100%" }}
       >
-        <div className="w-[95%] flex">
+        <div className="w-[95%] flex bg-[#E9F1EF]">
           <InputEmoji
             value={textMessage}
             onChange={setTextMessage}
             fontFamily="Nunito, sans-serif"
-            borderColor="rgba(44, 105, 117, 0.2)"
+            borderColor="rgba(44, 105, 117)"
             placeholder="Type a message..."
-            className="flex-1 border-none focus:ring-0 outline-none"
+            bgcolor="#E9F1EF" // This is for the overall component
+            className="flex-1 border-none focus:ring-0 outline-none bg-[#E9F1EF] text-[#2C6975] placeholder-[#2C6975]"
           />
+
           <IconButton
             color="primary"
             onClick={handleSendMessage}
             aria-label="Send message"
           >
-            <SendIcon />
+            <SendIcon
+              sx={{
+                color: "#2C6975",
+              }}
+            />
           </IconButton>
         </div>
       </Box>

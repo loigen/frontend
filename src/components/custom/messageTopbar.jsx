@@ -14,7 +14,7 @@ import {
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import { useAuth } from "../../context/AuthProvider";
-
+import LogoutButton from "../LogoutButton"
 const Topbar = () => {
   const { user, logout, loading: authLoading, error: authError } = useAuth();
   const [avatar, setAvatar] = useState(null);
@@ -22,6 +22,8 @@ const Topbar = () => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+  const [isHovered, setIsHovered] = useState(false); // State for hover
+
 
   useEffect(() => {
     const handleResize = () => {
@@ -66,9 +68,38 @@ const Topbar = () => {
   };
 
   return (
-    <div className="topbarComponent fixed w-full bg-white z-50 flex flex-row justify-between shadow-2xl p-3 h-16 md:h-20">
+    <div className="topbarComponent flex flex-row justify-between p-3 h-16 md:h-20">
       <IconButton onClick={() => navigate(-1)}>
-        <Tooltip title="Back to Dashboard" arrow>
+        <Tooltip
+          title="Back to Dashboard"
+          arrow
+          sx={{
+            color: "#2C6975",
+          }}
+          PopperProps={{
+            modifiers: [
+              {
+                name: "arrow",
+                options: {
+                  padding: 5, // optional padding for the arrow
+                },
+              },
+            ],
+          }}
+          componentsProps={{
+            tooltip: {
+              sx: {
+                bgcolor: "#2C6975", // Set the background color
+                color: "#fff", // Set the text color to white
+              },
+            },
+            arrow: {
+              sx: {
+                color: "#2C6975", // Set the arrow color
+              },
+            },
+          }}
+        >
           <KeyboardArrowLeftIcon />
         </Tooltip>
       </IconButton>
@@ -82,19 +113,23 @@ const Topbar = () => {
 
         <div className="profilePart flex flex-row gap-4 md:gap-6 items-center justify-center">
           {!isMobile && (
-            <p className="name capitalize font-bold text-xs md:text-sm cursor-pointer">
+            <p
+              className="name capitalize font-bold text-xs md:text-sm"
+              style={{
+                color: "#2C6975", // Change text color
+                fontWeight: 500, // Set font weight to 500
+              }}
+            >
               {user?.firstname} {user?.lastname}
             </p>
           )}
           <IconButton onClick={handleMenuClick} size="small">
-            <Tooltip title="Menu" className="flex items-center" arrow>
-              <Avatar
-                src={avatar || profile}
-                alt={`${user?.firstname} ${user?.lastname}`}
-                sx={{ width: 40, height: 40 }}
-              />
-              <KeyboardArrowDownIcon />
-            </Tooltip>
+            <Avatar
+              src={avatar || profile}
+              alt={`${user?.firstname} ${user?.lastname}`}
+              sx={{ width: 40, height: 40 }}
+            />
+            <KeyboardArrowDownIcon sx={{ color: "#2C6975" }} />
           </IconButton>
           <Menu
             anchorEl={anchorEl}
@@ -113,7 +148,12 @@ const Topbar = () => {
               horizontal: "center",
             }}
           >
-            <MenuItem onClick={handleLogout}>Logout</MenuItem>
+            <MenuItem
+              onMouseEnter={() => setIsHovered(true)} // Set hover state to true
+              onMouseLeave={() => setIsHovered(false)} // Reset hover state
+            >
+              <LogoutButton isHovered={isHovered} onClose={handleMenuClose} />
+            </MenuItem>{" "}
           </Menu>
         </div>
       </div>
