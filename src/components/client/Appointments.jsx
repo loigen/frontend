@@ -3,12 +3,11 @@ import { fetchAppointmentsByUserId } from "../../api/appointmentAPI/fetchAppoint
 import { useAuth } from "../../context/AuthProvider";
 import Reschedule from "./Reschedule";
 
-const Appointments = () => {
+const Appointments = ({ onBack }) => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { user } = useAuth();
-
   const [openReschedule, setOpenReschedule] = useState(false);
   const [selectedAppointmentId, setSelectedAppointmentId] = useState(null);
 
@@ -30,40 +29,15 @@ const Appointments = () => {
         const data = await fetchAppointmentsByUserId(user._id);
         console.log("API Response:", data);
 
-        const today = new Date().setHours(0, 0, 0, 0);
-
         const filteredAppointments = data.filter((appointment) => {
-          const appointmentDate = new Date(appointment.date).setHours(
-            0,
-            0,
-            0,
-            0
-          );
-          console.log("Filtering Appointment:", {
-            date: appointmentDate,
-            status: appointment.status,
-            isValidDate: appointmentDate >= today,
-            isValidStatus:
-              appointment.status === "pending" ||
-              appointment.status === "accepted",
-          });
-
-          return (
-            appointment.status === "pending" ||
-            appointment.status === "accepted"
-          );
+          return appointment.status === "accepted"; // Only fetch accepted appointments
         });
 
         console.log("Filtered Appointments:", filteredAppointments);
 
-        const sortedAppointments = filteredAppointments.sort((a, b) => {
-          return new Date(a.date) - new Date(b.date);
-        });
-
-        console.log("Sorted Appointments:", sortedAppointments);
-
-        setAppointments(sortedAppointments);
+        setAppointments(filteredAppointments);
       } catch (err) {
+        setError("Error fetching appointments.");
       } finally {
         setLoading(false);
       }
@@ -76,69 +50,106 @@ const Appointments = () => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="w-full shadow-2xl h-full p-5 flex flex-col gap-5 bg-white rounded-lg">
-      <h2 className="font-bold font-mono text-gray-500 text-lg">
-        My Appointments
+    <div className="min-h-screen p-8 bg-gray-50">
+      {/* Back Button */}
+      <div className="mb-6">
+        <button
+          className="text-[#2C6975] flex items-center"
+          onClick={onBack} // Call the back function passed as prop
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5 mr-1"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+          BACK
+        </button>
+      </div>
+
+      {/* Title */}
+      <h2 className="text-2xl font-semibold text-[#2C6975] mb-8">
+        Accepted Appointments
       </h2>
-      <div className="w-full">
-        {appointments.length === 0 ? (
-          <p>No appointments found.</p>
-        ) : (
-          <ul className="flex flex-col gap-5 w-full">
-            {appointments.map((appointment) => {
-              const statusBgColor =
-                appointment.status === "pending"
-                  ? "bg-orange-500"
-                  : appointment.status === "rescheduled"
-                  ? "bg-yellow-500" // You can customize the color for "rescheduled" if desired
-                  : "bg-[#2C6975]";
 
-              return (
-                <li
-                  key={appointment._id}
-                  style={{ borderLeft: "5px solid #2C6975" }}
-                  className="shadow-2xl w-full rounded-md p-2"
-                >
-                  <div className="w-full flex justify-end">
-                    <p className={`p-1 text-slate-50 rounded ${statusBgColor}`}>
-                      {appointment.status}
-                    </p>
-                  </div>
-                  <div className="capitalize">
-                    {appointment.appointmentType}
-                  </div>
-                  <div className="flex flex-row gap-2">
-                    <p>{new Date(appointment.date).toLocaleDateString()},</p>
-                    {appointment.time}
-                  </div>
-                  {appointment.meetLink && (
-                    <div className="flex justify-end">
+      {/* Table */}
+      <div className="overflow-x-auto">
+        <table className="min-w-full bg-white shadow-lg rounded-lg">
+          <thead>
+            <tr className="bg-gray-100 text-left">
+              <th className="p-4 font-semibold">Date</th>
+              <th className="p-4 font-semibold">Type of Service</th>
+              <th className="p-4 font-semibold">Consultation Method</th>
+              <th className="p-4 font-semibold">Receipt</th>{" "}
+              {/* Changed from Total Payment to Receipt */}
+              <th className="p-4"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {appointments.length === 0 ? (
+              <tr>
+                <td colSpan="5" className="text-center p-4">
+                  No accepted appointments found.
+                </td>
+              </tr>
+            ) : (
+              appointments.map((appointment) => (
+                <tr key={appointment._id} className="border-b">
+                  <td className="p-4">
+                    {new Date(appointment.date).toLocaleDateString()}
+                  </td>
+                  <td className="p-4">{appointment.appointmentType}</td>
+                  <td className="p-4 font-semibold text-teal-600">
+                    {appointment.consultationMethod}
+                  </td>
+                  <td className="p-4">
+                    {appointment.receipt ? (
                       <a
-                        className="bg-[#2C6975] text-white py-2 px-5 font-bold rounded-md"
-                        href={appointment.meetLink}
+                        href={appointment.receipt}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-500 hover:underline"
                       >
-                        Go to Room
+                        View Receipt
                       </a>
-                    </div>
-                  )}
-
-                  {/* Add Reschedule Button conditionally */}
-                  {(appointment.status === "rescheduled" ||
-                    appointment.status === "accepted") && (
-                    <div className="flex justify-end mt-3">
-                      <button
-                        className="bg-blue-500 text-white py-2 px-5 rounded-md"
-                        onClick={() => handleOpenReschedule(appointment._id)}
+                    ) : (
+                      "N/A"
+                    )}
+                  </td>
+                  <td className="p-4 text-right">
+                    <button
+                      className="text-gray-500"
+                      onClick={() => handleOpenReschedule(appointment._id)}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-6 w-6"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
                       >
-                        Reschedule
-                      </button>
-                    </div>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
-        )}
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M6 12h12M6 12l-3 3m3-3l-3-3"
+                        />
+                      </svg>
+                    </button>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
       </div>
 
       {/* Reschedule Modal */}

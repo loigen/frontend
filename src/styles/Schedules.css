@@ -24,7 +24,7 @@
 
 .custom-calendar .react-calendar__tile--active:enabled:hover {
   border: 2px solid #2c6975;
-  color: #2c6975;
+  color: #fff;
 }
 
 .custom-calendar .react-calendar__navigation button {

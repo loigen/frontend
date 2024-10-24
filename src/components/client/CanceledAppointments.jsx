@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { fetchAppointmentsByUserId } from "../../api/appointmentAPI/fetchAppointmentsByUserId";
 import { useAuth } from "../../context/AuthProvider";
-import axios from "axios";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import { IconButton } from "@mui/material";
 
-const CanceledAppointments = () => {
+const CanceledAppointments = ({ onBackToActive }) => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedAppointmentId, setSelectedAppointmentId] = useState(null);
-  const [qrCodeFile, setQrCodeFile] = useState(null);
-  const [uploading, setUploading] = useState(false);
-  const [responseMessage, setResponseMessage] = useState(null);
   const { user } = useAuth();
 
   useEffect(() => {
@@ -18,21 +15,12 @@ const CanceledAppointments = () => {
       if (!user) return;
       try {
         const data = await fetchAppointmentsByUserId(user._id);
-
-        const today = new Date().setHours(0, 0, 0, 0);
-
         const filteredAppointments = data.filter((appointment) => {
-          const appointmentDate = new Date(appointment.date).setHours(
-            0,
-            0,
-            0,
-            0
-          );
           return appointment.status === "canceled";
         });
-
         setAppointments(filteredAppointments);
       } catch (err) {
+        setError("Failed to fetch appointments.");
       } finally {
         setLoading(false);
       }
@@ -41,112 +29,90 @@ const CanceledAppointments = () => {
     getAppointments();
   }, [user]);
 
-  const handleRequestRefund = async () => {
-    if (!qrCodeFile) {
-      setError("Please upload a QR code file.");
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append("qrCode", qrCodeFile);
-    formData.append("appointmentId", selectedAppointmentId);
-
-    try {
-      setUploading(true);
-      setResponseMessage(null);
-      const response = await axios.post(
-        `https://backend-production-c8da.up.railway.app/Appointments/api/appointments/update-with-bank-account`,
-        formData,
-        { withCredentials: true }
-      );
-
-      setResponseMessage(response.data.message);
-      setSelectedAppointmentId(null);
-      setQrCodeFile(null);
-    } catch (error) {
-      console.error("Error submitting refund request:", error);
-      setError("Error submitting refund request.");
-    } finally {
-      setUploading(false);
-    }
-  };
-
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="shadow-2xl p-5 flex flex-col gap-5 bg-white rounded-lg">
-      <h2 className="font-bold font-mono text-gray-500 text-lg">
+    <div className="min-h-screen p-8 bg-gray-50">
+      {/* Back Button */}
+      <div className="mb-6">
+        <button
+          className="text-[#2C6975] flex items-center"
+          onClick={onBackToActive}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5 mr-1"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+          BACK
+        </button>
+      </div>
+
+      {/* Title */}
+      <h2 className="text-2xl font-semibold text-[#2C6975] mb-8">
         Canceled Appointments
       </h2>
-      <div className="w-full">
-        {appointments.length === 0 ? (
-          <p>No canceled appointments found.</p>
-        ) : (
-          <ul className="flex flex-col gap-5 w-full">
-            {appointments.map((appointment) => (
-              <li
-                key={appointment._id}
-                style={{ borderLeft: "5px solid #2C6975" }}
-                className="shadow-2xl w-full rounded-md p-2"
-              >
-                <div className="w-full flex justify-end">
-                  <p className="p-1 text-slate-50 rounded bg-red-500">
-                    {appointment.status}
-                  </p>
-                </div>
-                <div className="capitalize">{appointment.appointmentType}</div>
-                <div className="flex flex-row gap-2">
-                  <p>{new Date(appointment.date).toLocaleDateString()},</p>
-                  {appointment.time}
-                </div>
-                {appointment.refundReceipt && (
-                  <div className="flex justify-end mt-2">
-                    <a
-                      className="bg-blue-500 text-white py-2 px-5 font-bold rounded-md"
-                      href={appointment.refundReceipt}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      View Receipt
-                    </a>
-                  </div>
-                )}
-                <div className="mt-4">
-                  <button
-                    onClick={() => setSelectedAppointmentId(appointment._id)}
-                    className="bg-green-500 text-white py-2 px-5 font-bold rounded-md"
-                  >
-                    Request Refund
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
+
+      {/* Table */}
+      <div className="overflow-x-auto">
+        <table className="min-w-full bg-white shadow-lg rounded-lg">
+          <thead>
+            <tr className="bg-gray-100 text-left">
+              <th className="p-4 font-semibold">Date</th>
+              <th className="p-4 font-semibold">Type of Service</th>
+              <th className="p-4 font-semibold">Consultation Method</th>
+              <th className="p-4 font-semibold">Receipt</th>
+              <th className="p-4"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {appointments.length === 0 ? (
+              <tr>
+                <td colSpan={5} className="text-center p-4 text-gray-500">
+                  No canceled appointments found. You can go back to view active
+                  appointments.
+                </td>
+              </tr>
+            ) : (
+              appointments.map((appointment) => (
+                <tr key={appointment._id} className="border-b">
+                  <td className="p-4">
+                    {new Date(appointment.date).toLocaleDateString()}
+                  </td>
+                  <td className="p-4">{appointment.appointmentType}</td>
+                  <td className="p-4 font-semibold text-teal-600">
+                    {appointment.consultationMethod}
+                  </td>
+                  <td className="p-4">
+                    {appointment.receipt ? (
+                      <a
+                        href={appointment.receipt}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-500 hover:underline"
+                      >
+                        View Receipt
+                      </a>
+                    ) : (
+                      "N/A"
+                    )}
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
       </div>
-      {selectedAppointmentId && (
-        <div className="mt-4">
-          <h3 className="text-lg font-bold">Submit Refund Request</h3>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => setQrCodeFile(e.target.files[0])}
-            className="border p-2 w-full rounded-md"
-          />
-          <button
-            onClick={handleRequestRefund}
-            className="bg-blue-500 text-white py-2 px-5 font-bold rounded-md mt-2"
-            disabled={uploading}
-          >
-            {uploading ? "Submitting..." : "Submit Request"}
-          </button>
-          {responseMessage && (
-            <p className="text-green-500 mt-2">{responseMessage}</p>
-          )}
-          {error && <p className="text-red-500 mt-2">{error}</p>}
-        </div>
-      )}
     </div>
   );
 };
