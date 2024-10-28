@@ -5,6 +5,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import Swal from "sweetalert2";
 import "../../styles/Schedules.css";
 import DeleteIcon from "@mui/icons-material/Delete";
+import ReminderIcon from "@mui/icons-material/Alarm"; // Import Reminder Icon
 
 import dayjs from "dayjs";
 import { CustomTimePicker, AppointmentRequest } from "../../components/custom";
@@ -18,6 +19,7 @@ import {
   Tooltip,
 } from "@mui/material";
 import axios from "axios";
+import { InfoOutlined } from "@mui/icons-material";
 
 const API_URL = `https://backend-production-c8da.up.railway.app`;
 
@@ -63,7 +65,31 @@ const Schedules = () => {
 
     return () => clearInterval(intervalId);
   }, []);
+  const handleShowDetails = (appointment) => {
+    Swal.fire({
+      title: "Appointment Details",
+      html: `
+        <strong>Date:</strong> ${appointment.date}<br>
+        <strong>Time:</strong> ${appointment.time}<br>
+        <strong>Patient:</strong> ${appointment.firstname} ${appointment.lastname}<br>
+        <strong>Type:</strong> ${appointment.appointmentType}
+      `,
+      icon: "info",
+      confirmButtonColor: "#2c6975",
+    });
+  };
 
+  const handleRemind = async (appointmentId) => {
+    try {
+      const response = await axios.post(
+        `${API_URL}/Appointments/api/remind/${appointmentId}`
+      );
+      Swal.fire("Success", response.data.message, "success");
+    } catch (error) {
+      console.error("Error sending reminder:", error);
+      Swal.fire("Error", "Failed to send reminder", "error");
+    }
+  };
   const handleDeleteFreeSlot = async (id) => {
     const result = await Swal.fire({
       title: "Are you sure?",
@@ -206,15 +232,39 @@ const Schedules = () => {
                   todaysAppointments.map((appointment, index) => (
                     <li
                       key={index}
-                      className="flex flex-col rounded-3xl shadow-2xl px-10 py-2 bg-white"
+                      className="flex flex-col rounded-lg shadow-lg bg-white p-6 "
                     >
-                      <strong>{appointment.time}</strong>
-                      <p>
-                        <strong>Patients Name: </strong>
-                        {appointment.firstname} {appointment.lastname}
+                      <div className="flex justify-between items-center mb-4">
+                        <strong className="text-xl text-gray-800">
+                          {appointment.time}
+                        </strong>
+
+                        <div className="flex gap-4">
+                          <IconButton
+                            onClick={() => handleRemind(appointment._id)}
+                            className="flex items-center bg-blue-500 text-white rounded-md px-3 py-2 transition-colors hover:bg-blue-600"
+                          >
+                            <Tooltip title="Send Reminder" arrow>
+                              <ReminderIcon />
+                            </Tooltip>
+                          </IconButton>
+                          <IconButton
+                            onClick={() => handleShowDetails(appointment)}
+                            className="text-gray-600 hover:text-blue-500"
+                          >
+                            <Tooltip title="Show Details" arrow>
+                              <InfoOutlined />
+                            </Tooltip>
+                          </IconButton>
+                        </div>
+                      </div>
+
+                      <p className="text-gray-700 mb-2">
+                        <strong>Patient's Name:</strong> {appointment.firstname}{" "}
+                        {appointment.lastname}
                       </p>
-                      <p>
-                        {" "}
+
+                      <p className="text-gray-700 mb-4">
                         <strong>Type:</strong> {appointment.appointmentType}
                       </p>
                     </li>

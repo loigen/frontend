@@ -2,10 +2,13 @@ import React, { useState, useEffect } from "react";
 import PersonIcon from "@mui/icons-material/Person";
 import EqualizerOutlinedIcon from "@mui/icons-material/EqualizerOutlined";
 import InfoIcon from "@mui/icons-material/Info";
+import ReminderIcon from "@mui/icons-material/Alarm"; // Import Reminder Icon
+import Swal from "sweetalert2";
+import axios from "axios";
 
 import CancelIcon from "@mui/icons-material/Cancel";
 import "../../styles/Home.css";
-
+import { IconButton, Tooltip } from "@mui/material";
 import {
   WorkloadChart,
   AppointmentRequest,
@@ -21,6 +24,7 @@ import { fetchTodaysAppointments } from "../../api/appointmentAPI/fetchTodayAppo
 import { fetchUserCount } from "../../api/appointmentAPI/fetchUserCount";
 import { fetchCancellationRate } from "../../api/appointmentAPI/fetchCancellationRate";
 import { fetchCompletionRate } from "../../api/appointmentAPI/fetchCompletionRate";
+const API_URL = `https://backend-production-c8da.up.railway.app`;
 
 const Home = () => {
   const [userCount, setUserCount] = useState(0);
@@ -125,7 +129,17 @@ const Home = () => {
 
     handlefetchCompletionRate();
   }, []);
-
+  const handleRemind = async (appointmentId) => {
+    try {
+      const response = await axios.post(
+        `${API_URL}/Appointments/api/remind/${appointmentId}`
+      );
+      Swal.fire("Success", response.data.message, "success");
+    } catch (error) {
+      console.error("Error sending reminder:", error);
+      Swal.fire("Error", "Failed to send reminder", "error");
+    }
+  };
   return (
     <>
       <div className="min-h-screen w-full h-full pt-16 pr-14 pl-14 pb-14">
@@ -297,12 +311,25 @@ const Home = () => {
                         <span className="text-[#2c6975] font-normal font-poppins">
                           <strong>{appointment.time}</strong>
                         </span>
-                        <button
-                          onClick={() => handleShowDetails(appointment)}
-                          className="text-gray-400 hover:text-[#2c6975] mr-2"
-                        >
-                          <InfoIcon />
-                        </button>
+                        <div>
+                          <button
+                            onClick={() => handleShowDetails(appointment)}
+                            className="text-gray-400 hover:text-[#2c6975] mr-2"
+                          >
+                            <Tooltip title="Show Details" arrow>
+                              {" "}
+                              <InfoIcon />
+                            </Tooltip>
+                          </button>
+                          <IconButton
+                            onClick={() => handleRemind(appointment._id)}
+                            className="flex items-center bg-blue-500 text-white rounded-md px-3 py-2 transition-colors hover:bg-blue-600"
+                          >
+                            <Tooltip title="Send Reminder" arrow>
+                              <ReminderIcon />
+                            </Tooltip>
+                          </IconButton>
+                        </div>
                       </div>
                       <div className="flex flex-col sm:flex-row gap-2 mt-2">
                         <p className="uppercase font-semibold text-[#54595E]">

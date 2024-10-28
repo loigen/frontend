@@ -5,7 +5,10 @@ import { LoadingSpinner, MeetLinkModal } from "./index";
 import emailjs, { send } from "emailjs-com";
 import axios from "axios";
 import CloseIcon from "@mui/icons-material/Close";
-import "../../styles/Rejectpopup.css"
+import "../../styles/Rejectpopup.css";
+import MeetPlaceModal from "./meetPlaceModal";
+import { patch } from "@mui/material";
+import { trim } from "validator";
 
 const AppointmentRequest = () => {
   const [selectedAppointment, setSelectedAppointment] = useState(null);
@@ -18,6 +21,7 @@ const AppointmentRequest = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [appointmentToAccept, setAppointmentToAccept] = useState(null);
   const [isHovered, setIsHovered] = useState(false);
+  const [isMeetLinkOpen, setIsMeetLinkOpen] = useState(false);
 
   const handleShowDetails = (appointment) => {
     setSelectedAppointment(appointment);
@@ -29,7 +33,11 @@ const AppointmentRequest = () => {
 
   const handleAccept = (appointment) => {
     setAppointmentToAccept(appointment);
-    setIsModalOpen(true);
+    if (appointment.consultationMethod === "face-to-face") {
+      setIsMeetLinkOpen(true);
+    } else {
+      setIsModalOpen(true);
+    }
   };
 
   const handleReject = async (id, date, time) => {
@@ -41,17 +49,17 @@ const AppointmentRequest = () => {
       confirmButtonText: "Yes, reject it!",
       cancelButtonText: "No, cancel!",
       customClass: {
-        confirmButton: "btn-confirm",  // Your custom class for the confirm button
-        cancelButton: "btn-cancel",    // Your custom class for the cancel button
-        popup: "custom-swal-popup",    // Your custom class for the popup
-        title: "custom-swal-title",    // Custom class for the title
-        icon: "custom-swal-icon",      // Custom class for the icon
-        content: "custom-swal-content",// Custom class for the content
+        confirmButton: "btn-confirm", // Your custom class for the confirm button
+        cancelButton: "btn-cancel", // Your custom class for the cancel button
+        popup: "custom-swal-popup", // Your custom class for the popup
+        title: "custom-swal-title", // Custom class for the title
+        icon: "custom-swal-icon", // Custom class for the icon
+        content: "custom-swal-content", // Custom class for the content
       },
       buttonsStyling: false, // Set to false to apply custom styles
-      reverseButtons: true,   // Puts cancel button on the left
+      reverseButtons: true, // Puts cancel button on the left
     });
-  
+
     if (confirmation.isConfirmed) {
       try {
         await axios.patch(
@@ -61,20 +69,20 @@ const AppointmentRequest = () => {
           `https://backend-production-c8da.up.railway.app/schedules/updateByDateTime`,
           { date, time }
         );
-  
+
         setAppointments((prevAppointments) =>
           prevAppointments.filter((app) => app._id !== id)
         );
-  
+
         Swal.fire({
           title: "Success",
           text: "Successfully declined!",
           icon: "success",
           confirmButtonText: "Close",
           customClass: {
-            confirmButton: "btn-success",  // Custom success button styling
+            confirmButton: "btn-success", // Custom success button styling
           },
-          buttonsStyling: false,  // Apply your custom styles
+          buttonsStyling: false, // Apply your custom styles
         });
       } catch (error) {
         Swal.fire({
@@ -83,7 +91,7 @@ const AppointmentRequest = () => {
           icon: "error",
           confirmButtonText: "Okay",
           customClass: {
-            confirmButton: "btn-error",  // Custom error button styling
+            confirmButton: "btn-error", // Custom error button styling
           },
           buttonsStyling: false,
         });
@@ -145,6 +153,7 @@ const AppointmentRequest = () => {
           `https://backend-production-c8da.up.railway.app/Appointments/api/accept/${appointmentToAccept._id}`,
           {
             meetLink: validMeetLink,
+            meetPlace: "",
           }
         );
         console.log("Appointment to accept:", appointmentToAccept);
@@ -164,6 +173,49 @@ const AppointmentRequest = () => {
         });
       } finally {
         setIsModalOpen(false);
+        setAppointmentToAccept(null);
+      }
+    }
+  };
+
+  const handleMeetPlaceModalSubmit = async (meetPlace) => {
+    if (!meetPlace.trim()) {
+      Swal.fire({
+        title: "Invalid Place",
+        text: "Please provide a valid meet place.",
+        icon: "error",
+        confirmButtonText: "Try Again",
+      });
+      return;
+    }
+
+    if (appointmentToAccept) {
+      try {
+        await axios.patch(
+          `https://backend-production-c8da.up.railway.app/Appointments/api/accept/${appointmentToAccept._id}`,
+          {
+            meetPlace: meetPlace,
+            meetLink: "",
+          }
+        );
+        console.log("Appointment to accept:", appointmentToAccept);
+        await sendEmailNotification({
+          ...appointmentToAccept,
+          meetPlace: meetPlace,
+          meetLink: "",
+        });
+        setAppointments((prevAppointments) =>
+          prevAppointments.filter((app) => app._id !== appointmentToAccept._id)
+        );
+      } catch (error) {
+        Swal.fire({
+          title: "Error",
+          text: "Failed to accept the appointment.",
+          icon: "error",
+          confirmButtonText: "Close",
+        });
+      } finally {
+        setIsMeetLinkOpen(false);
         setAppointmentToAccept(null);
       }
     }
@@ -201,7 +253,10 @@ const AppointmentRequest = () => {
 
   return (
     <div className="thirdBox w-full mt-4 bg-white p-4 shadow-2xl">
-      <h2 className="text-xl text-center uppercase font-mono" style={{color: "rgba(0,0,0,0.78)"}}>
+      <h2
+        className="text-xl text-center uppercase font-mono"
+        style={{ color: "rgba(0,0,0,0.78)" }}
+      >
         Patient Requests for Approval
       </h2>
 
@@ -279,7 +334,7 @@ const AppointmentRequest = () => {
                 <p className="mt-2 text-gray-700 capitalize">
                   {appointment.appointmentType}
                 </p>
-                <p className="mt-2 font-semibold">{formattedTime}</p>
+                <p className="mt-2 font-semibold">{appointment.time}</p>
                 <div className="mt-4 flex justify-end">
                   <button
                     onClick={() => handleAccept(appointment)}
@@ -404,6 +459,11 @@ const AppointmentRequest = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSubmit={handleModalSubmit}
+      />
+      <MeetPlaceModal
+        isOpen={isMeetLinkOpen}
+        onClose={() => setIsMeetLinkOpen(false)}
+        onSubmit={handleMeetPlaceModalSubmit}
       />
     </div>
   );

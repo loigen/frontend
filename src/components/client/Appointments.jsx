@@ -89,7 +89,6 @@ const Appointments = ({ onBack }) => {
               <th className="p-4 font-semibold">Type of Service</th>
               <th className="p-4 font-semibold">Consultation Method</th>
               <th className="p-4 font-semibold">Receipt</th>{" "}
-              {/* Changed from Total Payment to Receipt */}
               <th className="p-4"></th>
             </tr>
           </thead>
