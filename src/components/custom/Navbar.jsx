@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useLocation } from "react-router-dom";
-import logo from "../../images/logo.png";
+import logo from "../../images/safeplacelogo.png";
 import SignupModal from "../Signup";
 import LoginModal from "../Login";
 const Navbar = () => {
@@ -59,6 +59,9 @@ const Navbar = () => {
         button
         onClick={() => handleMenuItemClick("/")}
         className={isActive("/")}
+        sx={{
+          cursor: "pointer",
+        }}
       >
         <ListItemText primary="Home" />
       </ListItem>
@@ -66,6 +69,9 @@ const Navbar = () => {
         button
         onClick={() => handleMenuItemClick("/About")}
         className={isActive("/About")}
+        sx={{
+          cursor: "pointer",
+        }}
       >
         <ListItemText primary="About" />
       </ListItem>
@@ -73,6 +79,9 @@ const Navbar = () => {
         button
         onClick={() => handleMenuItemClick("/Services")}
         className={isActive("/Services")}
+        sx={{
+          cursor: "pointer",
+        }}
       >
         <ListItemText primary="Services" />
       </ListItem>
@@ -80,6 +89,9 @@ const Navbar = () => {
         button
         onClick={() => handleMenuItemClick("/Contact")}
         className={isActive("/Contact")}
+        sx={{
+          cursor: "pointer",
+        }}
       >
         <ListItemText primary="Contact" />
       </ListItem>
@@ -87,6 +99,9 @@ const Navbar = () => {
         button
         onClick={() => handleMenuItemClick("/guestBlog")}
         className={isActive("/guestBlog")}
+        sx={{
+          cursor: "pointer",
+        }}
       >
         <ListItemText primary="Blog" />
       </ListItem>
@@ -94,6 +109,9 @@ const Navbar = () => {
         button
         onClick={handleOpenLoginModal}
         className={isActive("/signin")}
+        sx={{
+          cursor: "pointer",
+        }}
       >
         <ListItemText primary="Signin/Signup" />
       </ListItem>
@@ -102,11 +120,11 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="nav-container fixed w-full">
-        <div className="nav-content flex justify-between flex-row w-full ">
-          <div className="logo-container">
-            <img src={logo} alt="Logo" className="logo" />
-          </div>
+      <header className="flex justify-between items-center py-4 px-6 bg-white shadow-md w-full sticky top-0">
+        <div className="flex items-center space-x-2">
+          <h1 className="text-2xl font-bold text-teal-700">Safe Place</h1>
+        </div>
+        <nav className="flex space-x-6 text-gray-600 ">
           {isMobile ? (
             <>
               <IconButton
@@ -136,47 +154,49 @@ const Navbar = () => {
               </Drawer>
             </>
           ) : (
-            <div className="nav-links flex-row flex items-center gap-10 px-10">
+            <div className="cursor-pointer flex-row flex items-center gap-10 px-10">
               <div
-                className={`nav-link ${isActive("/")}`}
+                className={` ${isActive("/")} hover:text-[#68B2A0]`}
                 onClick={() => handleMenuItemClick("/")}
               >
                 Home
               </div>
               <div
-                className={`nav-link ${isActive("/About")}`}
+                className={`${isActive("/About")} hover:text-[#68B2A0]`}
                 onClick={() => handleMenuItemClick("/About")}
               >
                 About
               </div>
               <div
-                className={`nav-link ${isActive("/Services")}`}
+                className={` ${isActive("/Services")} hover:text-[#68B2A0]`}
                 onClick={() => handleMenuItemClick("/Services")}
               >
                 Services
               </div>
               <div
-                className={`nav-link ${isActive("/Contact")}`}
+                className={`${isActive("/Contact")} hover:text-[#68B2A0]`}
                 onClick={() => handleMenuItemClick("/Contact")}
               >
                 Contact
               </div>
               <div
-                className={`nav-link ${isActive("/guestBlog")}`}
+                className={` ${isActive("/guestBlog")} hover:text-[#68B2A0]`}
                 onClick={() => handleMenuItemClick("/guestBlog")}
               >
                 Blog
               </div>
               <div
-                className={`nav-link ${isActive("/signin")}`}
+                className={` ${isActive("/signin")} hover:text-[#68B2A0]`}
                 onClick={handleOpenLoginModal}
               >
                 Signin/Signup
               </div>
+
+     
             </div>
           )}
-        </div>
-      </nav>
+        </nav>
+      </header>
       <LoginModal
         open={isLoginModalOpen}
         onClose={handleCloseLoginModal}

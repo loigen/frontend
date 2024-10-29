@@ -1,7 +1,15 @@
 import React from "react";
+import { Navbar } from "./custom";
 
 const Services = () => {
-  return <div>Services</div>;
+  return (
+    <>
+    <Navbar />
+    <div className="container">
+      
+    </div>
+    </>
+  )
 };
 
 export default Services;
