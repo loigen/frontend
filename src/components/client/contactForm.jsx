@@ -7,7 +7,6 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import FacebookIcon from "@mui/icons-material/Facebook";
-import CircularProgress from "@mui/material/CircularProgress"; // Import the spinner
 
 const Contact = () => {
   const [formData, setFormData] = useState({

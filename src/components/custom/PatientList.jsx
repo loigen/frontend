@@ -103,7 +103,9 @@ const PatientList = ({
               >
                 <TableCell>{patient.date}</TableCell>
                 <TableCell>{patient.time}</TableCell>
-                <TableCell>{patient.name}</TableCell>
+                <TableCell>
+                  {patient.firstname} <span> </span> {patient.lastname}
+                </TableCell>
                 <TableCell>
                   <Typography
                     variant="body2"

@@ -100,7 +100,6 @@ const AppointmentsPage = () => {
     setHistoryOfIntervention(event.target.value === "Yes");
   };
 
-  // Handle consultation method change
   const handleConsultationMethodChange = (event) => {
     setConsultationMethod(event.target.value);
   };
@@ -846,19 +845,79 @@ const AppointmentsPage = () => {
                     ref={dropdownRef}
                     className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg z-10"
                   >
-                    <button className="block w-full text-left px-4 py-2 hover:bg-gray-100">
+                    <button
+                      style={{
+                        backgroundColor:
+                          currentView === "completed" || isHoveredCompleted
+                            ? "rgba(44, 105, 117, 0.13)"
+                            : "#E9F1EF",
+                        color: "#2C6975",
+                      }}
+                      onMouseEnter={() => setIsHoveredCompleted(true)}
+                      onMouseLeave={() => setIsHoveredCompleted(false)}
+                      onClick={() => handleViewChange("completed")}
+                      className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                    >
                       Completed
                     </button>
-                    <button className="block w-full text-left px-4 py-2 hover:bg-gray-100">
+                    <button
+                      style={{
+                        backgroundColor:
+                          currentView === "canceled" || isHoveredCanceled
+                            ? "rgba(44, 105, 117, 0.13)"
+                            : "#E9F1EF",
+                        color: "#2C6975",
+                      }}
+                      onMouseEnter={() => setIsHoveredCanceled(true)}
+                      onMouseLeave={() => setIsHoveredCanceled(false)}
+                      onClick={() => handleViewChange("canceled")}
+                      className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                    >
                       Canceled
                     </button>
-                    <button className="block w-full text-left px-4 py-2 hover:bg-gray-100">
+                    <button
+                      style={{
+                        backgroundColor:
+                          currentView === "rejected" || isHoveredRejected
+                            ? "rgba(44, 105, 117, 0.13)"
+                            : "#E9F1EF",
+                        color: "#2C6975",
+                      }}
+                      onMouseEnter={() => setIsHoveredRejected(true)}
+                      onMouseLeave={() => setIsHoveredRejected(false)}
+                      onClick={() => handleViewChange("rejected")}
+                      className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                    >
                       Rejected
                     </button>
-                    <button className="block w-full text-left px-4 py-2 hover:bg-gray-100">
+                    <button
+                      style={{
+                        backgroundColor:
+                          currentView === "refunded" || isHoveredRefunded
+                            ? "rgba(44, 105, 117, 0.13)"
+                            : "#E9F1EF",
+                        color: "#2C6975",
+                      }}
+                      onMouseEnter={() => setIsHoveredRefunded(true)}
+                      onMouseLeave={() => setIsHoveredRefunded(false)}
+                      onClick={() => handleViewChange("refunded")}
+                      className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                    >
                       Refunded
                     </button>
-                    <button className="block w-full text-left px-4 py-2 hover:bg-gray-100">
+                    <button
+                      style={{
+                        backgroundColor:
+                          currentView === "Accepted" || isHoveredAccepted
+                            ? "rgba(44, 105, 117, 0.13)"
+                            : "#E9F1EF",
+                        color: "#2C6975",
+                      }}
+                      onMouseEnter={() => setIsHoveredAccepted(true)}
+                      onMouseLeave={() => setIsHoveredAccepted(false)}
+                      onClick={() => handleViewChange("Accepted")}
+                      className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                    >
                       Accepted
                     </button>
                   </div>
