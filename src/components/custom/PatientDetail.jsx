@@ -142,51 +142,144 @@ const PatientDetails = ({ patient, onClose, handleRefund }) => {
           flexDirection={{ xs: "column", md: "row" }}
           flexGrow={1}
         >
-          <Box
-            sx={{
-              flex: 1,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              mb: 2,
-            }}
-          >
-            {patient.qrCode ? (
-              <Box
-                sx={{
-                  mb: 2,
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                }}
-              >
-                <Typography
-                  variant="subtitle1"
-                  fontWeight="bold"
-                  component="div"
-                  sx={{ mb: 1 }}
-                >
-                  Patient's QR Code
-                </Typography>
-                <img
-                  src={patient.qrCode}
-                  alt="QR Code"
-                  style={{
-                    width: "100%",
-                    maxWidth: 500,
-                    height: "auto",
-                    border: "1px solid #000",
-                    borderRadius: 4,
-                    padding: 4,
+          {patient.status === "requested" && (
+            <Box
+              sx={{
+                flex: 1,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                mb: 2,
+              }}
+            >
+              {patient.qrCode ? (
+                <Box
+                  sx={{
+                    mb: 2,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
                   }}
-                />
-              </Box>
-            ) : (
-              "No QR Code Available"
-            )}
-          </Box>
-
+                >
+                  <Typography
+                    variant="subtitle1"
+                    fontWeight="bold"
+                    component="div"
+                    sx={{ mb: 1 }}
+                  >
+                    Patient's QR Code
+                  </Typography>
+                  <img
+                    src={patient.qrCode}
+                    alt="QR Code"
+                    style={{
+                      width: "100%",
+                      maxWidth: 500,
+                      height: "auto",
+                      border: "1px solid #000",
+                      borderRadius: 4,
+                      padding: 4,
+                    }}
+                  />
+                </Box>
+              ) : (
+                "No QR Code Available"
+              )}
+            </Box>
+          )}
+          {patient.status === "refunded" && (
+            <Box
+              sx={{
+                flex: 1,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                mb: 2,
+              }}
+            >
+              {patient.refundReceipt ? (
+                <Box
+                  sx={{
+                    mb: 2,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography
+                    variant="subtitle1"
+                    fontWeight="bold"
+                    component="div"
+                    sx={{ mb: 1 }}
+                  >
+                    Patient's QR Code
+                  </Typography>
+                  <img
+                    src={patient.refundReceipt}
+                    alt="Receipt"
+                    style={{
+                      width: "100%",
+                      maxWidth: 500,
+                      height: "auto",
+                      border: "1px solid #000",
+                      borderRadius: 4,
+                      padding: 4,
+                    }}
+                  />
+                </Box>
+              ) : (
+                "No Receipt Code Available"
+              )}
+            </Box>
+          )}
+          {patient.status !== "refunded" && patient.status !== "requested" && (
+            <Box
+              sx={{
+                flex: 1,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                mb: 2,
+              }}
+            >
+              {patient.receipt ? (
+                <Box
+                  sx={{
+                    mb: 2,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography
+                    variant="subtitle1"
+                    fontWeight="bold"
+                    component="div"
+                    sx={{ mb: 1 }}
+                  >
+                    Patient's Receipt
+                  </Typography>
+                  <img
+                    src={patient.receipt}
+                    alt="Receipt"
+                    style={{
+                      width: "100%",
+                      maxWidth: 500,
+                      height: "auto",
+                      border: "1px solid #000",
+                      borderRadius: 4,
+                      padding: 4,
+                    }}
+                  />
+                </Box>
+              ) : (
+                "No Receipt Code Available"
+              )}
+            </Box>
+          )}
           <Box
             sx={{
               flex: 1,

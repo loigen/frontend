@@ -104,7 +104,9 @@ const PatientList = ({
                 <TableCell>{patient.date}</TableCell>
                 <TableCell>{patient.time}</TableCell>
                 <TableCell>
-                  {patient.firstname} <span> </span> {patient.lastname}
+                  {patient.user.firstname}
+                  <span> </span>
+                  {patient.user.lastname}
                 </TableCell>
                 <TableCell>
                   <Typography
@@ -136,7 +138,7 @@ const PatientList = ({
                 </TableCell>
 
                 <TableCell>{patient.typeOfCounseling}</TableCell>
-                <TableCell>{patient.sex}</TableCell>
+                <TableCell>{patient.user.sex}</TableCell>
                 <TableCell align="right">
                   <Tooltip title="More options" arrow>
                     <IconButton

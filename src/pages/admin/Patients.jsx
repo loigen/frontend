@@ -43,7 +43,7 @@ const Patients = () => {
   const [itemsPerPage] = useState(5);
   const [dateRange, setDateRange] = useState("allTime");
   const [statusFilter, setStatusFilter] = useState("all");
-  const [searchQuery, setSearchQuery] = useState(""); // Search query state
+  const [searchQuery, setSearchQuery] = useState("");
   const [isRescheduleOpen, setIsRescheduleOpen] = useState(false);
 
   useEffect(() => {
@@ -89,10 +89,12 @@ const Patients = () => {
         );
       }
 
-      // Filter by search query
+      // Filter by search query (by name)
       if (searchQuery) {
         filtered = filtered.filter((patient) =>
-          patient.name.includes(searchQuery.toLowerCase())
+          (patient.user.firstname + " " + patient.user.lastname)
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase())
         );
       }
 
@@ -154,7 +156,6 @@ const Patients = () => {
     if (result.isConfirmed) {
       try {
         await markAppointmentAsCompleted(appointmentId);
-
         setPatients((prevPatients) =>
           prevPatients.map((patient) =>
             patient.id === appointmentId
@@ -163,11 +164,7 @@ const Patients = () => {
           )
         );
 
-        Swal.fire("Success", "Appointment marked as completed", "success").then(
-          () => {
-            window.location.reload();
-          }
-        );
+        Swal.fire("Success", "Appointment marked as completed", "success");
       } catch (error) {
         console.error("Error completing appointment", error);
         Swal.fire("Error", "Failed to complete appointment", "error");
