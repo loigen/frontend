@@ -246,7 +246,6 @@ const AppointmentsPage = () => {
     <>
       {showContent === true ? (
         <>
-          {" "}
           <button
             onClick={() => setShowContent(false)}
             className="bg-teal-600 text-white m-2 px-4 py-2 md:px-6 md:py-2 rounded-full mb-4 md:mb-8 shadow-md"
@@ -502,7 +501,6 @@ const AppointmentsPage = () => {
             </Box>
           ) : (
             <>
-              {" "}
               <button
                 className="bg-teal-600 text-white m-2 px-4 py-2 md:px-6 md:py-2 rounded-full mb-4 md:mb-8 shadow-md"
                 onClick={() => setStep(1)}
@@ -846,19 +844,19 @@ const AppointmentsPage = () => {
                     ref={dropdownRef}
                     className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg z-10"
                   >
-                    <button className="block w-full text-left px-4 py-2 hover:bg-gray-100">
+                    <button className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-[#2C6975]">
                       Completed
                     </button>
-                    <button className="block w-full text-left px-4 py-2 hover:bg-gray-100">
+                    <button className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-[#2C6975]">
                       Canceled
                     </button>
-                    <button className="block w-full text-left px-4 py-2 hover:bg-gray-100">
+                    <button className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-[#2C6975]">
                       Rejected
                     </button>
-                    <button className="block w-full text-left px-4 py-2 hover:bg-gray-100">
+                    <button className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-[#2C6975]">
                       Refunded
                     </button>
-                    <button className="block w-full text-left px-4 py-2 hover:bg-gray-100">
+                    <button className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-[#2C6975]">
                       Accepted
                     </button>
                   </div>
@@ -889,7 +887,7 @@ const AppointmentsPage = () => {
           {currentView === "Accepted" && (
             <Appointments onBack={() => handleViewChange("default")} />
           )}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mr-5 ml-5 mt-5">
             {/* Render Active or Completed Appointments */}
             {currentView === "default" && (
               <>

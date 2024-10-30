@@ -3,6 +3,7 @@ import InfoIcon from "@mui/icons-material/Info";
 import { useAuth } from "../../context/AuthProvider";
 import { fetchAppointmentsByUserId } from "../../api/appointmentAPI/fetchAppointmentsByUserId";
 import Modal from "@mui/material/Modal";
+import sadface from "../../images/sadface.png";
 
 const ActiveAppointments = () => {
   const [appointments, setAppointments] = useState([]);
@@ -40,8 +41,21 @@ const ActiveAppointments = () => {
   };
 
   if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
-
+  if (error)
+    return (
+      <div className="min-h-screen p-8 bg-gray-50 mr-5 ml-5 mb-5 rounded-lg shadow-lg flex items-center justify-center flex-col">
+        <p className="text-center text-gray-500">
+          You don't have any records here yet. Click the
+          <span className="text-teal-600 font-semibold cursor-pointer">
+            "Book Appointment"
+          </span>
+          button now to schedule your first appointment!
+        </p>
+        <div>
+          <img src={sadface} alt="sadface" />
+        </div>
+      </div>
+    );
   // Filter appointments by status
   const acceptedAppointments = appointments.filter(
     (appointment) => appointment.status === "accepted"
@@ -59,7 +73,7 @@ const ActiveAppointments = () => {
   return (
     <>
       {/* Active Appointments */}
-      <div className="bg-white p-6 rounded-lg shadow-lg mb-4 ml-2">
+      <div className="bg-white p-6 rounded-lg shadow-lg">
         <h3 className="text-md font-semibold mb-4 text-[#2C6975]">
           Today's Active Appointments
         </h3>
@@ -80,7 +94,7 @@ const ActiveAppointments = () => {
       </div>
 
       {/* Rescheduled Appointments */}
-      <div className="bg-white p-6 rounded-lg shadow-lg mb-4">
+      <div className="bg-white p-6 rounded-lg shadow-lg ">
         <h3 className="text-md font-semibold mb-4 text-[#2C6975]">
           Rescheduled Appointments
         </h3>
@@ -101,7 +115,7 @@ const ActiveAppointments = () => {
       </div>
 
       {/* Requested Rescheduled Appointments */}
-      <div className="bg-white p-6 rounded-lg shadow-lg mb-4">
+      <div className="bg-white p-6 rounded-lg shadow-lg mb-4 ">
         <h3 className="text-md font-semibold mb-4 text-[#2C6975]">
           Requested Rescheduled Appointments
         </h3>
@@ -122,7 +136,7 @@ const ActiveAppointments = () => {
       </div>
 
       {/* Pending Appointments */}
-      <div className="bg-white ml-2 p-6 mr-2 rounded-lg shadow-lg mb-4">
+      <div className="bg-white ml-2 p-6 mr-2 rounded-lg shadow-lg mb-4 ">
         <h3 className="text-md font-semibold mb-4 text-[#2C6975]">
           Pending Appointments
         </h3>
