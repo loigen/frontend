@@ -289,9 +289,7 @@ const Home = () => {
             </h2>
 
             {loading ? (
-              <div className="text-center flex justify-center items-center text-gray-500 p-10 h-full w-full font-poppins">
-                Loading...
-              </div>
+              <LoadingSpinner />
             ) : error ? (
               <div className="text-center flex justify-center items-center text-red-500 p-10 h-full w-full font-poppins">
                 {error}

@@ -26,6 +26,7 @@ import {
 import AdminUserForm from "../custom/AdminUserForm";
 import { Add, ChevronLeft } from "@mui/icons-material";
 import AdminUsers from "./AdminUsers";
+import { LoadingSpinner } from "../custom";
 
 const ManageUsers = ({ setView }) => {
   const [users, setUsers] = useState([]);
@@ -127,7 +128,7 @@ const ManageUsers = ({ setView }) => {
     setPage(0);
   };
 
-  if (loading) return <CircularProgress />;
+  if (loading) return <LoadingSpinner />;
   if (error) return <Typography color="error">{error}</Typography>;
 
   // Slice data for pagination

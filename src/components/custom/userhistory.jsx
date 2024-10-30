@@ -8,6 +8,7 @@ import {
   ListItem,
   ListItemText,
 } from "@mui/material";
+import LoadingSpinner from "./LoadingSpinner";
 
 const UserAppointments = ({ userId }) => {
   const [appointments, setAppointments] = useState([]);
@@ -30,16 +31,7 @@ const UserAppointments = ({ userId }) => {
   }, [userId]);
 
   if (loading) {
-    return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        height="100%"
-      >
-        <CircularProgress />
-      </Box>
-    );
+    <LoadingSpinner />;
   }
 
   if (error) {

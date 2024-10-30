@@ -15,6 +15,7 @@ import {
   Avatar,
   Tooltip,
   Link,
+  Skeleton,
 } from "@mui/material";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 
@@ -39,7 +40,11 @@ const Notification = ({ user }) => {
   });
 
   if (!user) {
-    return <Typography color="textSecondary">Loading user data...</Typography>;
+    return (
+      <Typography color="textSecondary">
+        <Skeleton />
+      </Typography>
+    );
   }
 
   const handleMenuOpen = (event) => {

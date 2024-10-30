@@ -3,6 +3,7 @@ import InfoIcon from "@mui/icons-material/Info";
 import { useAuth } from "../../context/AuthProvider";
 import { fetchAppointmentsByUserId } from "../../api/appointmentAPI/fetchAppointmentsByUserId";
 import Modal from "@mui/material/Modal";
+import LoadingSpinner from "./LoadingSpinner";
 
 const ActiveAppointments = () => {
   const [appointments, setAppointments] = useState([]);
@@ -20,7 +21,7 @@ const ActiveAppointments = () => {
         const data = await fetchAppointmentsByUserId(user._id);
         setAppointments(data); // Store all appointments
       } catch (err) {
-        setError("Failed to load appointments");
+        setError(null);
       } finally {
         setLoading(false);
       }
@@ -39,7 +40,7 @@ const ActiveAppointments = () => {
     setSelectedAppointment(null);
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <LoadingSpinner />;
   if (error) return <div>Error: {error}</div>;
 
   // Filter appointments by status

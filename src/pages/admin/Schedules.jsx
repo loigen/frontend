@@ -8,7 +8,11 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ReminderIcon from "@mui/icons-material/Alarm"; // Import Reminder Icon
 
 import dayjs from "dayjs";
-import { CustomTimePicker, AppointmentRequest } from "../../components/custom";
+import {
+  CustomTimePicker,
+  AppointmentRequest,
+  LoadingSpinner,
+} from "../../components/custom";
 import {
   Card,
   CardContent,
@@ -17,6 +21,7 @@ import {
   Typography,
   IconButton,
   Tooltip,
+  Skeleton,
 } from "@mui/material";
 import axios from "axios";
 import { Close, InfoOutlined } from "@mui/icons-material";
@@ -216,7 +221,7 @@ const Schedules = () => {
               Today's Appointments
             </h2>
             {loading ? (
-              <p>Loading...</p>
+              <Skeleton />
             ) : error ? (
               <p style={{ color: "red" }}>{error}</p>
             ) : (

@@ -27,6 +27,7 @@ import {
   ThemeProvider,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
+import { LoadingSpinner } from "../custom";
 
 const theme = createTheme({
   palette: {
@@ -128,8 +129,7 @@ const DraftsPage = ({ searchQuery }) => {
     }
   };
 
-  if (loading)
-    return <CircularProgress sx={{ display: "block", mx: "auto", my: 4 }} />;
+  if (loading) return <LoadingSpinner />;
   if (error)
     return (
       <Alert severity="error" sx={{ my: 4 }}>

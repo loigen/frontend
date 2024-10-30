@@ -25,6 +25,7 @@ import { Pie } from "react-chartjs-2";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import axios from "axios";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import LoadingSpinner from "./LoadingSpinner";
 
 const theme = createTheme({
   palette: {
@@ -155,9 +156,7 @@ const FeedbackList = ({ setView }) => {
             </Typography>
 
             {loading ? (
-              <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
-                <CircularProgress color="primary" />
-              </Box>
+              <LoadingSpinner />
             ) : (
               <>
                 {/* Rating Distribution and Summary */}

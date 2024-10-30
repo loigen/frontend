@@ -18,6 +18,7 @@ import {
   unblockUser,
 } from "../../api/manageUsers/userService";
 import Swal from "sweetalert2";
+import { LoadingSpinner } from "../custom";
 
 const AdminUsers = () => {
   const [adminUsers, setAdminUsers] = useState([]);
@@ -113,7 +114,7 @@ const AdminUsers = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <LoadingSpinner />;
   }
 
   if (error) {

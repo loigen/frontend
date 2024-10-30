@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { fetchAppointmentsByUserId } from "../../api/appointmentAPI/fetchAppointmentsByUserId";
 import { useAuth } from "../../context/AuthProvider";
+import { LoadingSpinner } from "../custom";
 
 const RefundedAppointments = ({ onBackToActive }) => {
   const [appointments, setAppointments] = useState([]);
@@ -14,11 +15,11 @@ const RefundedAppointments = ({ onBackToActive }) => {
       try {
         const data = await fetchAppointmentsByUserId(user._id);
         const filteredAppointments = data.filter((appointment) => {
-          return appointment.status === "refunded"; // Fetch only refunded appointments
+          return appointment.status === "refunded";
         });
         setAppointments(filteredAppointments);
       } catch (err) {
-        setError("Error fetching refunded appointments.");
+        setError(null);
       } finally {
         setLoading(false);
       }
@@ -27,7 +28,7 @@ const RefundedAppointments = ({ onBackToActive }) => {
     getAppointments();
   }, [user]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <LoadingSpinner />;
   if (error) return <div>Error: {error}</div>;
 
   return (

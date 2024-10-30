@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { fetchAppointmentsByUserId } from "../../api/appointmentAPI/fetchAppointmentsByUserId";
 import { useAuth } from "../../context/AuthProvider";
 import Reschedule from "./Reschedule";
+import { LoadingSpinner } from "../custom";
 
 const Appointments = ({ onBack }) => {
   const [appointments, setAppointments] = useState([]);
@@ -37,7 +38,7 @@ const Appointments = ({ onBack }) => {
 
         setAppointments(filteredAppointments);
       } catch (err) {
-        setError("Error fetching appointments.");
+        setError(null);
       } finally {
         setLoading(false);
       }
@@ -46,7 +47,7 @@ const Appointments = ({ onBack }) => {
     getAppointments();
   }, [user]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <LoadingSpinner />;
   if (error) return <div>Error: {error}</div>;
 
   return (

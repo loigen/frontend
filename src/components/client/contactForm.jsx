@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import emailjs from "emailjs-com";
-import image from "../images/Frame 1.png";
+import image from "../../images/Frame 1.png";
 import PhoneIcon from "@mui/icons-material/Phone";
 import EmailIcon from "@mui/icons-material/Email";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
@@ -8,7 +8,6 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import CircularProgress from "@mui/material/CircularProgress"; // Import the spinner
-import { Navbar } from "./custom";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -67,7 +66,7 @@ const Contact = () => {
 
   return (
     <div>
-      <div className="flex min-h-[100%] mt-3 flex-col items-center justify-center">
+      <div className="flex flex-col items-center justify-center">
         <div className="text-center mb-10">
           <h1 className="text-4xl font-semibold text-[#2C6975]">Contact Us</h1>
           <p className="text-gray-500">
@@ -186,11 +185,7 @@ const Contact = () => {
                 }`} // Disable styling
                 disabled={isLoading || !isFormFilled} // Disable button
               >
-                {isLoading ? (
-                  <CircularProgress size={24} color="inherit" />
-                ) : (
-                  "Send Message"
-                )}
+                {isLoading ? <>Sending...</> : "Send Message"}
               </button>
             </form>
             {statusMessage && <p className="mt-4 text-sm">{statusMessage}</p>}

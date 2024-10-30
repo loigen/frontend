@@ -7,6 +7,7 @@ import moment from "moment";
 import { deleteChat } from "../../api/chatApi/deleteChat";
 import Swal from "sweetalert2";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { Skeleton } from "@mui/material";
 const UserChat = ({ chat, user }) => {
   const { recipientUser } = useFetchRecipient(chat, user);
   const { onlineUsers, notifications, markThisUserNotificationsAsRead } =
@@ -19,7 +20,7 @@ const UserChat = ({ chat, user }) => {
   );
 
   if (!recipientUser) {
-    return <div className="flex justify-center items-center">Loading...</div>;
+    return <Skeleton />;
   }
 
   const isOnline = onlineUsers?.some(

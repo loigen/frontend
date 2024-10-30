@@ -3,6 +3,7 @@ import { fetchAppointmentsByUserId } from "../../api/appointmentAPI/fetchAppoint
 import Swal from "sweetalert2";
 import { useAuth } from "../../context/AuthProvider";
 import axios from "axios";
+import { LoadingSpinner } from "../custom";
 
 const RejectedAppointments = ({ onBackToActive }) => {
   const [appointments, setAppointments] = useState([]);
@@ -23,7 +24,7 @@ const RejectedAppointments = ({ onBackToActive }) => {
 
         setAppointments(filteredAppointments);
       } catch (err) {
-        setError("Error fetching rejected appointments.");
+        setError(null);
       } finally {
         setLoading(false);
       }
@@ -32,7 +33,7 @@ const RejectedAppointments = ({ onBackToActive }) => {
     getAppointments();
   }, [user]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <LoadingSpinner />;
   if (error) return <div>Error: {error}</div>;
 
   return (

@@ -3,6 +3,7 @@ import { fetchAppointmentsByUserId } from "../../api/appointmentAPI/fetchAppoint
 import { useAuth } from "../../context/AuthProvider";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { IconButton } from "@mui/material";
+import { LoadingSpinner } from "../custom";
 
 const CanceledAppointments = ({ onBackToActive }) => {
   const [appointments, setAppointments] = useState([]);
@@ -20,7 +21,7 @@ const CanceledAppointments = ({ onBackToActive }) => {
         });
         setAppointments(filteredAppointments);
       } catch (err) {
-        setError("Failed to fetch appointments.");
+        setError(null);
       } finally {
         setLoading(false);
       }
@@ -29,7 +30,7 @@ const CanceledAppointments = ({ onBackToActive }) => {
     getAppointments();
   }, [user]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <LoadingSpinner />;
   if (error) return <div>Error: {error}</div>;
 
   return (

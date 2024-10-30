@@ -13,10 +13,9 @@ import { useLocation } from "react-router-dom";
 import logo from "../../images/safeplacelogo.png";
 import SignupModal from "../Signup";
 import LoginModal from "../Login";
-const Navbar = () => {
+const Navbar = ({ setView }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const location = useLocation();
-  const [activeNavLink, setActiveNavLink] = useState("ABOUT");
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
 
@@ -45,10 +44,7 @@ const Navbar = () => {
   };
 
   const handleMenuItemClick = (route) => {
-    window.location.href = route;
-    if (drawerOpen) {
-      setDrawerOpen(false);
-    }
+    setView(route);
   };
 
   const isActive = (route) => (location.pathname === route ? "active" : "");
@@ -57,8 +53,7 @@ const Navbar = () => {
     <List>
       <ListItem
         button
-        onClick={() => handleMenuItemClick("/")}
-        className={isActive("/")}
+        onClick={() => handleMenuItemClick("Home")}
         sx={{
           cursor: "pointer",
         }}
@@ -67,8 +62,7 @@ const Navbar = () => {
       </ListItem>
       <ListItem
         button
-        onClick={() => handleMenuItemClick("/About")}
-        className={isActive("/About")}
+        onClick={() => handleMenuItemClick("About")}
         sx={{
           cursor: "pointer",
         }}
@@ -77,8 +71,7 @@ const Navbar = () => {
       </ListItem>
       <ListItem
         button
-        onClick={() => handleMenuItemClick("/Services")}
-        className={isActive("/Services")}
+        onClick={() => handleMenuItemClick("Services")}
         sx={{
           cursor: "pointer",
         }}
@@ -87,8 +80,7 @@ const Navbar = () => {
       </ListItem>
       <ListItem
         button
-        onClick={() => handleMenuItemClick("/Contact")}
-        className={isActive("/Contact")}
+        onClick={() => handleMenuItemClick("Contact")}
         sx={{
           cursor: "pointer",
         }}
@@ -97,8 +89,7 @@ const Navbar = () => {
       </ListItem>
       <ListItem
         button
-        onClick={() => handleMenuItemClick("/guestBlog")}
-        className={isActive("/guestBlog")}
+        onClick={() => handleMenuItemClick("guestBlog")}
         sx={{
           cursor: "pointer",
         }}
@@ -156,32 +147,32 @@ const Navbar = () => {
           ) : (
             <div className="cursor-pointer flex-row flex items-center gap-10 px-10">
               <div
-                className={` ${isActive("/")} hover:text-[#68B2A0]`}
-                onClick={() => handleMenuItemClick("/")}
+                className={` hover:text-[#68B2A0]`}
+                onClick={() => handleMenuItemClick("Home")}
               >
                 Home
               </div>
               <div
-                className={`${isActive("/About")} hover:text-[#68B2A0]`}
-                onClick={() => handleMenuItemClick("/About")}
+                className={` hover:text-[#68B2A0]`}
+                onClick={() => handleMenuItemClick("About")}
               >
                 About
               </div>
               <div
-                className={` ${isActive("/Services")} hover:text-[#68B2A0]`}
-                onClick={() => handleMenuItemClick("/Services")}
+                className={`  hover:text-[#68B2A0]`}
+                onClick={() => handleMenuItemClick("Services")}
               >
                 Services
               </div>
               <div
-                className={`${isActive("/Contact")} hover:text-[#68B2A0]`}
-                onClick={() => handleMenuItemClick("/Contact")}
+                className={` hover:text-[#68B2A0]`}
+                onClick={() => handleMenuItemClick("Contact")}
               >
                 Contact
               </div>
               <div
-                className={` ${isActive("/guestBlog")} hover:text-[#68B2A0]`}
-                onClick={() => handleMenuItemClick("/guestBlog")}
+                className={`  hover:text-[#68B2A0]`}
+                onClick={() => handleMenuItemClick("guestBlog")}
               >
                 Blog
               </div>
@@ -191,8 +182,6 @@ const Navbar = () => {
               >
                 Signin/Signup
               </div>
-
-     
             </div>
           )}
         </nav>

@@ -122,9 +122,7 @@ const BlogGuestPage = () => {
 
   return (
     <>
-      <Navbar />
-
-      <div className="pt-24">
+      <div className="pt-2">
         <ThemeProvider theme={blogTheme}>
           <Box sx={{ p: 3, bgcolor: "background.default" }}>
             <Box

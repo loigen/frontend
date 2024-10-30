@@ -4,12 +4,9 @@ import { Navbar } from "./custom";
 const Services = () => {
   return (
     <>
-    <Navbar />
-    <div className="container">
-      
-    </div>
+      <div className="container">asdas</div>
     </>
-  )
+  );
 };
 
 export default Services;

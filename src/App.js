@@ -33,24 +33,25 @@ import {
   Services,
   LoginModal,
 } from "./components";
-import { PatientDetails, Reset, Chat } from "./components/custom";
+import {
+  PatientDetails,
+  Reset,
+  Chat,
+  LoadingSpinner,
+} from "./components/custom";
 import LoginPage from "./components/AdminLogin";
 
 function App() {
   const { user, loading } = useContext(AuthContext); // Extract user from AuthContext
 
-  if (loading) return <p>Loading...</p>; // Handle loading state
+  if (loading) return <LoadingSpinner />; // Handle loading state
 
   return (
     <ChatContextProvider user={user}>
       <Router>
         <Routes>
           <Route exact path="/" element={<LandingPage />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/guestBlog" element={<BlogGuestPage />} />
           <Route path="/patients/:id" element={<PatientDetails />} />
-          <Route path="/Services" element={<Services />} />
           <Route path="/forgot-password" element={<Reset />} />
           <Route path="/AdminForm" element={<LoginPage />} />
           {/* Private Routes for All Authenticated Users */}

@@ -4,6 +4,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { fetchUserProfile } from "../../api/userAPI/fetchUserProfile";
 import axios from "axios";
+import LoadingSpinner from "./LoadingSpinner";
 
 const categories = [
   { id: "Technology", name: "Technology" },
@@ -111,7 +112,7 @@ const AllBlogs = () => {
   });
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <LoadingSpinner />;
   }
 
   if (error) {

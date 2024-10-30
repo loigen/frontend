@@ -35,6 +35,7 @@ import {
   Tooltip,
 } from "@mui/material";
 import { useAuth } from "../../context/AuthProvider";
+import { LoadingSpinner } from "../../components/custom";
 
 const categories = [
   { id: "Technology", name: "Technology" },
@@ -224,7 +225,7 @@ const BLog = () => {
     });
 
   if (loading) {
-    return <CircularProgress />;
+    return <LoadingSpinner />;
   }
 
   if (error) {

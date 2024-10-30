@@ -21,6 +21,8 @@ import EmailIcon from "@mui/icons-material/Email";
 import { Profile } from "../../components/client";
 import PrivacyTipIcon from "@mui/icons-material/PrivacyTip";
 import ReviewsIcon from "@mui/icons-material/Reviews";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+
 import {
   ChangePasswordForm,
   UserGuide,
@@ -28,8 +30,10 @@ import {
   FAQs,
 } from "../../components/custom";
 import { useAuth } from "../../context/AuthProvider";
-import { NavLink } from "react-router-dom";
+// import { NavLink } from "react-router-dom";
 import FeedbackPage from "../../components/custom/FeedbackPage";
+import Contact from "../../components/client/contactForm";
+// import { Contact } from "../../components";
 
 const UserSettings = () => {
   const { user } = useAuth();
@@ -51,7 +55,17 @@ const UserSettings = () => {
         return <FAQs setView={setView} />;
       case "feedback":
         return <FeedbackPage setView={setView} />;
-
+      case "ContactSupport":
+        return (
+          <>
+            <Box display="flex" justifyContent="flex-start" mb={2}>
+              <IconButton onClick={() => setView("settings")}>
+                <ArrowBackIcon />
+              </IconButton>
+            </Box>
+            <Contact />
+          </>
+        );
       default:
         return (
           <Container maxWidth="md" sx={{ py: 4 }}>
@@ -136,15 +150,14 @@ const UserSettings = () => {
                     >
                       Rates & Review
                     </Button>
-                    <NavLink to="/contactSupport" underline="none">
-                      <Button
-                        startIcon={<EmailIcon />}
-                        fullWidth
-                        sx={{ mb: 1, color: "#2C6975" }}
-                      >
-                        Contact Support
-                      </Button>
-                    </NavLink>
+                    <Button
+                      startIcon={<EmailIcon />}
+                      fullWidth
+                      onClick={() => setView("ContactSupport")}
+                      sx={{ mb: 1, color: "#2C6975" }}
+                    >
+                      Contact Support
+                    </Button>
                     <Button
                       startIcon={<QuestionMarkOutlinedIcon />}
                       fullWidth
