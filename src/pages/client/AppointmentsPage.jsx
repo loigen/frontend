@@ -18,6 +18,7 @@ import {
   Radio,
   RadioGroup,
   Select,
+  Skeleton,
   TextField,
   ThemeProvider,
   Typography,
@@ -338,7 +339,7 @@ const AppointmentsPage = () => {
                 <Typography variant="body2">Available Time Slots</Typography>
                 <Box>
                   {loading ? (
-                    <LoadingSpinner />
+                    <Skeleton />
                   ) : getAvailableSlotsForSelectedDate().length === 0 ? (
                     <Typography
                       variant="body1"
