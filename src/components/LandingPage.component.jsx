@@ -72,12 +72,9 @@ const LandingPage = () => {
 
   return (
     <>
-      <div className="navbar flex flex-grow justify-between">
-        <Navbar handleOpenLoginModal={handleOpenLoginModal} />
-      </div>
-      <section className="banner">
-        <p>Safeplace</p>
-      </section>
+      <Navbar handleOpenLoginModal={handleOpenLoginModal} />
+
+      <div className="bg-slate-100 h-96"></div>
       <section className="content">
         <div className="titleSection">
           <h2 className="welcome">Welcome to Dr. Jeb Bohol{"'"}s Practice: </h2>
