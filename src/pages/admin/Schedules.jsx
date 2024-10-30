@@ -19,7 +19,7 @@ import {
   Tooltip,
 } from "@mui/material";
 import axios from "axios";
-import { InfoOutlined } from "@mui/icons-material";
+import { Close, InfoOutlined } from "@mui/icons-material";
 
 const API_URL = `https://backend-production-c8da.up.railway.app`;
 
@@ -30,6 +30,7 @@ const Schedules = () => {
   const [todaysAppointments, setTodaysAppointments] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [selectedAppointment, setSelectedAppointment] = useState(null);
 
   const [freeSlots, setFreeSlots] = useState([]);
 
@@ -66,17 +67,11 @@ const Schedules = () => {
     return () => clearInterval(intervalId);
   }, []);
   const handleShowDetails = (appointment) => {
-    Swal.fire({
-      title: "Appointment Details",
-      html: `
-        <strong>Date:</strong> ${appointment.date}<br>
-        <strong>Time:</strong> ${appointment.time}<br>
-        <strong>Patient:</strong> ${appointment.firstname} ${appointment.lastname}<br>
-        <strong>Type:</strong> ${appointment.appointmentType}
-      `,
-      icon: "info",
-      confirmButtonColor: "#2c6975",
-    });
+    setSelectedAppointment(appointment);
+  };
+
+  const handleCloseDetails = () => {
+    setSelectedAppointment(null);
   };
 
   const handleRemind = async (appointmentId) => {
@@ -215,9 +210,9 @@ const Schedules = () => {
           />
         </div>
 
-        <div className="upcomingAppointment mt-4 p-4 shadow-2xl rounded-lg flex justify-center items-center">
-          <div className="card flex flex-col justify-center items-center ">
-            <h2 className="text-xl font-bold uppercase font-mono ">
+        <div className="upcomingAppointment w-full mt-4 bg-white p-4 shadow-2xl">
+          <div className="card ">
+            <h2 className="text-xl text-center uppercase font-mono">
               Today's Appointments
             </h2>
             {loading ? (
@@ -232,28 +227,28 @@ const Schedules = () => {
                   todaysAppointments.map((appointment, index) => (
                     <li
                       key={index}
-                      className="flex flex-col rounded-lg shadow-lg bg-white p-6 "
+                      className="mt-4 p-4 rounded shadow-lg list-none w-full font-poppins"
                     >
-                      <div className="flex justify-between items-center mb-4">
-                        <strong className="text-xl text-gray-800">
-                          {appointment.time}
+                      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                        <strong className="font-normal  text-[#2c6975]">
+                          <strong>{appointment.time}</strong>
                         </strong>
 
                         <div className="flex gap-4">
+                          <IconButton
+                            onClick={() => handleShowDetails(appointment)}
+                            className="text-gray-600 "
+                          >
+                            <Tooltip title="Show Details" arrow>
+                              <InfoOutlined />
+                            </Tooltip>
+                          </IconButton>
                           <IconButton
                             onClick={() => handleRemind(appointment._id)}
                             className="flex items-center bg-blue-500 text-white rounded-md px-3 py-2 transition-colors hover:bg-blue-600"
                           >
                             <Tooltip title="Send Reminder" arrow>
                               <ReminderIcon />
-                            </Tooltip>
-                          </IconButton>
-                          <IconButton
-                            onClick={() => handleShowDetails(appointment)}
-                            className="text-gray-600 hover:text-blue-500"
-                          >
-                            <Tooltip title="Show Details" arrow>
-                              <InfoOutlined />
                             </Tooltip>
                           </IconButton>
                         </div>
@@ -267,6 +262,38 @@ const Schedules = () => {
                       <p className="text-gray-700 mb-4">
                         <strong>Type:</strong> {appointment.appointmentType}
                       </p>
+                      <p className="text-gray-700 mb-4">
+                        <strong>Consultation Method:</strong>{" "}
+                        {appointment.consultationMethod}
+                      </p>
+                      {appointment.consultationMethod !== "face-to-face" && (
+                        <>
+                          <div
+                            className="mt-4 flex justify-end items-center font-poppins"
+                            style={{ height: "40px" }}
+                          >
+                            <a
+                              href={appointment.meetLink}
+                              className="text-white font-semibold shadow-md transition-colors text-center flex items-center justify-center"
+                              style={{
+                                backgroundColor: "#2C6975",
+                                borderRadius: "20px",
+                                width: "auto",
+                                height: "40px",
+                                padding: "0 20px", // Adjust the horizontal padding here
+                              }}
+                              onMouseEnter={(e) =>
+                                (e.target.style.backgroundColor = "#358898")
+                              }
+                              onMouseLeave={(e) =>
+                                (e.target.style.backgroundColor = "#2C6975")
+                              }
+                            >
+                              Go to room
+                            </a>
+                          </div>
+                        </>
+                      )}
                     </li>
                   ))
                 )}
@@ -351,6 +378,124 @@ const Schedules = () => {
         </Card>
       </div>
       <AppointmentRequest />
+      {selectedAppointment && (
+        <div
+          className="fixed inset-0 flex justify-center items-center z-50 p-4 sm:p-6 md:p-8 lg:p-12"
+          style={{ backgroundColor: "rgba(233, 241, 239, 0.83)" }}
+          onClick={handleCloseDetails}
+        >
+          <div
+            className="bg-white relative flex flex-col md:flex-row gap-4 p-4 sm:p-6 md:p-8 lg:p-10 rounded-lg shadow-lg max-w-full md:max-w-3xl w-full md:w-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={handleCloseDetails}
+              className="bg-gray-500 absolute right-4 top-4 text-white font-semibold py-1 px-2 rounded-full shadow-md hover:bg-gray-600 transition-colors"
+            >
+              <Close />
+            </button>
+
+            <div className="text-[#2c6975] flex flex-col gap-4 w-full">
+              <h2 className="text-xl sm:text-2xl font-semibold mb-2 sm:mb-4 border-b pb-2">
+                Appointment Details
+              </h2>
+
+              <div className="capitalize">
+                <strong className="font-bold">Full Name:</strong>{" "}
+                {selectedAppointment.firstname} {selectedAppointment.middleName}{" "}
+                {selectedAppointment.lastname}{" "}
+              </div>
+
+              <p className="mb-2">
+                <strong className="font-bold">Email:</strong>{" "}
+                {selectedAppointment.email}
+              </p>
+
+              <p className="mb-2">
+                <strong className="font-bold">Appointment Date:</strong>{" "}
+                {new Date(selectedAppointment.date).toLocaleDateString()}
+              </p>
+
+              <p className="mb-2">
+                <strong className="font-bold">Time:</strong>{" "}
+                {selectedAppointment.time}
+              </p>
+
+              <p className="mb-2">
+                <strong className="font-bold">Primary Complaint:</strong>{" "}
+                {selectedAppointment.primaryComplaint}
+              </p>
+
+              <p className="mb-2">
+                <strong className="font-bold">Service Availed:</strong>{" "}
+                {selectedAppointment.appointmentType}
+              </p>
+
+              <p className="mb-2">
+                <strong className="font-bold">History of Intervention:</strong>{" "}
+                {selectedAppointment.historyOfIntervention !== "false"
+                  ? selectedAppointment.historyOfIntervention
+                  : "None"}
+              </p>
+
+              {selectedAppointment.briefDetails ? (
+                <p className="mb-2">
+                  <strong className="font-bold">Brief Details:</strong>{" "}
+                  {selectedAppointment.briefDetails}
+                </p>
+              ) : null}
+
+              <p className="mb-2">
+                <strong className="font-bold">Consultation Method:</strong>{" "}
+                {selectedAppointment.consultationMethod}
+              </p>
+            </div>
+
+            <div className="mt-4 w-full">
+              {selectedAppointment.receipt ? (
+                <div className="mt-2 border border-gray-300 rounded-lg overflow-hidden">
+                  <img
+                    src={selectedAppointment.receipt}
+                    alt="Receipt"
+                    className="w-full h-auto object-contain"
+                  />
+                  <div className="mt-2 space-x-2 flex items-center justify-center">
+                    <button
+                      onClick={async () => {
+                        try {
+                          const response = await fetch(
+                            selectedAppointment.receipt
+                          );
+                          if (response.ok) {
+                            const blob = await response.blob();
+                            const url = URL.createObjectURL(blob);
+                            const link = document.createElement("a");
+                            link.href = url;
+                            link.download = "receipt.jpg";
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                            URL.revokeObjectURL(url);
+                          } else {
+                            console.error("Failed to fetch receipt");
+                          }
+                        } catch (error) {
+                          console.error("Error downloading receipt:", error);
+                        }
+                      }}
+                      className="inline-flex items-center underline text-blue-500"
+                    >
+                      Download Receipt
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <span className="font-bold">No receipt available</span>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

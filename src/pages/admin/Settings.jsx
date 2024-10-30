@@ -45,7 +45,7 @@ const AdminSettings = () => {
       case "Help":
         return <Help setView={setView} />;
       case "userFeedback":
-        return <FeedbackList />;
+        return <FeedbackList setView={setView} />;
       default:
         return (
           <Container maxWidth="md" sx={{ py: 4 }}>
@@ -111,6 +111,7 @@ const AdminSettings = () => {
                       variant="subtitle1"
                       gutterBottom
                       color="GrayText"
+                      textAlign="center"
                     >
                       More
                     </Typography>

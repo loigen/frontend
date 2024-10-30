@@ -14,7 +14,7 @@ import {
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import { useAuth } from "../../context/AuthProvider";
-import LogoutButton from "../LogoutButton"
+import LogoutButton from "../LogoutButton";
 const Topbar = () => {
   const { user, logout, loading: authLoading, error: authError } = useAuth();
   const [avatar, setAvatar] = useState(null);
@@ -23,7 +23,6 @@ const Topbar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const [isHovered, setIsHovered] = useState(false); // State for hover
-
 
   useEffect(() => {
     const handleResize = () => {
@@ -107,7 +106,7 @@ const Topbar = () => {
       <div className="flex flex-row w-full justify-end gap-10">
         <ul className="flex flex-row gap-4 md:gap-6 items-center">
           <li>
-            <Notification />
+            <Notification user={user} />
           </li>
         </ul>
 

@@ -192,7 +192,7 @@ const ChangePasswordForm = ({ setView }) => {
             color="primary"
             fullWidth
             disabled={isBlocked || isDisabled}
-            style={{ marginTop: "1rem" }}
+            style={{ marginTop: "1rem", backgroundColor: "#2C6975" }}
           >
             Change Password
           </Button>

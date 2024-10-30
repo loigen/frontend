@@ -263,6 +263,11 @@ const LoginModal = ({
         >
           {loading ? "Loading..." : "Login"}
         </Button>
+        <Box mt={2}>
+          <Link to="/adminform" className="underline text-blue-500">
+            Sign In as Doctor
+          </Link>
+        </Box>
         <Box textAlign="center" mt={2}>
           <Typography variant="body2">
             Don{"'"}t have an account?{" "}

@@ -138,7 +138,7 @@ const BLog = () => {
 
             Swal.fire({
               icon: "error",
-              title: "Error",
+              title: "Oopss",
               text: "No favorite blogs. Please add favorites.",
               confirmButtonText: "Add Favorites",
             }).then((result) => {

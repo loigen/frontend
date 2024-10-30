@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createElement } from "react";
 import InfoIcon from "@mui/icons-material/Info";
 import Swal from "sweetalert2";
 import { LoadingSpinner, MeetLinkModal } from "./index";
@@ -7,15 +7,13 @@ import axios from "axios";
 import CloseIcon from "@mui/icons-material/Close";
 import "../../styles/Rejectpopup.css";
 import MeetPlaceModal from "./meetPlaceModal";
-import { patch } from "@mui/material";
-import { trim } from "validator";
+import { Close } from "@mui/icons-material";
 
 const AppointmentRequest = () => {
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [appointments, setAppointments] = useState([]);
   const [filteredAppointments, setFilteredAppointments] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [message, setMessage] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -363,55 +361,86 @@ const AppointmentRequest = () => {
 
       {selectedAppointment && (
         <div
-          className="fixed inset-0 flex justify-center items-center z-50"
+          className="fixed inset-0 flex justify-center items-center z-50 p-4 sm:p-6 md:p-8 lg:p-12"
           style={{ backgroundColor: "rgba(233, 241, 239, 0.83)" }}
           onClick={handleCloseDetails}
         >
           <div
-            className="bg-white rounded-lg p-6 max-w-lg mx-4 w-full sm:w-11/12 md:w-3/4 lg:w-1/2 shadow-lg"
+            className="bg-white relative flex flex-col md:flex-row gap-4 p-4 sm:p-6 md:p-8 lg:p-10 rounded-lg shadow-lg max-w-full md:max-w-3xl w-full md:w-auto"
             onClick={(e) => e.stopPropagation()}
           >
-            <h2 className="text-2xl font-semibold mb-4 border-b pb-2">
-              Appointment Details
-            </h2>
-            <p className="mb-2">
-              <strong className="text-gray-700">Date:</strong>{" "}
-              {new Date(selectedAppointment.date).toLocaleDateString()}
-            </p>
-            <p className="mb-2">
-              <strong className="text-gray-700">Time:</strong>{" "}
-              {selectedAppointment.time}
-            </p>
-            <p className="mb-2">
-              <strong className="text-gray-700">Type:</strong>{" "}
-              {selectedAppointment.appointmentType}
-            </p>
-            <p className="mb-2">
-              <strong className="text-gray-700">Firstname:</strong>{" "}
-              {selectedAppointment.firstname}
-            </p>
-            <p className="mb-2">
-              <strong className="text-gray-700">Lastname:</strong>{" "}
-              {selectedAppointment.lastname}
-            </p>
-            <p className="mb-2">
-              <strong className="text-gray-700">Email:</strong>{" "}
-              {selectedAppointment.email}
-            </p>
-            <p className="mb-4">
-              <strong className="text-gray-700">Role:</strong>{" "}
-              {selectedAppointment.role}
-            </p>
-            <div className="mb-4">
-              <strong className="text-gray-700">Receipt:</strong>
+            <button
+              onClick={handleCloseDetails}
+              className="bg-gray-500 absolute right-4 top-4 text-white font-semibold py-1 px-2 rounded-full shadow-md hover:bg-gray-600 transition-colors"
+            >
+              <Close />
+            </button>
+
+            <div className="text-[#2c6975] flex flex-col gap-4 w-full">
+              <h2 className="text-xl sm:text-2xl font-semibold mb-2 sm:mb-4 border-b pb-2">
+                Appointment Details
+              </h2>
+
+              <div className="capitalize">
+                <strong className="font-bold">Full Name:</strong>{" "}
+                {selectedAppointment.firstname} {selectedAppointment.middleName}{" "}
+                {selectedAppointment.lastname}{" "}
+              </div>
+
+              <p className="mb-2">
+                <strong className="font-bold">Email:</strong>{" "}
+                {selectedAppointment.email}
+              </p>
+
+              <p className="mb-2">
+                <strong className="font-bold">Appointment Date:</strong>{" "}
+                {new Date(selectedAppointment.date).toLocaleDateString()}
+              </p>
+
+              <p className="mb-2">
+                <strong className="font-bold">Time:</strong>{" "}
+                {selectedAppointment.time}
+              </p>
+
+              <p className="mb-2">
+                <strong className="font-bold">Primary Complaint:</strong>{" "}
+                {selectedAppointment.primaryComplaint}
+              </p>
+
+              <p className="mb-2">
+                <strong className="font-bold">Service Availed:</strong>{" "}
+                {selectedAppointment.appointmentType}
+              </p>
+
+              <p className="mb-2">
+                <strong className="font-bold">History of Intervention:</strong>{" "}
+                {selectedAppointment.historyOfIntervention !== "false"
+                  ? selectedAppointment.historyOfIntervention
+                  : "None"}
+              </p>
+
+              {selectedAppointment.briefDetails ? (
+                <p className="mb-2">
+                  <strong className="font-bold">Brief Details:</strong>{" "}
+                  {selectedAppointment.briefDetails}
+                </p>
+              ) : null}
+
+              <p className="mb-2">
+                <strong className="font-bold">Consultation Method:</strong>{" "}
+                {selectedAppointment.consultationMethod}
+              </p>
+            </div>
+
+            <div className="mt-4 w-full">
               {selectedAppointment.receipt ? (
                 <div className="mt-2 border border-gray-300 rounded-lg overflow-hidden">
                   <img
                     src={selectedAppointment.receipt}
                     alt="Receipt"
-                    className="w-full h-auto"
+                    className="w-full h-auto object-contain"
                   />
-                  <div className="mt-2 flex space-x-2">
+                  <div className="mt-2 space-x-2 flex items-center justify-center">
                     <button
                       onClick={async () => {
                         try {
@@ -435,22 +464,16 @@ const AppointmentRequest = () => {
                           console.error("Error downloading receipt:", error);
                         }
                       }}
-                      className="inline-flex items-center bg-green-500 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-green-600 transition-colors"
+                      className="inline-flex items-center underline text-blue-500"
                     >
                       Download Receipt
                     </button>
                   </div>
                 </div>
               ) : (
-                <span className="text-gray-500">No receipt available</span>
+                <span className="font-bold">No receipt available</span>
               )}
             </div>
-            <button
-              onClick={handleCloseDetails}
-              className="bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-blue-600 transition-colors"
-            >
-              Close Details
-            </button>
           </div>
         </div>
       )}

@@ -46,14 +46,12 @@ const Chat = () => {
           <div
             className="lg:w-1/3 bg-[#FFFFFF] p-4 rounded-lg shadow-lg overflow-y-auto gap-7"
             style={{
-              overflowY: "scroll", // Enable vertical scrolling
-              scrollbarWidth: "none", // For Firefox to hide scrollbar
+              overflowY: "scroll",
+              scrollbarWidth: "none",
             }}
           >
             <div className="sticky top-0 bg-[#FFFFFF] z-10">
               {" "}
-              {/* Sticky Header */}
-              <SearchBar />
               <PotentialChats />
             </div>
             {userChats?.length > 0 ? (
@@ -90,8 +88,7 @@ const Chat = () => {
                   }}
                 >
                   <Toolbar>
-                    <Typography variant="h6">
-                    </Typography>
+                    <Typography variant="h6"></Typography>
                   </Toolbar>
                 </AppBar>
                 <p className="text-[#2C6975] top-60 relative">
