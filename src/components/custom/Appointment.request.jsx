@@ -8,6 +8,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import "../../styles/Rejectpopup.css";
 import MeetPlaceModal from "./meetPlaceModal";
 import { Close } from "@mui/icons-material";
+import { Skeleton } from "@mui/material";
 
 const AppointmentRequest = () => {
   const [selectedAppointment, setSelectedAppointment] = useState(null);
@@ -246,7 +247,7 @@ const AppointmentRequest = () => {
     );
   }, [appointments, searchTerm]);
 
-  if (loading) return <LoadingSpinner />;
+  if (loading) return <Skeleton />;
   if (error) return <div>{error}</div>;
 
   return (
