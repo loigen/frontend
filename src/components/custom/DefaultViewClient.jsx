@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import InfoIcon from "@mui/icons-material/Info";
-import { useAuth } from "../../context/AuthProvider";
-import { fetchAppointmentsByUserId } from "../../api/appointmentAPI/fetchAppointmentsByUserId";
 import Modal from "@mui/material/Modal";
 import LoadingSpinner from "./LoadingSpinner";
+import { useAuth } from "../../context/AuthProvider";
+import { fetchAppointmentsByUserId } from "../../api/appointmentAPI/fetchAppointmentsByUserId";
+import { reqRescheduleAppointment } from "../../api/appointmentAPI/reqReschedule";
 
 const ActiveAppointments = () => {
   const [appointments, setAppointments] = useState([]);
@@ -12,6 +13,9 @@ const ActiveAppointments = () => {
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const { user } = useAuth();
   const [isModalOpen, setModalOpen] = useState(false);
+  const [isRescheduleModalOpen, setRescheduleModalOpen] = useState(false);
+  const [rescheduleDate, setRescheduleDate] = useState("");
+  const [rescheduleTime, setRescheduleTime] = useState("");
 
   useEffect(() => {
     const getAppointments = async () => {
@@ -21,7 +25,7 @@ const ActiveAppointments = () => {
         const data = await fetchAppointmentsByUserId(user._id);
         setAppointments(data); // Store all appointments
       } catch (err) {
-        setError(null);
+        setError("Failed to load appointments");
       } finally {
         setLoading(false);
       }
@@ -40,10 +44,37 @@ const ActiveAppointments = () => {
     setSelectedAppointment(null);
   };
 
+  const openRescheduleModal = (appointment) => {
+    setSelectedAppointment(appointment);
+    setRescheduleModalOpen(true);
+  };
+
+  const closeRescheduleModal = () => {
+    setRescheduleModalOpen(false);
+    setSelectedAppointment(null);
+    setRescheduleDate("");
+    setRescheduleTime("");
+  };
+
+  const handleRescheduleAppointment = async () => {
+    if (!selectedAppointment || !rescheduleDate || !rescheduleTime) return;
+
+    try {
+      await reqRescheduleAppointment(
+        selectedAppointment._id,
+        rescheduleDate,
+        rescheduleTime
+      );
+      closeRescheduleModal();
+      setLoading(false);
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
   if (loading) return <LoadingSpinner />;
   if (error) return <div>Error: {error}</div>;
 
-  // Filter appointments by status
   const acceptedAppointments = appointments.filter(
     (appointment) => appointment.status === "accepted"
   );
@@ -51,7 +82,7 @@ const ActiveAppointments = () => {
     (appointment) => appointment.status === "rescheduled"
   );
   const requestedRescheduledAppointments = appointments.filter(
-    (appointment) => appointment.status === "requestedReschedule"
+    (appointment) => appointment.status === "ReqRescheduled"
   );
   const pendingAppointments = appointments.filter(
     (appointment) => appointment.status === "pending"
@@ -71,6 +102,7 @@ const ActiveAppointments = () => {
                 key={appointment._id}
                 appointment={appointment}
                 onOpenModal={handleOpenModal}
+                onOpenRescheduleModal={openRescheduleModal}
                 showGoToRoom={true}
               />
             ))}
@@ -86,7 +118,7 @@ const ActiveAppointments = () => {
           Rescheduled Appointments
         </h3>
         {rescheduledAppointments.length > 0 ? (
-          <div className="grid  gap-4">
+          <div className="grid gap-4">
             {rescheduledAppointments.map((appointment) => (
               <AppointmentCard
                 key={appointment._id}
@@ -97,7 +129,7 @@ const ActiveAppointments = () => {
             ))}
           </div>
         ) : (
-          <p>No rescheduled</p>
+          <p>No rescheduled appointments</p>
         )}
       </div>
 
@@ -107,7 +139,7 @@ const ActiveAppointments = () => {
           Requested Rescheduled Appointments
         </h3>
         {requestedRescheduledAppointments.length > 0 ? (
-          <div className="grid  gap-4">
+          <div className="grid gap-4">
             {requestedRescheduledAppointments.map((appointment) => (
               <AppointmentCard
                 key={appointment._id}
@@ -118,7 +150,7 @@ const ActiveAppointments = () => {
             ))}
           </div>
         ) : (
-          <p>No requsted torescheduled</p>
+          <p>No requested rescheduled appointments</p>
         )}
       </div>
 
@@ -134,6 +166,7 @@ const ActiveAppointments = () => {
                 key={appointment._id}
                 appointment={appointment}
                 onOpenModal={handleOpenModal}
+                onOpenRescheduleModal={openRescheduleModal}
                 showGoToRoom={false}
               />
             ))}
@@ -187,31 +220,63 @@ const ActiveAppointments = () => {
           )}
         </div>
       </Modal>
+
+      {/* Modal for rescheduling appointments */}
+      <Modal
+        open={isRescheduleModalOpen}
+        onClose={closeRescheduleModal}
+        aria-labelledby="reschedule-appointment-title"
+      >
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-lg shadow-lg">
+          <h2
+            id="reschedule-appointment-title"
+            className="text-xl font-semibold mb-4"
+          >
+            Request Reschedule Appointment
+          </h2>
+          <input
+            type="date"
+            value={rescheduleDate}
+            onChange={(e) => setRescheduleDate(e.target.value)}
+            min={new Date().toISOString().split("T")[0]} // Set min to today's date
+            className="border p-2 mb-4 w-full"
+          />
+
+          <input
+            type="time"
+            value={rescheduleTime}
+            onChange={(e) => setRescheduleTime(e.target.value)}
+            className="border p-2 mb-4 w-full"
+          />
+          <div className="flex flex-row gap-2">
+            <button
+              onClick={handleRescheduleAppointment}
+              className="bg-[#2C6975] text-white px-4 py-2 rounded-lg mt-4"
+            >
+              Confirm Request
+            </button>
+            <button
+              onClick={closeRescheduleModal}
+              className="text-gray-500 px-4 py-2 mt-4  border rounded-lg border-[#2C6975]"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </Modal>
     </>
   );
 };
 
 // Helper component for rendering appointment cards
-const AppointmentCard = ({ appointment, onOpenModal, showGoToRoom }) => (
-  <div
-    key={appointment._id}
-    className="bg-[#FFFFFF] p-4 rounded-lg shadow-md border-l-2 border-[#68B2AD] relative mb-4"
-  >
+const AppointmentCard = ({
+  appointment,
+  onOpenModal,
+  onOpenRescheduleModal,
+  showGoToRoom,
+}) => (
+  <div className="bg-[#FFFFFF] p-4 rounded-lg shadow-md border-l-2 border-[#68B2AD] relative mb-4">
     <div className="flex items-center mb-2">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="h-6 w-6 text-teal-600"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          d="M8 7V3m8 4V3m-9 8h10m-2 4h2a2 2 0 001.95-1.75L21 12a9 9 0 10-18 0v1a2 2 0 002 2h2m0 4h8m-2 4h-4m0-4h4v-2a2 2 0 00-2-2h-4a2 2 0 00-2 2v2z"
-        />
-      </svg>
       <p className="ml-2 text-sm">
         {new Date(appointment.date).toLocaleString("en-US", {
           weekday: "long",
@@ -223,14 +288,12 @@ const AppointmentCard = ({ appointment, onOpenModal, showGoToRoom }) => (
           hour12: true,
         })}
       </p>
-      <div className="justify-end">
-        <button
-          className="absolute top-4 right-4 text-[#68B2A0] hover:text-[#2c6975]"
-          onClick={() => onOpenModal(appointment)}
-        >
-          <InfoIcon />
-        </button>
-      </div>
+      <button
+        className="absolute top-4 right-4 text-[#68B2A0] hover:text-[#2c6975]"
+        onClick={() => onOpenModal(appointment)}
+      >
+        <InfoIcon />
+      </button>
     </div>
     <p className="text-sm mb-4">{appointment.serviceType}</p>
     {showGoToRoom && (
@@ -238,18 +301,21 @@ const AppointmentCard = ({ appointment, onOpenModal, showGoToRoom }) => (
         <a
           href={appointment.meetLink}
           className="text-white text-center px-4 py-2 rounded-lg mt-4"
-          style={{
-            backgroundColor: "#2C6975",
-            borderRadius: "20px",
-            width: "auto",
-            padding: "10px 20px",
-          }}
-          onMouseEnter={(e) => (e.target.style.backgroundColor = "#358898")}
-          onMouseLeave={(e) => (e.target.style.backgroundColor = "#2C6975")}
+          style={{ backgroundColor: "#2C6975" }}
         >
           Go to Room
         </a>
       </div>
+    )}
+    {/* Conditionally render the Request Reschedule button */}
+    {(appointment.status === "pending" ||
+      appointment.status === "accepted") && (
+      <button
+        onClick={() => onOpenRescheduleModal(appointment)}
+        className="bg-blue-500 text-white px-4 py-2 rounded-lg mt-2"
+      >
+        Request Reschedule
+      </button>
     )}
   </div>
 );
