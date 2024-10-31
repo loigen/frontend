@@ -256,7 +256,7 @@ const AppointmentRequest = () => {
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="thirdBox w-full mt-4 bg-white p-4 shadow-2xl">
+    <div className="thirdBox w-full mt-4 bg-white p-4 shadow-2xl overflow-y-scroll">
       <h2
         className="text-xl text-center uppercase font-mono"
         style={{ color: "rgba(0,0,0,0.78)" }}
@@ -269,7 +269,7 @@ const AppointmentRequest = () => {
           No Appointment Request
         </div>
       ) : (
-        <ul className="list-disc pl-5 mt-4 overflow-scroll">
+        <ul className="list-disc pl-5 mt-4">
           {filteredAppointments.map((appointment) => {
             const appointmentDate = new Date(appointment.date);
             const appointmentTime = new Date(appointment.time);
