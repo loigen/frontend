@@ -76,16 +76,6 @@ const LoginModal = ({
       setUser(response.data);
       await fetchProfile();
 
-      if (response.data.role === "admin") {
-        Swal.fire({
-          icon: "error",
-          title: "Access Denied",
-          text: "Admins are not allowed to log in.",
-        });
-        setLoading(false);
-        return;
-      }
-
       if (rememberMe) {
         localStorage.setItem("rememberMe", true);
         localStorage.setItem("rememberedEmail", email);
@@ -104,32 +94,39 @@ const LoginModal = ({
       }
       onClose();
     } catch (error) {
+      const status = error.response?.status;
       const errorMessage =
         error.response?.data?.error || "An error occurred. Please try again.";
 
-      if (errorMessage === "Email and password are required") {
+      if (status === 400) {
         Swal.fire({
           icon: "warning",
           title: "Missing Information",
-          text: errorMessage,
+          text: "Email and password are required",
         });
-      } else if (errorMessage === "User not found") {
+      } else if (status === 404) {
         Swal.fire({
           icon: "warning",
           title: "User Not Found",
-          text: errorMessage,
+          text: "User not found",
         });
-      } else if (errorMessage === "Incorrect password") {
+      } else if (status === 401) {
         Swal.fire({
           icon: "error",
           title: "Incorrect Password",
-          text: errorMessage,
+          text: "Incorrect password",
+        });
+      } else if (status === 403) {
+        Swal.fire({
+          icon: "error",
+          title: "Access Denied",
+          text: "Admin user, please use the admin login form!",
         });
       } else {
         Swal.fire({
           icon: "error",
-          title: "Not Allowed!",
-          text: "Admin user, please use the admin login form!",
+          title: "Server Error",
+          text: errorMessage,
         });
       }
     } finally {
