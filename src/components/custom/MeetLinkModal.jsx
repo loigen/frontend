@@ -4,28 +4,6 @@ import Swal from "sweetalert2";
 const MeetLinkModal = ({ isOpen, onClose, onSubmit }) => {
   const [meetLink, setMeetLink] = useState("");
 
-  const handleSubmit = () => {
-    if (meetLink.trim() === "") {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Please enter a meet link!",
-      });
-      return;
-    }
-
-    onSubmit(meetLink);
-    setMeetLink("");
-
-    Swal.fire({
-      icon: "success",
-      title: "Success!",
-      text: "Meet link has been submitted successfully.",
-    }).then(() => {
-      onClose();
-    });
-  };
-
   if (!isOpen) return null;
 
   return (
@@ -55,7 +33,7 @@ const MeetLinkModal = ({ isOpen, onClose, onSubmit }) => {
             Cancel
           </button>
           <button
-            onClick={onsubmit}
+            onClick={onSubmit}
             className="bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg"
           >
             Submit
