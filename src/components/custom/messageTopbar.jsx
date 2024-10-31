@@ -68,7 +68,13 @@ const Topbar = () => {
 
   return (
     <div className="topbarComponent flex flex-row justify-between p-3 h-16 md:h-20">
-      <IconButton onClick={() => navigate(-1)}>
+      <IconButton
+        onClick={
+          user.role === "admin"
+            ? () => navigate("/home")
+            : () => navigate("/Booking")
+        }
+      >
         <Tooltip
           title="Back to Dashboard"
           arrow
