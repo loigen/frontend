@@ -269,7 +269,7 @@ const AppointmentRequest = () => {
           No Appointment Request
         </div>
       ) : (
-        <ul className="list-disc pl-5 mt-4">
+        <ul className="list-disc pl-5 mt-4 overflow-scroll">
           {filteredAppointments.map((appointment) => {
             const appointmentDate = new Date(appointment.date);
             const appointmentTime = new Date(appointment.time);
