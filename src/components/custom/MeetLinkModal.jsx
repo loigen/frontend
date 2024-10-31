@@ -33,7 +33,7 @@ const MeetLinkModal = ({ isOpen, onClose, onSubmit }) => {
             Cancel
           </button>
           <button
-            onClick={onSubmit}
+            onClick={onSubmit(meetLink)}
             className="bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg"
           >
             Submit
