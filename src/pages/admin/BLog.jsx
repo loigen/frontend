@@ -36,6 +36,8 @@ import {
 } from "@mui/material";
 import { useAuth } from "../../context/AuthProvider";
 import { LoadingSpinner } from "../../components/custom";
+import { Delete } from "@mui/icons-material";
+const API_URL = "https://backend-production-c8da.up.railway.app";
 
 const categories = [
   { id: "Technology", name: "Technology" },
@@ -116,55 +118,78 @@ const BLog = () => {
       console.error("Error updating blog:", error);
     }
   };
+  const fetchUserProfileAndBlogs = async () => {
+    setLoading(true);
+    try {
+      setUserId(user._id);
 
-  useEffect(() => {
-    const fetchUserProfileAndBlogs = async () => {
-      setLoading(true);
-      try {
-        setUserId(user._id);
+      const blogsResponse = await axios.get(
+        `https://backend-production-c8da.up.railway.app/blog/allBlogs`
+      );
+      setBlogs(blogsResponse.data.blogs);
 
-        const blogsResponse = await axios.get(
-          `https://backend-production-c8da.up.railway.app/blog/allBlogs`
-        );
-        setBlogs(blogsResponse.data.blogs);
+      if (view === "favorites" && user._id) {
+        try {
+          const favoritesResponse = await axios.get(
+            `https://backend-production-c8da.up.railway.app/blog/userFavorites/${user._id}`
+          );
+          setFavoriteBlogs(favoritesResponse.data.blogs || []);
+        } catch (favoriteError) {
+          console.error("Error fetching favorites:", favoriteError);
 
-        if (view === "favorites" && user._id) {
-          try {
-            const favoritesResponse = await axios.get(
-              `https://backend-production-c8da.up.railway.app/blog/userFavorites/${user._id}`
-            );
-            setFavoriteBlogs(favoritesResponse.data.blogs || []);
-          } catch (favoriteError) {
-            console.error("Error fetching favorites:", favoriteError);
-
-            Swal.fire({
-              icon: "error",
-              title: "Error",
-              text: "No favorite blogs. Please add favorites.",
-              confirmButtonText: "Add Favorites",
-            }).then((result) => {
-              if (result.isConfirmed) {
-                setView("all");
-              }
-            });
-          }
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "No favorite blogs. Please add favorites.",
+            confirmButtonText: "Add Favorites",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              setView("all");
+            }
+          });
         }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setError("Failed to fetch data. Please try again later.");
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "Failed to fetch data. Please try again later.",
-        });
-      } finally {
-        setLoading(false);
       }
-    };
-
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setError("Failed to fetch data. Please try again later.");
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Failed to fetch data. Please try again later.",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
     fetchUserProfileAndBlogs();
   }, [view]);
 
+  const deleteBlog = async (blogId) => {
+    try {
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+      });
+
+      if (result.isConfirmed) {
+        const response = await axios.delete(`${API_URL}/blog/${blogId}`);
+
+        if (response.status === 200) {
+          Swal.fire("Deleted!", response.data.message, "success");
+          fetchUserProfileAndBlogs();
+        } else {
+          Swal.fire("Error", response.data.message, "error");
+        }
+      }
+    } catch (error) {
+      console.error("Error deleting blog:", error);
+      Swal.fire("Error", "Could not delete the blog", "error");
+    }
+  };
   const handleToggleFavorite = async (blogId) => {
     try {
       const isFavorite = favoriteBlogs.some((blog) => blog._id === blogId);
@@ -357,14 +382,24 @@ const BLog = () => {
                           </Typography>
                         }
                         action={
-                          <IconButton
-                            color="textColor"
-                            onClick={() => openEditModal(blog)}
-                          >
-                            <Tooltip title="Edit Blog" arrow>
-                              <EditIcon />
-                            </Tooltip>
-                          </IconButton>
+                          <>
+                            <IconButton
+                              color="textColor"
+                              onClick={() => openEditModal(blog)}
+                            >
+                              <Tooltip title="Edit Blog" arrow>
+                                <EditIcon />
+                              </Tooltip>
+                            </IconButton>
+                            <IconButton
+                              color="textColor"
+                              onClick={() => deleteBlog(blog._id)}
+                            >
+                              <Tooltip title="Delete Blog" arrow>
+                                <Delete />
+                              </Tooltip>
+                            </IconButton>
+                          </>
                         }
                         sx={{
                           bgcolor: "primary.main",

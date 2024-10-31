@@ -52,21 +52,20 @@ function LoginPage() {
   }, [isTimerActive, countdown]);
 
   const handleResendOtp = async () => {
-    setCountdown(60); // Reset the countdown to 60 seconds
-    setError(""); // Clear any previous error messages
-    setSuccessMessage(""); // Clear previous success message
+    setCountdown(60);
+    setError("");
+    setSuccessMessage("");
 
     try {
-      // Make the API call to resend the OTP
       const response = await axios.post(`${API_URL}/auth/resend-otp`, {
         email,
       });
-      setSuccessMessage(response.data.message); // Display success message
+      setSuccessMessage(response.data.message);
     } catch (error) {
       if (error.response) {
-        setError(error.response.data.message); // Set error message from server response
+        setError(error.response.data.message);
       } else {
-        setError("An error occurred while resending the OTP."); // General error message
+        setError("An error occurred while resending the OTP.");
       }
     }
   };

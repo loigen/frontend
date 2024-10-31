@@ -36,6 +36,7 @@ import {
 } from "@mui/material";
 import { useAuth } from "../../context/AuthProvider";
 import { LoadingSpinner } from "../../components/custom";
+import { Delete } from "@mui/icons-material";
 
 const categories = [
   { id: "Technology", name: "Technology" },
@@ -43,6 +44,7 @@ const categories = [
   { id: "Lifestyle", name: "Lifestyle" },
   { id: "Education", name: "Education" },
 ];
+const API_URL = "https://backend-production-c8da.up.railway.app";
 
 const blogTheme = createTheme({
   palette: {
@@ -116,55 +118,81 @@ const BLog = () => {
       console.error("Error updating blog:", error);
     }
   };
+  const fetchUserProfileAndBlogs = async () => {
+    setLoading(true);
+    try {
+      setUserId(user._id);
 
-  useEffect(() => {
-    const fetchUserProfileAndBlogs = async () => {
-      setLoading(true);
-      try {
-        setUserId(user._id);
+      const blogsResponse = await axios.get(
+        `https://backend-production-c8da.up.railway.app/blog/allBlogs`
+      );
+      setBlogs(blogsResponse.data.blogs);
 
-        const blogsResponse = await axios.get(
-          `https://backend-production-c8da.up.railway.app/blog/allBlogs`
-        );
-        setBlogs(blogsResponse.data.blogs);
+      if (view === "favorites" && user._id) {
+        try {
+          const favoritesResponse = await axios.get(
+            `https://backend-production-c8da.up.railway.app/blog/userFavorites/${user._id}`
+          );
+          setFavoriteBlogs(favoritesResponse.data.blogs || []);
+        } catch (favoriteError) {
+          console.error("Error fetching favorites:", favoriteError);
 
-        if (view === "favorites" && user._id) {
-          try {
-            const favoritesResponse = await axios.get(
-              `https://backend-production-c8da.up.railway.app/blog/userFavorites/${user._id}`
-            );
-            setFavoriteBlogs(favoritesResponse.data.blogs || []);
-          } catch (favoriteError) {
-            console.error("Error fetching favorites:", favoriteError);
-
-            Swal.fire({
-              icon: "error",
-              title: "Oopss",
-              text: "No favorite blogs. Please add favorites.",
-              confirmButtonText: "Add Favorites",
-            }).then((result) => {
-              if (result.isConfirmed) {
-                setView("all");
-              }
-            });
-          }
+          Swal.fire({
+            icon: "error",
+            title: "Oopss",
+            text: "No favorite blogs. Please add favorites.",
+            confirmButtonText: "Add Favorites",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              setView("all");
+            }
+          });
         }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setError("Failed to fetch data. Please try again later.");
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "Failed to fetch data. Please try again later.",
-        });
-      } finally {
-        setLoading(false);
       }
-    };
-
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setError("Failed to fetch data. Please try again later.");
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Failed to fetch data. Please try again later.",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
     fetchUserProfileAndBlogs();
   }, [view]);
+  const deleteBlog = async (blogId) => {
+    try {
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+      });
 
+      if (result.isConfirmed) {
+        const response = await fetch(`${API_URL}/blog/${blogId}`, {
+          method: "DELETE",
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          Swal.fire("Deleted!", data.message, "success");
+          fetchUserProfileAndBlogs();
+        } else {
+          Swal.fire("Error", data.message, "error");
+        }
+      }
+    } catch (error) {
+      console.error("Error deleting blog:", error);
+      Swal.fire("Error", "Could not delete the blog", "error");
+    }
+  };
   const handleToggleFavorite = async (blogId) => {
     try {
       const isFavorite = favoriteBlogs.some((blog) => blog._id === blogId);
@@ -194,17 +222,17 @@ const BLog = () => {
     }
   };
 
-  const handleToggleExpand = (blogId) => {
-    setExpandedBlogs((prev) => {
-      const newExpandedBlogs = new Set(prev);
-      if (newExpandedBlogs.has(blogId)) {
-        newExpandedBlogs.delete(blogId);
-      } else {
-        newExpandedBlogs.add(blogId);
-      }
-      return newExpandedBlogs;
-    });
-  };
+  // const handleToggleExpand = (blogId) => {
+  //   setExpandedBlogs((prev) => {
+  //     const newExpandedBlogs = new Set(prev);
+  //     if (newExpandedBlogs.has(blogId)) {
+  //       newExpandedBlogs.delete(blogId);
+  //     } else {
+  //       newExpandedBlogs.add(blogId);
+  //     }
+  //     return newExpandedBlogs;
+  //   });
+  // };
 
   const filteredBlogs = blogs
     .filter((blog) => blog.category === selectedCategory)
@@ -467,8 +495,8 @@ const BLog = () => {
               alignItems: "center",
             }}
             style={{
-              scrollbarWidth: "thin", // For Firefox
-              scrollbarColor: "#68B2A0 #F0F0F0", // For Firefox
+              scrollbarWidth: "thin",
+              scrollbarColor: "#68B2A0 #F0F0F0",
             }}
           >
             <Box
@@ -555,79 +583,3 @@ const BLog = () => {
 };
 
 export default BLog;
-
-{
-  /*I turn this code into a comment because a Patient can only view a blog post, they cannot edit it. 
-  
-  <Box
-                sx={{
-                  width: "100%",
-                  overflowY: "auto",
-                  maxHeight: "80vh",
-                  bgcolor: "background.default",
-                  p: 2,
-                  overflow: "hidden",
-                  position: "sticky",
-                  top: 0,
-                }}
-              >
-   </Box>
-  */
-}
-{
-  /* <Dialog open={isEditModalOpen} onClose={closeEditModal}>
-          <DialogTitle>Edit Blog</DialogTitle>
-          <DialogContent>
-            <TextField
-              label="Title"
-              fullWidth
-              variant="outlined"
-              value={editableBlog.title}
-              onChange={(e) =>
-                setEditableBlog({ ...editableBlog, title: e.target.value })
-              }
-              margin="normal"
-            />
-            <TextField
-              label="Content"
-              fullWidth
-              variant="outlined"
-              multiline
-              rows={4}
-              value={editableBlog.content}
-              onChange={(e) =>
-                setEditableBlog({ ...editableBlog, content: e.target.value })
-              }
-              margin="normal"
-            />
-            <FormControl fullWidth margin="normal">
-              <InputLabel>Category</InputLabel>
-              <Select
-                value={editableBlog.category}
-                onChange={(e) =>
-                  setEditableBlog({ ...editableBlog, category: e.target.value })
-                }
-                label="Category"
-              >
-                {categories.map((cat) => (
-                  <MenuItem key={cat.id} value={cat.id}>
-                    {cat.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={closeEditModal} color="primary">
-              Cancel
-            </Button>
-            <Button
-              onClick={() => handleUpdateBlog(editableBlog)}
-              color="secondary"
-              variant="contained"
-            >
-              Update
-            </Button>
-          </DialogActions>
-        </Dialog> */
-}

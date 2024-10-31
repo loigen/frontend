@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
   TextField,
@@ -11,17 +11,15 @@ import {
 } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-// const API_URL = "https://backend-production-c8da.up.railway.app";
+// const API_URL = "http://localhost:5000";
 const API_URL = "https://backend-production-c8da.up.railway.app";
+const MAX_ATTEMPTS = 5;
+const LOCKOUT_DURATION = 3 * 60 * 60 * 1000;
 
 const theme = createTheme({
   palette: {
-    primary: {
-      main: "#2c6975",
-    },
-    secondary: {
-      main: "#4a8e8b",
-    },
+    primary: { main: "#2c6975" },
+    secondary: { main: "#4a8e8b" },
   },
 });
 
@@ -30,13 +28,41 @@ function LoginForm({ onOtpRequested }) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [loading, setLoading] = useState(false); // Loading state
+  const [loading, setLoading] = useState(false);
+  const [lockout, setLockout] = useState(false);
+
+  useEffect(() => {
+    const lockoutTime = localStorage.getItem("lockoutTime");
+    if (lockoutTime && Date.now() < lockoutTime) {
+      setLockout(true);
+      const remainingTime = lockoutTime - Date.now();
+      setTimeout(() => {
+        setLockout(false);
+        localStorage.removeItem("lockoutTime");
+        localStorage.removeItem("attempts");
+      }, remainingTime);
+    } else {
+      localStorage.removeItem("lockoutTime");
+      localStorage.removeItem("attempts");
+    }
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setSuccess("");
-    setLoading(true); // Set loading to true when the form is submitted
+    setLoading(true);
+
+    const attempts = parseInt(localStorage.getItem("attempts") || "0", 10);
+
+    if (attempts >= MAX_ATTEMPTS) {
+      const lockoutTime = Date.now() + LOCKOUT_DURATION;
+      localStorage.setItem("lockoutTime", lockoutTime);
+      setLockout(true);
+      setError("Too many failed attempts. Account locked for 3 hours.");
+      setLoading(false);
+      return;
+    }
 
     try {
       const response = await axios.post(`${API_URL}/auth/AdminLogin`, {
@@ -45,10 +71,24 @@ function LoginForm({ onOtpRequested }) {
       });
       setSuccess(response.data.message);
       onOtpRequested(email);
+      localStorage.removeItem("attempts");
     } catch (error) {
-      setError(error.response?.data?.message || "Login failed");
+      if (error.response?.status === 401) {
+        const newAttempts = attempts + 1;
+        localStorage.setItem("attempts", newAttempts);
+        if (newAttempts >= MAX_ATTEMPTS) {
+          const lockoutTime = Date.now() + LOCKOUT_DURATION;
+          localStorage.setItem("lockoutTime", lockoutTime);
+          setLockout(true);
+          setError("Too many failed attempts. Account locked for 3 hours.");
+        } else {
+          setError("Incorrect password. Please try again.");
+        }
+      } else {
+        setError(error.response?.data?.message || "Login failed");
+      }
     } finally {
-      setLoading(false); // Stop loading when the request completes
+      setLoading(false);
     }
   };
 
@@ -72,6 +112,7 @@ function LoginForm({ onOtpRequested }) {
             required
             variant="outlined"
             color="primary"
+            disabled={lockout}
           />
           <TextField
             label="Password"
@@ -82,6 +123,7 @@ function LoginForm({ onOtpRequested }) {
             required
             variant="outlined"
             color="primary"
+            disabled={lockout}
           />
           <Button
             type="submit"
@@ -89,7 +131,7 @@ function LoginForm({ onOtpRequested }) {
             color="primary"
             fullWidth
             sx={{ mt: 2 }}
-            disabled={loading} // Disable the button when loading
+            disabled={loading || lockout}
           >
             {loading ? <CircularProgress size={24} color="inherit" /> : "Login"}
           </Button>
