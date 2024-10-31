@@ -1,10 +1,15 @@
 import React, { useState } from "react";
-import Swal from "sweetalert2";
 
 const MeetLinkModal = ({ isOpen, onClose, onSubmit }) => {
   const [meetLink, setMeetLink] = useState("");
 
   if (!isOpen) return null;
+
+  const handleSubmit = () => {
+    onSubmit(meetLink);
+    setMeetLink("");
+    onClose();
+  };
 
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-70 flex justify-center items-center z-50">
@@ -33,7 +38,7 @@ const MeetLinkModal = ({ isOpen, onClose, onSubmit }) => {
             Cancel
           </button>
           <button
-            onClick={() => onSubmit(meetLink)} // Update this line
+            onClick={handleSubmit}
             className="bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg"
           >
             Submit

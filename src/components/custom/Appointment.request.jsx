@@ -163,6 +163,11 @@ const AppointmentRequest = () => {
         setAppointments((prevAppointments) =>
           prevAppointments.filter((app) => app._id !== appointmentToAccept._id)
         );
+        Swal.fire({
+          title: "Success",
+          text: "Appointment has been succesfully accepted!",
+          icon: "Success",
+        });
       } catch (error) {
         Swal.fire({
           title: "Error",
