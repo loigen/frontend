@@ -108,7 +108,14 @@ const ActiveAppointments = () => {
             ))}
           </div>
         ) : (
-          <p>No active appointments for today.</p>
+          <p
+            style={{
+              color: "rgba(44, 105, 117, 0.40)",
+            }}
+          >
+            {" "}
+            No active appointments for today.
+          </p>
         )}
       </div>
 
@@ -129,7 +136,7 @@ const ActiveAppointments = () => {
             ))}
           </div>
         ) : (
-          <p>No rescheduled appointments</p>
+          <p>No rescheduled</p>
         )}
       </div>
 
@@ -150,7 +157,7 @@ const ActiveAppointments = () => {
             ))}
           </div>
         ) : (
-          <p>No requested rescheduled appointments</p>
+          <p>No requsted torescheduled</p>
         )}
       </div>
 
@@ -172,7 +179,13 @@ const ActiveAppointments = () => {
             ))}
           </div>
         ) : (
-          <p>No pending appointments</p>
+          <p
+            style={{
+              color: "rgba(44, 105, 117, 0.40)",
+            }}
+          >
+            No pending appointments
+          </p>
         )}
       </div>
 

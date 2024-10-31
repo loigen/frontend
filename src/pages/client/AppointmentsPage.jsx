@@ -734,7 +734,7 @@ const AppointmentsPage = () => {
             display="flex"
             flexDirection="row"
             justifyContent="space-between"
-            padding={2}
+            padding={4}
           >
             <button
               className="bg-[#2C6975] text-white px-6 py-2 rounded-full font-poppins pt-4 pb-4 pl-10 pr-10 transition duration-300 ease-in-out hover:bg-[#358898] hover:shadow-lg "
@@ -949,7 +949,7 @@ const AppointmentsPage = () => {
           {currentView === "Accepted" && (
             <Appointments onBack={() => handleViewChange("default")} />
           )}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ml-5 mr-5 mt-5">
             {/* Render Active or Completed Appointments */}
             {currentView === "default" && (
               <>
