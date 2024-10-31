@@ -1,32 +1,74 @@
-// LoginPage.js
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import LoginForm from "./custom/AdminLoginForm";
 import OTPForm from "./custom/OTPForm";
-import { Container, Typography, Box, Paper, CssBaseline } from "@mui/material";
+import {
+  Container,
+  Typography,
+  Box,
+  Paper,
+  CssBaseline,
+  Button,
+} from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import axios from "axios";
 
-// Custom theme with your preferred color palette
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#2c6975", // Your primary color
+      main: "#2c6975",
     },
     secondary: {
-      main: "#4a8e8b", // Your secondary color
+      main: "#4a8e8b",
     },
   },
   typography: {
     fontFamily: "'Roboto', sans-serif",
   },
 });
-
+const API_URL = "https://backend-production-c8da.up.railway.app";
 function LoginPage() {
   const [otpRequested, setOtpRequested] = useState(false);
   const [email, setEmail] = useState("");
+  const [countdown, setCountdown] = useState(60);
+  const [isTimerActive, setIsTimerActive] = useState(false);
+  const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const handleOtpRequested = (email) => {
     setOtpRequested(true);
     setEmail(email);
+    setIsTimerActive(true);
+  };
+
+  useEffect(() => {
+    let timer;
+    if (isTimerActive && countdown > 0) {
+      timer = setInterval(() => {
+        setCountdown((prevCountdown) => prevCountdown - 1);
+      }, 1000);
+    }
+
+    return () => clearInterval(timer);
+  }, [isTimerActive, countdown]);
+
+  const handleResendOtp = async () => {
+    setCountdown(60); // Reset the countdown to 60 seconds
+    setError(""); // Clear any previous error messages
+    setSuccessMessage(""); // Clear previous success message
+
+    try {
+      // Make the API call to resend the OTP
+      const response = await axios.post(`${API_URL}/auth/resend-otp`, {
+        email,
+      });
+      setSuccessMessage(response.data.message); // Display success message
+    } catch (error) {
+      if (error.response) {
+        setError(error.response.data.message); // Set error message from server response
+      } else {
+        setError("An error occurred while resending the OTP."); // General error message
+      }
+    }
   };
 
   return (
@@ -34,9 +76,6 @@ function LoginPage() {
       <CssBaseline />
       <Container maxWidth="sm" sx={{ mt: 8 }}>
         <Paper elevation={3} sx={{ padding: 4 }}>
-          <Typography variant="h4" align="center" gutterBottom color="primary">
-            {otpRequested ? "OTP Verification" : "Admin Login"}
-          </Typography>
           <Box
             display="flex"
             flexDirection="column"
@@ -46,7 +85,43 @@ function LoginPage() {
             {!otpRequested ? (
               <LoginForm onOtpRequested={handleOtpRequested} />
             ) : (
-              <OTPForm email={email} />
+              <Box display="flex" flexDirection="column" alignItems="center">
+                <OTPForm email={email} />
+                {countdown > 0 ? (
+                  <Typography variant="body1" sx={{ mt: 2 }}>
+                    Resend OTP in {countdown} seconds
+                  </Typography>
+                ) : (
+                  <>
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      onClick={handleResendOtp}
+                      sx={{ mt: 2 }}
+                    >
+                      Resend OTP
+                    </Button>
+                    {successMessage && (
+                      <Typography
+                        variant="body2"
+                        color="success.main"
+                        sx={{ mt: 2 }}
+                      >
+                        {successMessage}
+                      </Typography>
+                    )}
+                    {error && (
+                      <Typography
+                        variant="body2"
+                        color="error.main"
+                        sx={{ mt: 2 }}
+                      >
+                        {error}
+                      </Typography>
+                    )}
+                  </>
+                )}
+              </Box>
             )}
           </Box>
         </Paper>
