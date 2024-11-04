@@ -191,21 +191,24 @@ const AppointmentsPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    setSubmitting(true);
+
     if (!file) {
       Swal.fire({
         icon: "warning",
         title: "No Receipt",
-        text: "Please Upload Receipt!",
+        text: "Please upload a receipt!",
       });
+      setSubmitting(false);
+      return; // Stop function execution if no file is provided
     }
-    setSubmitting(true);
 
     try {
       const appointmentData = new FormData();
       appointmentData.append("date", selectedSlot.date);
       appointmentData.append("time", selectedSlot.time);
       appointmentData.append("appointmentType", appointmentType);
-
       appointmentData.append("userId", user._id);
       appointmentData.append("firstname", user.firstname);
       appointmentData.append("lastname", user.lastname);
@@ -214,15 +217,14 @@ const AppointmentsPage = () => {
       appointmentData.append("avatar", user.profilePicture);
       appointmentData.append("sex", user.sex);
 
-      // Include patient information
+      // Patient information
       appointmentData.append("primaryComplaint", primaryComplaint);
       appointmentData.append("historyOfIntervention", historyOfIntervention);
       appointmentData.append("briefDetails", briefDetails);
       appointmentData.append("consultationMethod", consultationMethod);
 
-      if (file) {
-        appointmentData.append("receipt", file);
-      }
+      // Attach receipt file if provided
+      appointmentData.append("receipt", file);
 
       const response = await createAppointment(appointmentData);
       await updateSlotStatus(selectedSlot._id, "pending");

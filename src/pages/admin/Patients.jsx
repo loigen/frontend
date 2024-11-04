@@ -32,6 +32,12 @@ const statuses = [
   { label: "Accepted", value: "accepted" },
   { label: "Completed", value: "completed" },
   { label: "Canceled", value: "canceled" },
+  { label: "Requested", value: "requested" },
+  { label: "Rejected", value: "rejected" },
+  { label: "Pending", value: "pending" },
+  { label: "ReqRescheduled", value: "ReqRescheduled" },
+  { label: "Rescheduled", value: "rescheduled" },
+  { label: "Refunded", value: "refunded" },
 ];
 
 const Patients = () => {

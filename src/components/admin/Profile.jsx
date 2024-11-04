@@ -46,7 +46,6 @@ const Profile = ({ setView }) => {
     firstname: user?.firstname || "",
     lastname: user?.lastname || "",
     email: user?.email || "",
-    role: user?.role || "",
   });
   const [saving, setSaving] = useState(false);
   const [fileInputId] = useState("profile-picture-upload");
@@ -93,7 +92,6 @@ const Profile = ({ setView }) => {
       formPayload.append("firstname", formData.firstname);
       formPayload.append("lastname", formData.lastname);
       formPayload.append("email", formData.email);
-      formPayload.append("role", formData.role);
 
       if (localFile) {
         formPayload.append("profile_picture", localFile);
@@ -137,7 +135,6 @@ const Profile = ({ setView }) => {
       firstname: user.firstname,
       lastname: user.lastname,
       email: user.email,
-      role: user.role,
     });
     setAvatar(user.profilePicture);
     setLocalFile(null);
@@ -282,28 +279,7 @@ const Profile = ({ setView }) => {
               },
             }}
           />
-          <TextField
-            label="Role"
-            name="role"
-            value={formData.role}
-            onChange={handleInputChange}
-            disabled={!isEditing}
-            fullWidth
-            margin="normal"
-            variant="outlined"
-            sx={{
-              backgroundColor: "#f5f5f5",
-              borderRadius: 1,
-              "& .MuiOutlinedInput-root": {
-                "&:hover fieldset": {
-                  borderColor: "#4e8e9b",
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "#2c6975",
-                },
-              },
-            }}
-          />
+
           <Box mt={2} display="flex" justifyContent="right" gap={1}>
             {isEditing ? (
               <>

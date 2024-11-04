@@ -308,7 +308,7 @@ const AppointmentCard = ({
         <InfoIcon />
       </button>
     </div>
-    <p className="text-sm mb-4">{appointment.serviceType}</p>
+    <p className="text-sm mb-4">{appointment.appointmentType}</p>
     {showGoToRoom && (
       <div className="flex justify-end">
         <a
@@ -325,7 +325,7 @@ const AppointmentCard = ({
       appointment.status === "accepted") && (
       <button
         onClick={() => onOpenRescheduleModal(appointment)}
-        className="bg-blue-500 text-white px-4 py-2 rounded-lg mt-2"
+        className="bg-[#2c6975] text-white px-4 py-2 rounded-lg mt-2"
       >
         Request Reschedule
       </button>
