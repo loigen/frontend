@@ -21,6 +21,8 @@ import axios from "axios";
 
 const PrimaryButton = styled(Button)(({ theme }) => ({
   backgroundColor: "#2c6975",
+  color: "white",
+
   "&:hover": {
     backgroundColor: "#1e4d54",
   },
@@ -28,6 +30,8 @@ const PrimaryButton = styled(Button)(({ theme }) => ({
 
 const SecondaryButton = styled(Button)(({ theme }) => ({
   backgroundColor: "#d9534f",
+  color: "white",
+
   "&:hover": {
     backgroundColor: "#c9302c",
   },
