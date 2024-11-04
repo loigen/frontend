@@ -128,20 +128,36 @@ const AppointmentsPage = () => {
     loadAvailableSlots();
   }, []);
   const handleProceed = () => {
-    if (
-      !selectedSlot ||
-      !primaryComplaint ||
-      !consultationMethod ||
-      !agreementChecked
-    ) {
+    if (!selectedSlot) {
       Swal.fire({
         icon: "warning",
-        title: "Missing Information",
-        text: "Please complete all fields before proceeding.",
+        title: "No Selected Slot",
+        text: "Please select Time slot by Date!",
+      });
+      return;
+    } else if (!primaryComplaint) {
+      Swal.fire({
+        icon: "warning",
+        title: "No primary complaint",
+        text: "Please Provide primary complaint!",
+      });
+      return;
+    } else if (!consultationMethod) {
+      Swal.fire({
+        icon: "warning",
+        title: "No Consultaion Method",
+        text: "Please Provide primary complaint!",
+      });
+      return;
+    } else if (!agreementChecked) {
+      Swal.fire({
+        icon: "warning",
+        title: "Agreement",
+        text: "Please agree if you wish to proceed!",
       });
       return;
     }
-    setStep(2); // Proceed to step 2
+    setStep(2);
   };
   const handleDateChange = (date) => {
     setSelectedDate(date);
