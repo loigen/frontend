@@ -456,7 +456,7 @@ const Profile = ({ setView }) => {
           {isEditing ? (
             <Box display="flex" justifyContent="space-between" mt={2}>
               <PrimaryButton
-                className="text-white"
+                color="white"
                 onClick={handleSaveChanges}
                 disabled={saving}
               >
@@ -465,10 +465,7 @@ const Profile = ({ setView }) => {
               <SecondaryButton onClick={handleCancel}>Cancel</SecondaryButton>
             </Box>
           ) : (
-            <PrimaryButton
-              className="text-white"
-              onClick={() => setIsEditing(true)}
-            >
+            <PrimaryButton color="white" onClick={() => setIsEditing(true)}>
               Edit Profile
             </PrimaryButton>
           )}

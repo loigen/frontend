@@ -455,20 +455,13 @@ const Profile = ({ setView }) => {
           />
           {isEditing ? (
             <Box display="flex" justifyContent="space-between" mt={2}>
-              <PrimaryButton
-                className="text-white"
-                onClick={handleSaveChanges}
-                disabled={saving}
-              >
+              <PrimaryButton color="white" disabled={saving}>
                 {saving ? <CircularProgress size={24} /> : "Save Changes"}
               </PrimaryButton>
               <SecondaryButton onClick={handleCancel}>Cancel</SecondaryButton>
             </Box>
           ) : (
-            <PrimaryButton
-              className="text-white"
-              onClick={() => setIsEditing(true)}
-            >
+            <PrimaryButton color="white" onClick={() => setIsEditing(true)}>
               Edit Profile
             </PrimaryButton>
           )}
