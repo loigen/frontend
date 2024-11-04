@@ -25,7 +25,7 @@ const ActiveAppointments = () => {
         const data = await fetchAppointmentsByUserId(user._id);
         setAppointments(data); // Store all appointments
       } catch (err) {
-        setError("Failed to load appointments");
+        setError();
       } finally {
         setLoading(false);
       }
