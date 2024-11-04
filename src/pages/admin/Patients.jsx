@@ -35,7 +35,7 @@ const statuses = [
   { label: "Requested", value: "requested" },
   { label: "Rejected", value: "rejected" },
   { label: "Pending", value: "pending" },
-  { label: "ReqRescheduled", value: "Reschedule Request" },
+  { label: "Reschedule Request", value: "ReqRescheduled" },
   { label: "Rescheduled", value: "rescheduled" },
   { label: "Refunded", value: "refunded" },
 ];
