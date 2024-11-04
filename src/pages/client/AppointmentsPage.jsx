@@ -191,7 +191,13 @@ const AppointmentsPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    if (!file) {
+      Swal.fire({
+        icon: "warning",
+        title: "No Receipt",
+        text: "Please Upload Receipt!",
+      });
+    }
     setSubmitting(true);
 
     try {
