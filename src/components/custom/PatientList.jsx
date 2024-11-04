@@ -170,22 +170,25 @@ const PatientList = ({
                         <MenuItem onClick={() => openRescheduleModal(patient)}>
                           Reschedule
                         </MenuItem>
-                        <MenuItem
-                          onClick={() => {
-                            if (selectedPatient.meetLink) {
-                              window.open(selectedPatient.meetLink, "_blank");
-                            } else {
-                              Swal.fire(
-                                "Error",
-                                "Meeting link is not available",
-                                "error"
-                              );
-                            }
-                            handleMenuClose();
-                          }}
-                        >
-                          Go to Room
-                        </MenuItem>
+                        {selectedPatient.consultationMethod === "online" && (
+                          <MenuItem
+                            onClick={() => {
+                              if (selectedPatient.meetLink) {
+                                window.open(selectedPatient.meetLink, "_blank");
+                              } else {
+                                Swal.fire(
+                                  "Error",
+                                  "Meeting link is not available",
+                                  "error"
+                                );
+                              }
+                              handleMenuClose();
+                            }}
+                          >
+                            Go to Room
+                          </MenuItem>
+                        )}
+
                         <MenuItem
                           onClick={() => {
                             onMarkComplete(selectedPatient.id);

@@ -46,6 +46,13 @@ const Profile = ({ setView }) => {
     firstname: user?.firstname || "",
     lastname: user?.lastname || "",
     email: user?.email || "",
+    bio: user?.bio || "",
+    birthdate: user?.birthdate || "",
+    middleName: user?.middleName || "",
+    Profession: user?.Profession || "",
+    EducationBackground: user?.EducationBackground || "",
+    Religion: user?.Religion || "",
+    sex: user?.sex || "",
   });
   const [saving, setSaving] = useState(false);
   const [fileInputId] = useState("profile-picture-upload");
@@ -89,9 +96,9 @@ const Profile = ({ setView }) => {
 
     try {
       const formPayload = new FormData();
-      formPayload.append("firstname", formData.firstname);
-      formPayload.append("lastname", formData.lastname);
-      formPayload.append("email", formData.email);
+      Object.keys(formData).forEach((key) => {
+        formPayload.append(key, formData[key]);
+      });
 
       if (localFile) {
         formPayload.append("profile_picture", localFile);
@@ -108,6 +115,8 @@ const Profile = ({ setView }) => {
           withCredentials: true,
         }
       );
+
+      // Update local user data
       setIsEditing(false);
       setLocalFile(null);
       URL.revokeObjectURL(avatar);
@@ -135,6 +144,13 @@ const Profile = ({ setView }) => {
       firstname: user.firstname,
       lastname: user.lastname,
       email: user.email,
+      bio: user.bio,
+      birthdate: user.birthdate,
+      middleName: user.middleName,
+      Profession: user.Profession,
+      EducationBackground: user.EducationBackground,
+      Religion: user.Religion,
+      sex: user.sex,
     });
     setAvatar(user.profilePicture);
     setLocalFile(null);
@@ -279,30 +295,176 @@ const Profile = ({ setView }) => {
               },
             }}
           />
-
-          <Box mt={2} display="flex" justifyContent="right" gap={1}>
-            {isEditing ? (
-              <>
-                <PrimaryButton
-                  variant="contained"
-                  onClick={handleSaveChanges}
-                  disabled={!validateForm() || saving}
-                >
-                  {saving ? <CircularProgress size={24} /> : "Save Changes"}
-                </PrimaryButton>
-                <SecondaryButton variant="contained" onClick={handleCancel}>
-                  Cancel
-                </SecondaryButton>
-              </>
-            ) : (
-              <PrimaryButton
-                variant="contained"
-                onClick={() => setIsEditing(true)}
-              >
-                Edit Profile
+          <TextField
+            label="Bio"
+            name="bio"
+            value={formData.bio}
+            onChange={handleInputChange}
+            disabled={!isEditing}
+            fullWidth
+            margin="normal"
+            variant="outlined"
+            sx={{
+              backgroundColor: "#f5f5f5",
+              borderRadius: 1,
+              "& .MuiOutlinedInput-root": {
+                "&:hover fieldset": {
+                  borderColor: "#4e8e9b",
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "#2c6975",
+                },
+              },
+            }}
+          />
+          <TextField
+            label="Birthdate"
+            name="birthdate"
+            type="date"
+            value={formData.birthdate}
+            onChange={handleInputChange}
+            disabled={!isEditing}
+            fullWidth
+            margin="normal"
+            variant="outlined"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            sx={{
+              backgroundColor: "#f5f5f5",
+              borderRadius: 1,
+              "& .MuiOutlinedInput-root": {
+                "&:hover fieldset": {
+                  borderColor: "#4e8e9b",
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "#2c6975",
+                },
+              },
+            }}
+          />
+          <TextField
+            label="Middle Name"
+            name="middleName"
+            value={formData.middleName}
+            onChange={handleInputChange}
+            disabled={!isEditing}
+            fullWidth
+            margin="normal"
+            variant="outlined"
+            sx={{
+              backgroundColor: "#f5f5f5",
+              borderRadius: 1,
+              "& .MuiOutlinedInput-root": {
+                "&:hover fieldset": {
+                  borderColor: "#4e8e9b",
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "#2c6975",
+                },
+              },
+            }}
+          />
+          <TextField
+            label="Profession"
+            name="Profession"
+            value={formData.Profession}
+            onChange={handleInputChange}
+            disabled={!isEditing}
+            fullWidth
+            margin="normal"
+            variant="outlined"
+            sx={{
+              backgroundColor: "#f5f5f5",
+              borderRadius: 1,
+              "& .MuiOutlinedInput-root": {
+                "&:hover fieldset": {
+                  borderColor: "#4e8e9b",
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "#2c6975",
+                },
+              },
+            }}
+          />
+          <TextField
+            label="Education Background"
+            name="EducationBackground"
+            value={formData.EducationBackground}
+            onChange={handleInputChange}
+            disabled={!isEditing}
+            fullWidth
+            margin="normal"
+            variant="outlined"
+            sx={{
+              backgroundColor: "#f5f5f5",
+              borderRadius: 1,
+              "& .MuiOutlinedInput-root": {
+                "&:hover fieldset": {
+                  borderColor: "#4e8e9b",
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "#2c6975",
+                },
+              },
+            }}
+          />
+          <TextField
+            label="Religion"
+            name="Religion"
+            value={formData.Religion}
+            onChange={handleInputChange}
+            disabled={!isEditing}
+            fullWidth
+            margin="normal"
+            variant="outlined"
+            sx={{
+              backgroundColor: "#f5f5f5",
+              borderRadius: 1,
+              "& .MuiOutlinedInput-root": {
+                "&:hover fieldset": {
+                  borderColor: "#4e8e9b",
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "#2c6975",
+                },
+              },
+            }}
+          />
+          <TextField
+            label="Sex"
+            name="sex"
+            value={formData.sex}
+            onChange={handleInputChange}
+            disabled={!isEditing}
+            fullWidth
+            margin="normal"
+            variant="outlined"
+            sx={{
+              backgroundColor: "#f5f5f5",
+              borderRadius: 1,
+              "& .MuiOutlinedInput-root": {
+                "&:hover fieldset": {
+                  borderColor: "#4e8e9b",
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "#2c6975",
+                },
+              },
+            }}
+          />
+          {isEditing ? (
+            <Box display="flex" justifyContent="space-between" mt={2}>
+              <PrimaryButton onClick={handleSaveChanges} disabled={saving}>
+                {saving ? <CircularProgress size={24} /> : "Save Changes"}
               </PrimaryButton>
-            )}
-          </Box>
+              <SecondaryButton onClick={handleCancel}>Cancel</SecondaryButton>
+            </Box>
+          ) : (
+            <PrimaryButton onClick={() => setIsEditing(true)}>
+              Edit Profile
+            </PrimaryButton>
+          )}
         </Box>
       </Paper>
     </Container>
