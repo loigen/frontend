@@ -1,41 +1,40 @@
-import axios from "axios";
-
-export const baseUrl = `https://backend-production-c8da.up.railway.app/auth/signup/api`;
+export const baseUrl = `${process.env.REACT_APP_API_URL}/api`;
 
 export const postRequest = async (url, body) => {
-  try {
-    const response = await axios.post(url, body, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      withCredentials: true,
-    });
-    return response.data;
-  } catch (error) {
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body,
+  });
+  const data = await response.json();
+
+  if (!response.ok) {
     let message;
 
-    if (error.response && error.response.data?.message) {
-      message = error.response.data.message;
+    if (data?.message) {
+      message = data.message;
     } else {
-      message = error.message || "An error occurred";
+      message = data;
     }
 
     return { error: true, message };
   }
+  return data;
 };
 
 export const getRequest = async (url) => {
-  try {
-    const response = await axios.get(url, {
-      withCredentials: true,
-    });
-    return response.data;
-  } catch (error) {
-    let message = "An error occurred...";
+  const response = await fetch(url);
+  const data = await response.json();
 
-    if (error.response && error.response.data?.message) {
-      message = error.response.data.message;
+  if (!response.ok) {
+    let message = "An error occured...";
+
+    if (data?.message) {
+      message = data.message;
     }
     return { error: true, message };
   }
+  return data;
 };
