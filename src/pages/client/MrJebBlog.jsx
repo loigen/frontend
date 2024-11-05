@@ -69,7 +69,7 @@ const BLog = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [userId, setUserId] = useState(null);
-  const [view, setView] = useState("favorites");
+  const [view, setView] = useState("all");
   const [selectedCategory, setSelectedCategory] = useState("Technology");
   const [searchQuery, setSearchQuery] = useState("");
   const [favoriteBlogs, setFavoriteBlogs] = useState([]);
