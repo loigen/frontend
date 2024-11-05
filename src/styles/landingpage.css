@@ -622,3 +622,133 @@ hr {
     font-size: small;
   }
 }
+
+/* Base styles */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* Prevent horizontal scroll */
+.overflow-x-hidden {
+  overflow-x: hidden;
+}
+
+/* Responsive text adjustments */
+@media (max-width: 768px) {
+  .text-responsive {
+    font-size: clamp(1rem, 4vw, 1.5rem);
+  }
+}
+
+/* Smooth transitions for responsive changes */
+.transition-responsive {
+  transition: all 0.3s ease-in-out;
+}
+
+/* Fix for mobile carousel */
+@media (max-width: 768px) {
+  .carousel-wrapper {
+    transform: scale(0.8);
+  }
+  
+  .carousel-slide {
+    transform-origin: center center;
+  }
+}
+
+/* Responsive grid layouts */
+@media (max-width: 768px) {
+  .grid-responsive {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Responsive spacing */
+@media (max-width: 768px) {
+  .spacing-responsive {
+    padding: 1rem;
+    margin: 1rem;
+  }
+}
+
+/* Fix for mobile navigation */
+@media (max-width: 768px) {
+  .bottomNavlinks {
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    padding: 1rem 0;
+  }
+  
+  .navlinks {
+    padding: 0.5rem 1rem;
+    display: inline-block;
+  }
+}
+
+/* Responsive footer */
+@media (max-width: 768px) {
+  .footer-responsive {
+    text-align: center;
+  }
+  
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+/* Sticky navbar styles */
+.fixed {
+  position: fixed;
+  transition: all 0.3s ease-in-out;
+  backdrop-filter: blur(8px);
+  background-color: rgba(255, 255, 255, 0.95);
+}
+
+/* Add smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 72px; /* Height of your navbar */
+}
+
+/* Ensure content flows properly */
+.min-h-screen {
+  padding-top: env(safe-area-inset-top); /* For devices with notches */
+}
+
+/* Optional: Add shadow when scrolling */
+.shadow-md {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Ensure proper z-index stacking */
+.z-50 {
+  z-index: 1000;
+}
+
+/* Testimony card animations */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.testimony-card {
+  animation: slideIn 0.5s ease-out forwards;
+}
+
+/* Button hover effect */
+.group:hover span {
+  transform: translateX(5px);
+}
+
+.group:hover span.rotate-180 {
+  transform: translateX(-5px) rotate(180deg);
+}
