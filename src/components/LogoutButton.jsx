@@ -103,7 +103,7 @@ const LogoutButton = ({ isHovered, onClose }) => {
 
               "&:hover": {
                 backgroundColor: "rgba(157, 94, 90, 0.13)", // Background color with 13% opacity
-                color: "#9D5E5A"
+                color: "#9D5E5A",
               },
             }}
             autoFocus

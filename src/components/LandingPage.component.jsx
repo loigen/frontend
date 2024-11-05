@@ -76,8 +76,17 @@ const LandingPage = () => {
   };
 
   return (
+<<<<<<< Updated upstream
     <>
       <Navbar setView={setView} />
+=======
+    <div className="flex flex-col min-h-screen bg-white">
+      <div className="fixed top-0 left-0 right-0  bg-white shadow-md">
+        <div className="max-w-[2000px] mx-auto">
+          <Navbar setView={setView} />
+        </div>
+      </div>
+>>>>>>> Stashed changes
 
       {view === "Home" && (
         <>
@@ -241,8 +250,93 @@ const LandingPage = () => {
       )}
       {view === "About" && <About />}
       {view === "Services" && <Services />}
+<<<<<<< Updated upstream
       {view === "Contact" && <Contact />}
       {view === "guestBlog" && <BlogGuestPage />}
+=======
+      {view === "Contact" && (
+        <div className="mt-[5%]">
+          <Contact />
+        </div>
+      )}
+      {view === "guestBlog" && (
+        <div className="mt-20 bg-[#E9F1EF]">
+          <BlogGuestPage />
+        </div>
+      )}
+      <section className="bottomNavlinks mb-5 mt-5">
+        {["Home", "About", "Services", "Contact", "guestBlog"].map(
+          (navLink) => (
+            <a
+              className="uppercase cursor-pointer"
+              onClick={() => setView(navLink)}
+            >
+              {navLink}
+            </a>
+          )
+        )}
+      </section>
+      <footer className="bg-[#2C6975] text-white py-10">
+        <div className="container mx-auto px-10">
+          <div className="flex items-center flex-wrap justify-center md:justify-between mb-10">
+            <div className="flex items-center justify-center">
+              <img src={logo} alt="Logo" className="w-full h-auto" />
+            </div>
+            <div className="text-center max-w-2xl">
+              <h3 className="font-bold text-2xl mb-4">Our Mission</h3>
+              <p className="text-lg">
+                Embracing diversity and empathy, providing a supportive platform
+                for personal growth and mental wellness.
+              </p>
+              <p className="text-white text-xl mt-10">
+                Opening Hours: Mon - Fri 8AM - 5 PM
+              </p>
+            </div>
+            <div className="w-[200px]"></div>
+          </div>
+          {/* Divider */}
+          <div className="border-b border-white-600 mb-8"></div>
+
+          {/* Other Footer Content */}
+          <div className="flex justify-between gap-8 mb-6">
+            {/* Location Column */}
+            <div>
+              <h3 className="font-bold text-lg mb-4">Location</h3>
+              <p className="mb-2">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit
+              </p>
+              <p className="mb-4">Contact us: 0956 554 0992</p>
+            </div>
+
+            {/* Keep Connected Column */}
+            <div>
+              <h3 className="font-bold text-lg mb-4">Keep Connected</h3>
+              <div className="flex space-x-6">
+                <a href="#linkedin" className="hover:text-gray-300">
+                  <FaLinkedin size={24} />
+                </a>
+                <a href="#instagram" className="hover:text-gray-300">
+                  <FaInstagram size={24} />
+                </a>
+                <a href="#whatsapp" className="hover:text-gray-300">
+                  <FaWhatsapp size={24} />
+                </a>
+                <a href="#facebook" className="hover:text-gray-300">
+                  <FaFacebook size={24} />
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Copyright */}
+          <div className="border-t border-gray-600 pt-4">
+            <p className="text-sm text-center">
+              © 2024 Dr. Jeb. All Rights Reserved.
+            </p>
+          </div>
+        </div>
+      </footer>
+>>>>>>> Stashed changes
       <LoginModal
         open={isLoginModalOpen}
         onClose={handleCloseLoginModal}

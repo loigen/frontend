@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useLocation } from "react-router-dom";
-import logo from "../../images/safeplacelogo.png";
+import logo from "../../images/fullLogo.png";
 import SignupModal from "../Signup";
 import LoginModal from "../Login";
 const Navbar = ({ setView }) => {
@@ -113,7 +113,7 @@ const Navbar = ({ setView }) => {
     <>
       <header className="flex justify-between items-center py-4 px-6 bg-white shadow-md w-full sticky top-0">
         <div className="flex items-center space-x-2">
-          <h1 className="text-2xl font-bold text-teal-700">Safe Place</h1>
+          <img src={logo} alt="" className="w-40" />{" "}
         </div>
         <nav className="flex space-x-6 text-gray-600 ">
           {isMobile ? (
