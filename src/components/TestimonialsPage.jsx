@@ -1,12 +1,19 @@
-import React from 'react';
+import { ChevronLeft } from "@mui/icons-material";
+import { Tooltip } from "@mui/material";
+import React from "react";
 import { FaStar } from "react-icons/fa";
 
-const TestimonialsPage = ({ testimonies }) => {
+const TestimonialsPage = ({ testimonies, setView }) => {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-[#F6FBFB] py-20 px-4">
+    <div className="min-h-screen md:mt-[5%] mt-[20%] bg-gradient-to-b from-white to-[#F6FBFB] py-20 px-4">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-[#2C6975] mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold text-[#2C6975] mb-4 relative">
+            <Tooltip title="Back to Home" arrow>
+              <button onClick={setView} className="absolute left-0">
+                <ChevronLeft />
+              </button>
+            </Tooltip>
             Client Testimonials
           </h1>
           <p className="text-xl text-gray-600 mt-11">
@@ -47,4 +54,4 @@ const TestimonialsPage = ({ testimonies }) => {
   );
 };
 
-export default TestimonialsPage; 
+export default TestimonialsPage;
