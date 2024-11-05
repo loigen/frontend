@@ -1,40 +1,41 @@
+import axios from "axios";
+
 export const baseUrl = `${process.env.REACT_APP_API_URL}/api`;
 
 export const postRequest = async (url, body) => {
-  const response = await fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body,
-  });
-  const data = await response.json();
-
-  if (!response.ok) {
+  try {
+    const response = await axios.post(url, body, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true, 
+    });
+    return response.data;
+  } catch (error) {
     let message;
 
-    if (data?.message) {
-      message = data.message;
+    if (error.response && error.response.data?.message) {
+      message = error.response.data.message;
     } else {
-      message = data;
+      message = error.message || "An error occurred";
     }
 
     return { error: true, message };
   }
-  return data;
 };
 
 export const getRequest = async (url) => {
-  const response = await fetch(url);
-  const data = await response.json();
+  try {
+    const response = await axios.get(url, {
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (error) {
+    let message = "An error occurred...";
 
-  if (!response.ok) {
-    let message = "An error occured...";
-
-    if (data?.message) {
-      message = data.message;
+    if (error.response && error.response.data?.message) {
+      message = error.response.data.message;
     }
     return { error: true, message };
   }
-  return data;
 };
