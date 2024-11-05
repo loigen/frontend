@@ -111,7 +111,7 @@ const Navbar = ({ setView }) => {
 
   return (
     <>
-      <header className="flex justify-between items-center py-4 px-6 bg-white shadow-md w-full sticky top-0">
+      <header className="flex justify-between items-center py-4 px-6 bg-white shadow-md w-full sticky top-0 z-50">
         <div className="flex items-center space-x-2">
           <img src={logo} alt="" className="w-40" />{" "}
         </div>
