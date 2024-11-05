@@ -6,7 +6,7 @@ const Dashboard = ({ children }) => {
     <div className="relative h-screen overflow-hidden">
       <Topbar />
       <div className="contentBody flex flex-row justify-between h-full">
-        <div className="sidebarWrapper">
+        <div style={{ zIndex: 100 }}>
           <Sidebar />
         </div>
 

@@ -2,7 +2,7 @@ import React from "react";
 import sirjeb from "../images/sirJeb.png";
 const About = () => {
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen  mt-20">
       {/* Header */}
       {/* Profile Section */}
       <section className="flex flex-col items-center pt-10">

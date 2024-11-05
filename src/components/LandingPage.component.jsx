@@ -18,10 +18,18 @@ import About from "./About.component";
 import Services from "./Services";
 import Contact from "./contact.component";
 import BlogGuestPage from "./BlogGuestPage";
+
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import InstagramIcon from "@mui/icons-material/Instagram";
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import logo from "../images/logo.png";
+
 import TestimonialsPage from "./TestimonialsPage";
 import { FaRegClock } from "react-icons/fa6";
 import { GoBriefcase } from "react-icons/go";
 import { MdOutlineHighQuality } from "react-icons/md";
+
 
 const testimonies = [
   {
@@ -120,6 +128,7 @@ const LandingPage = () => {
   return (
     <div className="flex flex-col min-h-screen bg-white">
       <div className="fixed top-0 left-0 right-0 z-50 bg-white shadow-md">
+
         <div className="max-w-[2000px] mx-auto">
           <Navbar setView={setView} />
         </div>
@@ -375,7 +384,8 @@ const LandingPage = () => {
         </div>
       )}
       {view === "guestBlog" && (
-        <div className="mt-[3%]">
+        <div className="mt-20 bg-[#E9F1EF]">
+
           <BlogGuestPage />
         </div>
       )}
@@ -428,16 +438,17 @@ const LandingPage = () => {
               <h3 className="font-bold text-lg mb-4">Keep Connected</h3>
               <div className="flex space-x-6">
                 <a href="#linkedin" className="hover:text-gray-300">
-                  <FaLinkedin size={24} />
+                  <LinkedInIcon size={24} />
                 </a>
                 <a href="#instagram" className="hover:text-gray-300">
-                  <FaInstagram size={24} />
+                  <InstagramIcon size={24} />
                 </a>
                 <a href="#whatsapp" className="hover:text-gray-300">
-                  <FaWhatsapp size={24} />
+                  <WhatsAppIcon size={24} />
                 </a>
                 <a href="#facebook" className="hover:text-gray-300">
-                  <FaFacebook size={24} />
+                  <FacebookIcon size={24} />
+
                 </a>
               </div>
             </div>
