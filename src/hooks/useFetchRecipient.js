@@ -13,7 +13,7 @@ export const useFetchRecipient = (chat, user) => {
 
       try {
         const response = await getRequest(
-          `${process.env.REACT_APP_API_URL}/user/find/${recipientId}`
+          `https://backend-production-c8da.up.railway.app/auth/signup/user/find/${recipientId}`
         );
 
         if (response.error) {

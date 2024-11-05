@@ -88,9 +88,7 @@ export const ChatContextProvider = ({ children, user }) => {
     const getUsers = async () => {
       if (!user?._id) return;
 
-      const response = await getRequest(
-        `${process.env.REACT_APP_API_URL}/user/`
-      );
+      const response = await getRequest(`${baseUrl}/user/`);
 
       if (response.error) {
         return console.log("Error fetching users", response.error);

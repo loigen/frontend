@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const baseUrl = `${process.env.REACT_APP_API_URL}/api`;
+export const baseUrl = `https://backend-production-c8da.up.railway.app/auth/signup/api`;
 
 export const postRequest = async (url, body) => {
   try {
@@ -8,7 +8,7 @@ export const postRequest = async (url, body) => {
       headers: {
         "Content-Type": "application/json",
       },
-      withCredentials: true, 
+      withCredentials: true,
     });
     return response.data;
   } catch (error) {
