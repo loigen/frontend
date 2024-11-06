@@ -109,7 +109,7 @@ const Profile = ({ setView }) => {
       }
 
       const response = await axios.put(
-        `https://backend-production-c8da.up.railway.app/user/updateprofile`,
+        `https://backend-vp67.onrender.com/user/updateprofile`,
         formPayload,
         {
           headers: {

@@ -5,7 +5,7 @@ import axios from "axios";
 export const fetchDailyCancelAppointments = async () => {
   try {
     const response = await axios.get(
-      `https://backend-production-c8da.up.railway.app/Appointments/api/dailyCancel`
+      `https://backend-vp67.onrender.com/Appointments/api/dailyCancel`
     );
     return response.data;
   } catch (error) {

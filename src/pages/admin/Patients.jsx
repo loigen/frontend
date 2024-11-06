@@ -191,7 +191,7 @@ const Patients = () => {
     if (confirmation.isConfirmed) {
       try {
         await axios.patch(
-          `https://backend-production-c8da.up.railway.app/Appointments/api/cancel/${appointmentId}`
+          `https://backend-vp67.onrender.com/Appointments/api/cancel/${appointmentId}`
         );
         Swal.fire({
           title: "Success",

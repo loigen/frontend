@@ -61,7 +61,7 @@ const BlogGuestPage = () => {
       setLoading(true);
       try {
         const blogsResponse = await axios.get(
-          `https://backend-production-c8da.up.railway.app/blog/allBlogs`
+          `https://backend-vp67.onrender.com/blog/allBlogs`
         );
         setBlogs(blogsResponse.data.blogs);
       } catch (error) {

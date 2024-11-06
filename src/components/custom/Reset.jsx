@@ -14,17 +14,14 @@ export default class Reset extends Component {
     e.preventDefault();
     const { email } = this.state;
 
-    fetch(
-      `https://backend-production-c8da.up.railway.app/auth/forgot-password`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({ email }),
-      }
-    )
+    fetch(`https://backend-vp67.onrender.com/auth/forgot-password`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({ email }),
+    })
       .then((res) => res.json())
       .then((data) => {
         if (data.status === "success") {

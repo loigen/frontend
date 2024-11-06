@@ -26,7 +26,7 @@ import {
 import axios from "axios";
 import { Close, InfoOutlined } from "@mui/icons-material";
 
-const API_URL = `https://backend-production-c8da.up.railway.app`;
+const API_URL = `https://backend-vp67.onrender.com`;
 
 const Schedules = () => {
   const today = new Date();
@@ -43,7 +43,7 @@ const Schedules = () => {
     const handleFetchTodaysAppointment = async () => {
       try {
         const response = await axios.get(
-          `https://backend-production-c8da.up.railway.app/Appointments/api/today`
+          `https://backend-vp67.onrender.com/Appointments/api/today`
         );
         setTodaysAppointments(response.data);
       } catch (err) {
@@ -132,7 +132,7 @@ const Schedules = () => {
 
       try {
         const response = await axios.get(
-          `https://backend-production-c8da.up.railway.app/schedules/slots/check`,
+          `https://backend-vp67.onrender.com/schedules/slots/check`,
           {
             params: {
               date: selectedDate.toDateString(),
@@ -151,13 +151,10 @@ const Schedules = () => {
           return;
         }
 
-        await axios.post(
-          `https://backend-production-c8da.up.railway.app/schedules/slots`,
-          {
-            date: selectedDate.toDateString(),
-            time,
-          }
-        );
+        await axios.post(`https://backend-vp67.onrender.com/schedules/slots`, {
+          date: selectedDate.toDateString(),
+          time,
+        });
 
         setFreeSchedules((prevSchedules) => {
           const dateKey = selectedDate.toDateString();

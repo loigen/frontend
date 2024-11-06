@@ -21,7 +21,7 @@ export const ChatContextProvider = ({ children, user }) => {
   const [allUsers, setAllUsers] = useState([]);
 
   useEffect(() => {
-    const newSocket = io(`https://backend-production-c8da.up.railway.app`, {
+    const newSocket = io(`https://backend-vp67.onrender.com`, {
       transports: ["websocket"],
       secure: true,
       reconnection: true,

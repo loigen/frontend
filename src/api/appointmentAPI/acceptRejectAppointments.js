@@ -1,11 +1,10 @@
 import axios from "axios";
 import Swal from "sweetalert2";
+const API_URL = "https://backend-vp67.onrender.com";
 
 export const acceptAppointment = async (id) => {
   try {
-    await axios.patch(
-      `https://backend-production-c8da.up.railway.app/Appointments/api/accept/${id}`
-    );
+    await axios.patch(`${API_URL}/Appointments/api/accept/${id}`);
     Swal.fire("Success", "Appointment accepted successfully", "success");
   } catch (error) {
     console.error("Error accepting appointment:", error);
@@ -16,9 +15,7 @@ export const acceptAppointment = async (id) => {
 
 export const rejectAppointment = async (id) => {
   try {
-    await axiosInstance.patch(
-      `https://backend-production-c8da.up.railway.app/Appointments/api/reject/${id}`
-    );
+    await axiosInstance.patch(`${API_URL}/Appointments/api/reject/${id}`);
     Swal.fire("Success", "Appointment rejected successfully", "success");
   } catch (error) {
     console.error("Error rejecting appointment:", error);
@@ -29,9 +26,7 @@ export const rejectAppointment = async (id) => {
 
 export const cancelAppointment = async (id) => {
   try {
-    await axiosInstance.patch(
-      `https://backend-production-c8da.up.railway.app/Appointments/api/cancel/${id}`
-    );
+    await axiosInstance.patch(`${API_URL}/Appointments/api/cancel/${id}`);
     Swal.fire("Success", "Appointment canceled successfully", "success");
   } catch (error) {
     console.error("Error cancelling appointment:", error);

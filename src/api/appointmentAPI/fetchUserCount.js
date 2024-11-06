@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 export const fetchUserCount = async () => {
   try {
     const response = await axios.get(
-      `https://backend-production-c8da.up.railway.app/user/countNonAdminUsers`
+      `https://backend-vp67.onrender.com/user/countNonAdminUsers`
     );
     return response.data.count;
   } catch (error) {

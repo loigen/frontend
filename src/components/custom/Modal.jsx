@@ -23,7 +23,7 @@ const UpdateProfileModal = ({ user, isOpen, onRequestClose, updateUser }) => {
     e.preventDefault();
     try {
       const response = await axios.put(
-        `https://backend-production-c8da.up.railway.app/user/profile`,
+        `https://backend-vp67.onrender.com/user/profile`,
         formData,
         { withCredentials: true }
       );

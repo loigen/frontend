@@ -9,7 +9,7 @@ export const uploadFile = async (patientId, folderIndex, file) => {
 
   try {
     await axios.post(
-      `https://backend-production-c8da.up.railway.app/Appointments/api/files`,
+      `https://backend-vp67.onrender.com/Appointments/api/files`,
       formData,
       {
         headers: { "Content-Type": "multipart/form-data" },

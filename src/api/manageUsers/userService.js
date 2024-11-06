@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = `https://backend-production-c8da.up.railway.app/user/users`;
+const API_URL = `https://backend-vp67.onrender.com/user/users`;
 //for manage users
 const getUsers = async (token) => {
   return axios.get(API_URL, {

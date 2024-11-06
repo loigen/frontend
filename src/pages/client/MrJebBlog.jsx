@@ -44,7 +44,7 @@ const categories = [
   { id: "Lifestyle", name: "Lifestyle" },
   { id: "Education", name: "Education" },
 ];
-const API_URL = "https://backend-production-c8da.up.railway.app";
+const API_URL = "https://backend-vp67.onrender.com";
 
 const blogTheme = createTheme({
   palette: {

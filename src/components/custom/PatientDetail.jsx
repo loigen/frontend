@@ -39,7 +39,7 @@ const PatientDetails = ({ patient, onClose, handleRefund }) => {
   const handleAddNote = async () => {
     try {
       const response = await axios.put(
-        `https://backend-production-c8da.up.railway.app/Appointments/api/${patient.id}/note`,
+        `https://backend-vp67.onrender.com/Appointments/api/${patient.id}/note`,
         {
           note,
         }

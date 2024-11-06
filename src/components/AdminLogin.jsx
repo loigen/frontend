@@ -25,7 +25,7 @@ const theme = createTheme({
     fontFamily: "'Roboto', sans-serif",
   },
 });
-const API_URL = "https://backend-production-c8da.up.railway.app";
+const API_URL = "https://backend-vp67.onrender.com";
 function LoginPage() {
   const [otpRequested, setOtpRequested] = useState(false);
   const [email, setEmail] = useState("");

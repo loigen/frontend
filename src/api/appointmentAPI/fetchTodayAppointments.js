@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 export const fetchTodaysAppointments = async () => {
   try {
     const response = await axios.get(
-      `https://backend-production-c8da.up.railway.app/Appointments/api/today`
+      `https://backend-vp67.onrender.com/Appointments/api/today`
     );
     return response.data;
   } catch (error) {

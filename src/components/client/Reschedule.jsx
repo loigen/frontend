@@ -20,7 +20,7 @@ const Reschedule = ({ appointmentId, open, onClose }) => {
     const fetchAppointments = async () => {
       try {
         const response = await axios.get(
-          `https://backend-production-c8da.up.railway.app/Appointments/api/get-appointments`,
+          `https://backend-vp67.onrender.com/Appointments/api/get-appointments`,
           {
             params: {
               date: selectedDate.toISOString().split("T")[0],
@@ -48,7 +48,7 @@ const Reschedule = ({ appointmentId, open, onClose }) => {
     const formattedTime = `${newTime}`; // Already in "HH:mm AM/PM" format
     try {
       const response = await axios.get(
-        `https://backend-production-c8da.up.railway.app/Appointments/api/check-time`,
+        `https://backend-vp67.onrender.com/Appointments/api/check-time`,
         {
           params: {
             date: selectedDate.toISOString().split("T")[0],

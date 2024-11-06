@@ -1,6 +1,6 @@
 import React from "react";
 import Swal from "sweetalert2"; // Assuming you use SweetAlert for alerts
-const API_URL = "https://backend-production-c8da.up.railway.app";
+const API_URL = "https://backend-vp67.onrender.com";
 
 const deleteBlog = async (blogId, refreshBlogs) => {
   try {
@@ -21,7 +21,7 @@ const deleteBlog = async (blogId, refreshBlogs) => {
 
       if (response.ok) {
         Swal.fire("Deleted!", data.message, "success");
-        refreshBlogs(); 
+        refreshBlogs();
       } else {
         Swal.fire("Error", data.message, "error");
       }

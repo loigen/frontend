@@ -3,7 +3,7 @@ import axios from "axios";
 export const updateAppointmentStatusToRescheduled = async (appointmentId) => {
   try {
     const response = await axios.patch(
-      `https://backend-production-c8da.up.railway.app/Appointments/api/${appointmentId}/update-status-rescheduled`
+      `https://backend-vp67.onrender.com/Appointments/api/${appointmentId}/update-status-rescheduled`
     );
 
     return response.data;

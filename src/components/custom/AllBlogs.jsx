@@ -28,7 +28,7 @@ const AllBlogs = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          `https://backend-production-c8da.up.railway.app/blog/allBlogs`
+          `https://backend-vp67.onrender.com/blog/allBlogs`
         );
         setBlogs(response.data.blogs);
       } catch (error) {
@@ -50,7 +50,7 @@ const AllBlogs = () => {
         setUserId(user._id);
 
         const favoritesResponse = await axios.get(
-          `https://backend-production-c8da.up.railway.app/blog/userFavorites/${user._id}`
+          `https://backend-vp67.onrender.com/blog/userFavorites/${user._id}`
         );
         setFavoriteBlogs(favoritesResponse.data.blogs.map((blog) => blog._id));
       } catch (error) {
@@ -67,8 +67,8 @@ const AllBlogs = () => {
     try {
       const isFavorite = favoriteBlogs.includes(blogId);
       const url = isFavorite
-        ? `https://backend-production-c8da.up.railway.app/blog/removeFromFavorites/${blogId}/${userId}`
-        : `https://backend-production-c8da.up.railway.app/blog/addToFavorites/${blogId}/${userId}`;
+        ? `https://backend-vp67.onrender.com/blog/removeFromFavorites/${blogId}/${userId}`
+        : `https://backend-vp67.onrender.com/blog/addToFavorites/${blogId}/${userId}`;
 
       const response = await axios.post(url);
       Swal.fire({

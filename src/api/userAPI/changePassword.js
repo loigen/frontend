@@ -4,7 +4,7 @@ import axios from "axios";
 export const changePassword = async (currentPassword, newPassword, token) => {
   try {
     const response = await axios.post(
-      `https://backend-production-c8da.up.railway.app/user/changepassword`,
+      `https://backend-vp67.onrender.com/user/changepassword`,
       {
         currentPassword,
         newPassword,

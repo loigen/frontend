@@ -63,7 +63,7 @@ const DraftsPage = ({ searchQuery }) => {
     const fetchDrafts = async () => {
       try {
         const response = await axios.get(
-          `https://backend-production-c8da.up.railway.app/blog/drafts`
+          `https://backend-vp67.onrender.com/blog/drafts`
         );
         setDrafts(response.data.drafts);
       } catch (error) {
@@ -101,7 +101,7 @@ const DraftsPage = ({ searchQuery }) => {
   const handleUpdate = async () => {
     try {
       await axios.put(
-        `https://backend-production-c8da.up.railway.app/blog/${selectedDraft._id}/update`,
+        `https://backend-vp67.onrender.com/blog/${selectedDraft._id}/update`,
         formValues
       );
       setDrafts((prevDrafts) =>
@@ -118,7 +118,7 @@ const DraftsPage = ({ searchQuery }) => {
   const handlePublish = async (draftId) => {
     try {
       await axios.put(
-        `https://backend-production-c8da.up.railway.app/blog/${draftId}/publish`
+        `https://backend-vp67.onrender.com/blog/${draftId}/publish`
       );
       setDrafts((prevDrafts) =>
         prevDrafts.map((draft) =>

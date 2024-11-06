@@ -108,7 +108,7 @@ const Profile = ({ setView }) => {
       }
 
       const response = await axios.put(
-        `https://backend-production-c8da.up.railway.app/user/updateprofile`,
+        `https://backend-vp67.onrender.com/user/updateprofile`,
         formPayload,
         {
           headers: {
@@ -458,7 +458,11 @@ const Profile = ({ setView }) => {
           />
           {isEditing ? (
             <Box display="flex" justifyContent="space-between" mt={2}>
-              <PrimaryButton onClick={handleSaveChanges} color="white" disabled={saving}>
+              <PrimaryButton
+                onClick={handleSaveChanges}
+                color="white"
+                disabled={saving}
+              >
                 {saving ? <CircularProgress size={24} /> : "Save Changes"}
               </PrimaryButton>
               <SecondaryButton onClick={handleCancel}>Cancel</SecondaryButton>

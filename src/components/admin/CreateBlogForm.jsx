@@ -34,7 +34,7 @@ const BlogModal = ({ isOpen, onClose }) => {
 
     try {
       const response = await axios.post(
-        `https://backend-production-c8da.up.railway.app/blog/save-draft`,
+        `https://backend-vp67.onrender.com/blog/save-draft`,
         {
           title,
           content,
@@ -72,7 +72,7 @@ const BlogModal = ({ isOpen, onClose }) => {
 
     try {
       const response = await axios.post(
-        `https://backend-production-c8da.up.railway.app/blog/create`,
+        `https://backend-vp67.onrender.com/blog/create`,
         {
           title,
           content,

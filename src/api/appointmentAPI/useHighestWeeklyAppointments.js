@@ -13,7 +13,7 @@ const useHighestWeeklyAppointments = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `https://backend-production-c8da.up.railway.app/Appointments/api/highest-weekly`
+          `https://backend-vp67.onrender.com/Appointments/api/highest-weekly`
         );
         setData(response.data);
       } catch (err) {

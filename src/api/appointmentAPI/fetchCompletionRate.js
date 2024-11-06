@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 export const fetchCompletionRate = async () => {
   try {
     const response = await axios.get(
-      `https://backend-production-c8da.up.railway.app/Appointments/api/completion-rate`
+      `https://backend-vp67.onrender.com/Appointments/api/completion-rate`
     );
     return response.data.completionRate;
   } catch (error) {

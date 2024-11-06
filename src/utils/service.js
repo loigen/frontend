@@ -1,4 +1,4 @@
-export const baseUrl = `https://backend-production-c8da.up.railway.app/api`;
+export const baseUrl = `https://backend-vp67.onrender.com/api`;
 
 export const postRequest = async (url, body) => {
   const response = await fetch(url, {

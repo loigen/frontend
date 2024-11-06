@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 export const updateSlotStatus = async (slotId, status) => {
   try {
     const response = await axios.patch(
-      `https://backend-production-c8da.up.railway.app/schedules/slots/${slotId}`,
+      `https://backend-vp67.onrender.com/schedules/slots/${slotId}`,
       { status },
       { withCredentials: true }
     );

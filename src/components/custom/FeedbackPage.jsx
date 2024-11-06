@@ -38,7 +38,7 @@ const FeedbackPage = ({ setView }) => {
 
     try {
       const response = await axios.post(
-        `https://backend-production-c8da.up.railway.app/Feedback/submit-feedback`,
+        `https://backend-vp67.onrender.com/Feedback/submit-feedback`,
         feedbackData
       );
       if (response.status === 201) {

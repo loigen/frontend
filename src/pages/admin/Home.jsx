@@ -25,7 +25,7 @@ import { fetchUserCount } from "../../api/appointmentAPI/fetchUserCount";
 import { fetchCancellationRate } from "../../api/appointmentAPI/fetchCancellationRate";
 import { fetchCompletionRate } from "../../api/appointmentAPI/fetchCompletionRate";
 import { Close } from "@mui/icons-material";
-const API_URL = `https://backend-production-c8da.up.railway.app`;
+const API_URL = `https://backend-vp67.onrender.com`;
 
 const Home = () => {
   const [userCount, setUserCount] = useState(0);
