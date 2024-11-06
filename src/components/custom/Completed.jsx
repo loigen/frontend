@@ -1,28 +1,40 @@
 import React, { useState, useEffect } from "react";
 import { fetchAppointmentsByUserId } from "../../api/appointmentAPI/fetchAppointmentsByUserId";
 import { useAuth } from "../../context/AuthProvider";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import { IconButton } from "@mui/material";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  IconButton,
+  Menu,
+  MenuItem,
+} from "@mui/material";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 import LoadingSpinner from "./LoadingSpinner";
+import { Close, MoreHoriz } from "@mui/icons-material";
 
 const CompletedAppointments = ({ onBackToActive }) => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { user } = useAuth();
+  const [open, setOpen] = useState(false);
+  const [selectedAppointment, setSelectedAppointment] = useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   useEffect(() => {
     const getAppointments = async () => {
       if (!user) return;
       try {
         const data = await fetchAppointmentsByUserId(user._id);
-        // Filter appointments with status "completed"
         const filteredAppointments = data.filter(
           (appointment) => appointment.status === "completed"
         );
         setAppointments(filteredAppointments);
       } catch (err) {
-        setError(null);
+        setError(err.message);
       } finally {
         setLoading(false);
       }
@@ -30,6 +42,24 @@ const CompletedAppointments = ({ onBackToActive }) => {
 
     getAppointments();
   }, [user]);
+
+  const handleOpenDialog = (appointment, action) => {
+    setSelectedAppointment({ ...appointment, action });
+    setOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpen(false);
+    setSelectedAppointment(null);
+  };
+
+  const handleMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
 
   if (loading) return <LoadingSpinner />;
   if (error) return <div>Error: {error}</div>;
@@ -71,7 +101,6 @@ const CompletedAppointments = ({ onBackToActive }) => {
           <p>No completed appointments found.</p>
         </div>
       ) : (
-        // Table
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white shadow-lg rounded-lg">
             <thead>
@@ -79,7 +108,7 @@ const CompletedAppointments = ({ onBackToActive }) => {
                 <th className="p-4 font-semibold">Date</th>
                 <th className="p-4 font-semibold">Type of Service</th>
                 <th className="p-4 font-semibold">Consultation Method</th>
-                <th className="p-4 font-semibold">Receipt</th>
+                <th className="p-4 font-semibold">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -89,22 +118,43 @@ const CompletedAppointments = ({ onBackToActive }) => {
                     {new Date(appointment.date).toLocaleDateString()}
                   </td>
                   <td className="p-4">{appointment.appointmentType}</td>
-                  <td className="p-4 font-semibold text-teal-600">
+                  <td className="p-4 font-semibold text-teal-600 capitalize">
                     {appointment.consultationMethod}
                   </td>
                   <td className="p-4">
-                    {appointment.receipt ? (
-                      <a
-                        href={appointment.receipt}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-500 hover:underline"
+                    <IconButton onClick={handleMenuOpen}>
+                      <MoreHoriz className="text-[#2D4B40]" />
+                    </IconButton>
+                    <Menu
+                      anchorEl={anchorEl}
+                      open={Boolean(anchorEl)}
+                      onClose={handleMenuClose}
+                    >
+                      <MenuItem
+                        onClick={() => {
+                          handleMenuClose();
+                          handleOpenDialog(appointment, "details");
+                        }}
+                      >
+                        View Details
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          handleMenuClose();
+                          handleOpenDialog(appointment, "receipt");
+                        }}
                       >
                         View Receipt
-                      </a>
-                    ) : (
-                      "N/A"
-                    )}
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          handleMenuClose();
+                          handleOpenDialog(appointment, "notes");
+                        }}
+                      >
+                        View Notes
+                      </MenuItem>
+                    </Menu>
                   </td>
                 </tr>
               ))}
@@ -112,6 +162,85 @@ const CompletedAppointments = ({ onBackToActive }) => {
           </table>
         </div>
       )}
+
+      {/* Details Dialog */}
+      <Dialog open={open} onClose={handleCloseDialog} maxWidth="sm">
+        <div className="flex justify-end">
+          <DialogActions>
+            <Button onClick={handleCloseDialog} color="primary">
+              <Close className="text-[#2D4B40]" />
+            </Button>
+          </DialogActions>
+        </div>
+        <DialogContent>
+          {selectedAppointment ? (
+            <div>
+              {selectedAppointment.action === "details" && (
+                <>
+                  <div className="text-[#2D4B40] flex flex-col gap-6">
+                    <p>
+                      <strong>Name:</strong> {selectedAppointment.firstname}{" "}
+                      {selectedAppointment.lastname}
+                    </p>
+                    <p>
+                      <strong>Email Address:</strong>{" "}
+                      {selectedAppointment.firstname}{" "}
+                      {selectedAppointment.email}
+                    </p>
+                    <p>
+                      <strong>Complaint:</strong>{" "}
+                      {selectedAppointment.primaryComplaint}
+                    </p>
+                    <p>
+                      <strong>Service Availed:</strong>{" "}
+                      {selectedAppointment.appointmentType}
+                    </p>
+                    <p>
+                      <strong>History of Intervention:</strong>{" "}
+                      {selectedAppointment.historyOfIntervention !== "false"
+                        ? selectedAppointment.historyOfIntervention
+                        : "N/A"}
+                    </p>
+                    <p>
+                      <strong>Preferred Schedule:</strong>{" "}
+                      {new Date(selectedAppointment.date).toLocaleString(
+                        "en-US",
+                        {
+                          weekday: "long",
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        }
+                      )}
+                      <span> - </span>
+                      {selectedAppointment.time}
+                    </p>
+
+                    <p>
+                      <strong>Preferred Consultation Method:</strong>{" "}
+                      {selectedAppointment.consultationMethod}
+                    </p>
+                    <p>
+                      <strong>Total Payment:</strong>{" "}
+                      {selectedAppointment.TotalPayment}
+                    </p>
+                  </div>
+                </>
+              )}
+              {selectedAppointment.action === "receipt" && (
+                <img src={selectedAppointment.receipt} alt="" />
+              )}
+              {selectedAppointment.action === "notes" && (
+                <p className="text-[#2D4B40]">
+                  {selectedAppointment.notes || "No notes available."}
+                </p>
+              )}
+            </div>
+          ) : (
+            <p>Loading details...</p>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

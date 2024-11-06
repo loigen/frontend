@@ -15,6 +15,7 @@ import {
   FormControlLabel,
   Grid,
   MenuItem,
+  Modal,
   Radio,
   RadioGroup,
   Select,
@@ -73,30 +74,69 @@ const AppointmentsPage = () => {
   const [briefDetails, setBriefDetails] = useState("");
   const [consultationMethod, setConsultationMethod] = useState("");
   const fileInputRef = useRef(null); // Create a ref for the file input
+  const [appointmentPrice, setAppointmentPrice] = useState(0);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [appointmentDescription, setAppointmentDescription] = useState("");
+
+  const handleSelectAppointment = (type) => {
+    setAppointmentType(type.value);
+    setAppointmentPrice(type.price);
+    setAppointmentDescription(type.description);
+    handleOpenModal();
+  };
+
+  // Function to open and close modal
+  const handleOpenModal = () => setModalOpen(true);
+  const handleCloseModal = () => setModalOpen(false);
   const handleReplaceFile = () => {
     fileInputRef.current.click();
   };
   const appointmentTypes = [
-    { value: "", label: "Select an appointment type" },
+    { value: "", label: "Select an appointment type", description: "" },
     {
       value: "Individual Counceling",
-      label: "Individual Counceling",
+      label: "Individual Counseling",
       price: 540,
+      description:
+        "One-on-one sessions focused on personal mental health and emotional growth.",
     },
-    { value: "Family Counceling", label: "Family Counceling", price: 350 },
-    { value: "Couple Counceling", label: "Couple Counceling", price: 450 },
-    { value: "Therapy", label: "Therapy", price: 450 },
+    {
+      value: "Family Counceling",
+      label: "Family Counseling",
+      price: 350,
+      description:
+        "Counseling sessions for families to improve communication and resolve conflicts.",
+    },
+    {
+      value: "Couple Counceling",
+      label: "Couple Counseling",
+      price: 450,
+      description:
+        "Counseling for couples to enhance relationship dynamics and address issues.",
+    },
+    {
+      value: "Therapy",
+      label: "Therapy",
+      price: 450,
+      description:
+        "Therapeutic sessions aimed at addressing mental health concerns and healing.",
+    },
     {
       value: "Psychological Report",
       label: "Psychological Report",
       price: 450,
+      description:
+        "Formal assessment and report documenting psychological evaluations.",
     },
     {
       value: "Seminars and WorkShop",
-      label: "Seminars and WorkShop",
+      label: "Seminars and Workshop",
       price: 450,
+      description:
+        "Group seminars and workshops on various mental health topics and skills.",
     },
   ];
+
   const handleHistoryChange = (event) => {
     setHistoryOfIntervention(event.target.value === "Yes");
   };
@@ -146,7 +186,14 @@ const AppointmentsPage = () => {
       Swal.fire({
         icon: "warning",
         title: "No Consultaion Method",
-        text: "Please Provide primary complaint!",
+        text: "Please Provide Consultaion Method!",
+      });
+      return;
+    } else if (!appointmentType) {
+      Swal.fire({
+        icon: "warning",
+        title: "No Appointment Type",
+        text: "Please Provide Appointment Type!",
       });
       return;
     } else if (!agreementChecked) {
@@ -209,6 +256,7 @@ const AppointmentsPage = () => {
       appointmentData.append("date", selectedSlot.date);
       appointmentData.append("time", selectedSlot.time);
       appointmentData.append("appointmentType", appointmentType);
+      appointmentData.append("TotalPayment", appointmentPrice);
       appointmentData.append("userId", user._id);
       appointmentData.append("firstname", user.firstname);
       appointmentData.append("lastname", user.lastname);
@@ -313,7 +361,7 @@ const AppointmentsPage = () => {
                   {appointmentTypes.slice(1).map((type) => (
                     <Box
                       key={type.value}
-                      onClick={() => setAppointmentType(type.value)}
+                      onClick={() => handleSelectAppointment(type)}
                       display="flex"
                       flexDirection="row"
                       justifyContent="space-between"
@@ -344,6 +392,49 @@ const AppointmentsPage = () => {
                       <p className="text-teal-600">₱ {type.price}</p>
                     </Box>
                   ))}
+
+                  {/* Modal to display appointment details */}
+                  <Modal open={modalOpen} onClose={handleCloseModal}>
+                    <Box
+                      sx={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                        width: 400,
+                        bgcolor: "background.paper",
+                        borderRadius: 2,
+                        boxShadow: 24,
+                        p: 4,
+                      }}
+                    >
+                      <Typography
+                        variant="h6"
+                        component="h2"
+                        fontWeight="bold"
+                        color="#2D4B40"
+                      >
+                        {appointmentType} - ₱{appointmentPrice}
+                      </Typography>
+                      <Typography sx={{ mt: 1 }} color="#2D4B40">
+                        {appointmentDescription}
+                      </Typography>
+                      <div className="flex justify-end">
+                        <Button
+                          variant="contained"
+                          sx={{
+                            mt: 2,
+                            bgcolor: "#2D4B40",
+                            borderRadius: "100px",
+                            paddingX: "20px",
+                          }}
+                          onClick={handleCloseModal}
+                        >
+                          Done
+                        </Button>
+                      </div>
+                    </Box>
+                  </Modal>
                 </Box>
               </Box>
 
@@ -366,7 +457,7 @@ const AppointmentsPage = () => {
                     <Skeleton />
                   ) : getAvailableSlotsForSelectedDate().length === 0 ? (
                     <Typography
-                      variant="body1"
+                      variant="body"
                       sx={{
                         textAlign: "center",
                         margin: "10px",
@@ -981,6 +1072,7 @@ const AppointmentsPage = () => {
               </>
             )}
           </div>
+          
         </Box>
       )}
     </>
