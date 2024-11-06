@@ -143,7 +143,7 @@ const Home = () => {
   };
   return (
     <>
-      <div className="min-h-screen w-full h-full pt-16 pr-14 pl-14 pb-14">
+      <div className="min-h-screen w-full h-full pt-20 pr-14 pl-14 pb-14">
         {/* Top Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
           <div className="w-full max-w-[333px] h-[119px] bg-[#FFFFFF] p-4 rounded-lg flex items-center justify-center shadow-lg">
