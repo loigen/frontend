@@ -96,44 +96,44 @@ const AppointmentsPage = () => {
     {
       value: "Individual Counceling",
       label: "Individual Counseling",
-      price: 540,
+      price: 1000,
       description:
-        "One-on-one sessions focused on personal mental health and emotional growth.",
+        "This service is ideal for anyone dealing with personal challenges, mental health concerns, or wanting to improve their self-awareness and well-being. Dr. Jeb will work one-on-one with you, offering a safe space to explore your thoughts, feelings, and experiences. Sessions focus on understanding personal struggles, developing healthy coping strategies, and fostering growth. This service is especially helpful for managing anxiety, stress, or self-esteem issues.",
     },
     {
       value: "Family Counceling",
       label: "Family Counseling",
-      price: 350,
+      price: 2000,
       description:
-        "Counseling sessions for families to improve communication and resolve conflicts.",
+        "Family counseling is geared toward families looking to improve communication, resolve conflicts, or work through complex family dynamics. Dr. Jeb provides a supportive environment where family members can openly discuss their issues, learn effective communication skills, and find solutions together. This service is useful for families experiencing ongoing conflicts, dealing with significant life changes, or aiming to strengthen family bonds.",
     },
     {
       value: "Couple Counceling",
       label: "Couple Counseling",
-      price: 450,
+      price: 1500,
       description:
-        "Counseling for couples to enhance relationship dynamics and address issues.",
+        "Couple counseling is perfect for partners seeking to enhance their relationship, resolve conflicts, or reconnect emotionally. Dr. Jeb helps couples improve their communication, understand each other's perspectives, and develop healthy ways to navigate challenges. This service is valuable for managing conflicts, handling significant relationship changes, or building a more supportive and resilient partnership.",
     },
     {
       value: "Therapy",
       label: "Therapy",
-      price: 450,
+      price: 2000,
       description:
-        "Therapeutic sessions aimed at addressing mental health concerns and healing.",
+        "Therapy is tailored for individuals who need deeper support with mental health conditions like depression, trauma, or chronic anxiety. Dr. Jeb’s therapeutic approach provides a safe, empathetic space to work through painful emotions, understand past experiences, and develop healthier thought patterns and behaviors. Therapy sessions aim to help you achieve lasting mental and emotional well-being.",
     },
     {
       value: "Psychological Report",
       label: "Psychological Report",
-      price: 450,
+      price: 10000,
       description:
-        "Formal assessment and report documenting psychological evaluations.",
+        "A psychological report service is often needed for legal or official purposes, like for annulment or adoption cases. Dr. Jeb conducts a thorough assessment to provide a detailed psychological report that supports your needs in legal or other formal situations. The report is based on standardized assessments and insights gained through sessions, ensuring a professional evaluation that meets specific requirements.",
     },
     {
       value: "Seminars and WorkShop",
       label: "Seminars and Workshop",
-      price: 450,
+      price: 1000,
       description:
-        "Group seminars and workshops on various mental health topics and skills.",
+        "Dr. Jeb’s seminars and workshops cover a range of mental health topics, offering psychoeducation to individuals or groups interested in learning more about mental wellness. These sessions may cover stress management, self-care techniques, and more. Whether you’re looking to improve your own mental health or gain knowledge for personal growth, these workshops provide valuable tools and information.",
     },
   ];
 
@@ -1072,7 +1072,6 @@ const AppointmentsPage = () => {
               </>
             )}
           </div>
-          
         </Box>
       )}
     </>

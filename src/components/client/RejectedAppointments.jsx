@@ -12,7 +12,8 @@ import {
   MenuItem,
 } from "@mui/material";
 import { Close, MoreHoriz } from "@mui/icons-material";
-
+import axios from "axios";
+import Swal from "sweetalert2";
 const RejectedAppointments = ({ onBackToActive }) => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,9 +21,58 @@ const RejectedAppointments = ({ onBackToActive }) => {
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [qrCode, setQrCode] = useState(null); // For storing QR code file
+  const [qrCodePreview, setQrCodePreview] = useState(null); // For storing the image preview
 
   const { user } = useAuth();
 
+  const handleQrCodeUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setQrCode(file);
+      setQrCodePreview(URL.createObjectURL(file)); // Create a preview URL for the image
+    }
+  };
+
+  const handleRequestRefund = async () => {
+    if (!qrCode) {
+      Swal.fire({
+        icon: "error",
+        title: "No QR Code",
+        text: "Please upload a QR code before requesting a refund.",
+      });
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("qrCode", qrCode);
+    formData.append("appointmentId", selectedAppointment._id);
+
+    try {
+      const response = await axios.post(
+        "https://backend-vp67.onrender.com/Appointments/api/appointments/update-with-bank-account",
+        formData,
+        { headers: { "Content-Type": "multipart/form-data" } }
+      );
+
+      Swal.fire({
+        icon: "success",
+        title: "Refund Request",
+        text: response.data.message,
+      });
+
+      setOpen(false);
+      setAppointments(
+        appointments.filter((app) => app._id !== selectedAppointment._id)
+      );
+    } catch (err) {
+      Swal.fire({
+        icon: "error",
+        title: "Refund Request Failed",
+        text: err.response?.data?.error || "Something went wrong.",
+      });
+    }
+  };
   useEffect(() => {
     const getAppointments = async () => {
       if (!user) return;
@@ -148,6 +198,28 @@ const RejectedAppointments = ({ onBackToActive }) => {
                       >
                         View Receipt
                       </MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          handleMenuClose();
+                          handleOpenDialog(appointment, "notes");
+                        }}
+                      >
+                        View Reason
+                      </MenuItem>
+                      {appointment.refundReceipt && (
+                        <MenuItem
+                          onClick={() =>
+                            window.open(appointment.refundReceipt, "_blank")
+                          }
+                        >
+                          View Refund Receipt
+                        </MenuItem>
+                      )}
+                      <MenuItem
+                        onClick={() => handleOpenDialog(appointment, "refund")}
+                      >
+                        Request Refund
+                      </MenuItem>
                     </Menu>
                   </td>
                 </tr>
@@ -156,6 +228,7 @@ const RejectedAppointments = ({ onBackToActive }) => {
           </tbody>
         </table>
       </div>
+
       <Dialog open={open} onClose={handleCloseDialog} maxWidth="sm">
         <div className="flex justify-end">
           <DialogActions>
@@ -223,8 +296,39 @@ const RejectedAppointments = ({ onBackToActive }) => {
               )}
               {selectedAppointment.action === "notes" && (
                 <p className="text-[#2D4B40]">
-                  {selectedAppointment.notes || "No notes available."}
+                  {selectedAppointment.notes || "No Reason available."}
                 </p>
+              )}
+              {selectedAppointment.action === "refund" && (
+                <div>
+                  <h3 className="text-lg font-semibold">
+                    Request Refund for Appointment
+                  </h3>
+                  <input
+                    type="file"
+                    onChange={handleQrCodeUpload}
+                    accept="image/*"
+                    className="mt-4"
+                  />
+                  {/* Image Preview */}
+                  {qrCodePreview && (
+                    <div className="mt-4">
+                      <img
+                        src={qrCodePreview}
+                        alt="QR Code Preview"
+                        className="w-40 h-40 object-cover"
+                      />
+                    </div>
+                  )}
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    className="mt-4"
+                    onClick={handleRequestRefund}
+                  >
+                    Submit Refund Request
+                  </Button>
+                </div>
               )}
             </div>
           ) : (

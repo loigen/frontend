@@ -213,6 +213,14 @@ const Appointments = ({ onBack }) => {
                         View Receipt
                       </MenuItem>
                       <MenuItem
+                        onClick={() => {
+                          handleMenuClose();
+                          handleOpenDialog(appointment, "notes");
+                        }}
+                      >
+                        View Notes
+                      </MenuItem>
+                      <MenuItem
                         onClick={() => openRescheduleModal(appointment)}
                       >
                         Request Reschedule
