@@ -314,7 +314,6 @@ const Appointments = ({ onBack }) => {
                     </p>
                     <p>
                       <strong>Email Address:</strong>{" "}
-                      {selectedAppointment.firstname}{" "}
                       {selectedAppointment.email}
                     </p>
                     <p>
@@ -351,7 +350,7 @@ const Appointments = ({ onBack }) => {
                       {selectedAppointment.consultationMethod}
                     </p>
                     <p>
-                      <strong>Total Payment:</strong>{" "}
+                      <strong>Total Payment:</strong>₱
                       {selectedAppointment.TotalPayment}
                     </p>
                   </div>
