@@ -70,7 +70,6 @@ const BLog = () => {
   const [error, setError] = useState(null);
   const [userId, setUserId] = useState(null);
   const [view, setView] = useState("all");
-  const [selectedCategory, setSelectedCategory] = useState("Technology");
   const [searchQuery, setSearchQuery] = useState("");
   const [favoriteBlogs, setFavoriteBlogs] = useState([]);
   const [expandedBlogs, setExpandedBlogs] = useState(new Set());
@@ -79,7 +78,6 @@ const BLog = () => {
   const [editableBlog, setEditableBlog] = useState({
     title: "",
     content: "",
-    category: "Technology",
   });
   const [fullBlogDetails, setFullBlogDetails] = useState(null);
 
@@ -232,7 +230,6 @@ const BLog = () => {
   };
 
   const filteredBlogs = blogs
-    .filter((blog) => blog.category === selectedCategory)
     .filter((blog) =>
       blog.title.toLowerCase().includes(searchQuery.toLowerCase())
     )
@@ -653,22 +650,6 @@ const BLog = () => {
               }
               margin="normal"
             />
-            <FormControl fullWidth margin="normal">
-              <InputLabel>Category</InputLabel>
-              <Select
-                value={editableBlog.category}
-                onChange={(e) =>
-                  setEditableBlog({ ...editableBlog, category: e.target.value })
-                }
-                label="Category"
-              >
-                {categories.map((cat) => (
-                  <MenuItem key={cat.id} value={cat.id}>
-                    {cat.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
           </DialogContent>
           <DialogActions>
             <Button onClick={closeEditModal} color="primary">

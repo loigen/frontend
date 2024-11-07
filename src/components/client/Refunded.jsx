@@ -2,13 +2,25 @@ import React, { useState, useEffect } from "react";
 import { fetchAppointmentsByUserId } from "../../api/appointmentAPI/fetchAppointmentsByUserId";
 import { useAuth } from "../../context/AuthProvider";
 import { LoadingSpinner } from "../custom";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  IconButton,
+  Menu,
+  MenuItem,
+} from "@mui/material";
+import { Close, MoreHoriz } from "@mui/icons-material";
 
 const RefundedAppointments = ({ onBackToActive }) => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { user } = useAuth();
-
+  const [selectedAppointment, setSelectedAppointment] = useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [open, setOpen] = useState(false);
   useEffect(() => {
     const getAppointments = async () => {
       if (!user) return;
@@ -28,6 +40,24 @@ const RefundedAppointments = ({ onBackToActive }) => {
     getAppointments();
   }, [user]);
 
+  const handleOpenDialog = (appointment, action) => {
+    setSelectedAppointment({ ...appointment, action });
+    setOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpen(false);
+    setSelectedAppointment(null);
+  };
+  const handleMenuOpen = (event, appointment) => {
+    setAnchorEl(event.currentTarget);
+    setSelectedAppointment(appointment);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    setSelectedAppointment(null);
+  };
   if (loading) return <LoadingSpinner />;
   if (error) return <div>Error: {error}</div>;
 
@@ -92,12 +122,46 @@ const RefundedAppointments = ({ onBackToActive }) => {
                       {appointment.status}
                     </span>
                   </td>
-                  <td className="p-4 text-right">
-                    {appointment.refundReceipt && (
-                      <button className="bg-[#2C6975] text-white py-1 px-3 font-bold rounded-md">
-                        Show Receipt
-                      </button>
-                    )}
+                  <td className="p-4">
+                    <IconButton onClick={(e) => handleMenuOpen(e, appointment)}>
+                      <MoreHoriz />
+                    </IconButton>
+                    <Menu
+                      anchorEl={anchorEl}
+                      open={Boolean(anchorEl)}
+                      onClose={handleMenuClose}
+                    >
+                      <MenuItem
+                        onClick={() => handleOpenDialog(appointment, "details")}
+                      >
+                        View Details
+                      </MenuItem>
+                      {appointment.receipt && (
+                        <MenuItem
+                          onClick={() => {
+                            handleMenuClose();
+                            handleOpenDialog(appointment, "receipt");
+                          }}
+                        >
+                          View Receipt
+                        </MenuItem>
+                      )}
+                      {appointment.refundReceipt && (
+                        <MenuItem
+                          onClick={() => {
+                            handleMenuClose();
+                            handleOpenDialog(appointment, "Refundreceipt");
+                          }}
+                        >
+                          View Receipt
+                        </MenuItem>
+                      )}
+                      <MenuItem
+                        onClick={() => handleOpenDialog(appointment, "notes")}
+                      >
+                        View Notes
+                      </MenuItem>
+                    </Menu>
                   </td>
                 </tr>
               ))
@@ -105,6 +169,84 @@ const RefundedAppointments = ({ onBackToActive }) => {
           </tbody>
         </table>
       </div>
+      <Dialog open={open} onClose={handleCloseDialog}>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary">
+            <Close />
+          </Button>
+        </DialogActions>
+        <DialogContent>
+          {selectedAppointment ? (
+            <div>
+              {selectedAppointment.action === "details" && (
+                <>
+                  <div className="text-[#2D4B40] flex flex-col gap-6">
+                    <p>
+                      <strong>Name:</strong> {selectedAppointment.firstname}{" "}
+                      {selectedAppointment.lastname}
+                    </p>
+                    <p>
+                      <strong>Email Address:</strong>{" "}
+                      {selectedAppointment.email}
+                    </p>
+                    <p>
+                      <strong>Complaint:</strong>{" "}
+                      {selectedAppointment.primaryComplaint}
+                    </p>
+                    <p>
+                      <strong>Service Availed:</strong>{" "}
+                      {selectedAppointment.appointmentType}
+                    </p>
+                    <p>
+                      <strong>History of Intervention:</strong>{" "}
+                      {selectedAppointment.historyOfIntervention !== "false"
+                        ? selectedAppointment.historyOfIntervention
+                        : "N/A"}
+                    </p>
+                    <p>
+                      <strong>Preferred Schedule:</strong>{" "}
+                      {new Date(selectedAppointment.date).toLocaleString(
+                        "en-US",
+                        {
+                          weekday: "long",
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        }
+                      )}
+                      <span> - </span>
+                      {selectedAppointment.time}
+                    </p>
+
+                    <p>
+                      <strong>Preferred Consultation Method:</strong>{" "}
+                      {selectedAppointment.consultationMethod}
+                    </p>
+                    <p>
+                      <strong>Total Payment:</strong> ₱
+                      {selectedAppointment.TotalPayment}
+                    </p>
+                  </div>
+                </>
+              )}
+              {selectedAppointment.action === "receipt" && (
+                <img src={selectedAppointment.receipt} alt="" />
+              )}
+              {selectedAppointment.action === "notes" && (
+                <p className="text-[#2D4B40]">
+                  {selectedAppointment.notes || "No Reason available."}
+                </p>
+              )}
+
+              {selectedAppointment.action === "Refundreceipt" && (
+                <img src={selectedAppointment.refundReceipt} alt="" />
+              )}
+            </div>
+          ) : (
+            <p>Loading details...</p>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

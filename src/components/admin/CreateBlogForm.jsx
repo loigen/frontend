@@ -20,14 +20,6 @@ import axios from "axios";
 const BlogModal = ({ isOpen, onClose }) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [category, setCategory] = useState("");
-
-  const categories = [
-    { id: "Technology", name: "Technology" },
-    { id: "Health", name: "Health" },
-    { id: "Lifestyle", name: "Lifestyle" },
-    { id: "Education", name: "Education" },
-  ];
 
   const handleSaveAsDraft = async (e) => {
     e.preventDefault();
@@ -38,7 +30,6 @@ const BlogModal = ({ isOpen, onClose }) => {
         {
           title,
           content,
-          category,
         }
       );
 
@@ -50,7 +41,6 @@ const BlogModal = ({ isOpen, onClose }) => {
 
       setTitle("");
       setContent("");
-      setCategory("");
       onClose();
     } catch (error) {
       Swal.fire({
@@ -76,7 +66,6 @@ const BlogModal = ({ isOpen, onClose }) => {
         {
           title,
           content,
-          category,
           publish: true,
         }
       );
@@ -89,7 +78,6 @@ const BlogModal = ({ isOpen, onClose }) => {
 
       setTitle("");
       setContent("");
-      setCategory("");
       onClose();
     } catch (error) {
       Swal.fire({
@@ -140,51 +128,6 @@ const BlogModal = ({ isOpen, onClose }) => {
       </DialogTitle>
       <DialogContent dividers>
         <form>
-          <FormControl
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": {
-                  borderColor: "gray",
-                },
-                "&:hover fieldset": {
-                  borderColor: "#2c6975",
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "#2c6975",
-                },
-              },
-            }}
-            fullWidth
-            margin="normal"
-          >
-            <InputLabel id="category-label">Category</InputLabel>
-            <Select
-              labelId="category-label"
-              id="category"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              label="Category"
-              required
-              sx={{
-                "& .MuiSelect-select": {
-                  color: "gray",
-                },
-                "& .MuiSelect-select:hover": {
-                  border: "black",
-                },
-              }}
-              className="text-black"
-            >
-              <MenuItem sx={{ color: "gray" }} value="">
-                <em className="text-black">Pick a category</em>
-              </MenuItem>
-              {categories.map((cat) => (
-                <MenuItem sx={{ color: "black" }} key={cat.id} value={cat.id}>
-                  {cat.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
           <TextField
             label="Title"
             value={title}

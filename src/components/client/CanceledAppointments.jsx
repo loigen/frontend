@@ -12,9 +12,15 @@ import {
 } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import LoadingSpinner from "../custom/LoadingSpinner";
-import { Close, MoreHoriz } from "@mui/icons-material";
+import {
+  Close,
+  CloudDownloadOutlined,
+  CloudSyncOutlined,
+  MoreHoriz,
+} from "@mui/icons-material";
 import axios from "axios";
 import Swal from "sweetalert2";
+
 
 const CanceledAppointments = ({ onBackToActive }) => {
   const [appointments, setAppointments] = useState([]);
@@ -26,7 +32,25 @@ const CanceledAppointments = ({ onBackToActive }) => {
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [qrCode, setQrCode] = useState(null); // For storing QR code file
   const [qrCodePreview, setQrCodePreview] = useState(null); // For storing the image preview
+  const [notifOpen, setNotifOpen] = useState(false);
 
+  const notif = {
+    title: "Payment Issue Notification",
+    header: `Dear ${user.firstname} ${user.lastname},`,
+    body: "I hope this message finds you well. I wanted to bring to your attention an issue with the recent payment for your session(s). Upon reviewing the payment details and receipt you provided, it appears that there may be an error or inconsistency.",
+    body1:
+      "At this time, we have not received the payment reflected in the provided receipt. To continue providing services, I kindly request that you verify the payment and submit a valid receipt or make the necessary payment as soon as possible.",
+    body2:
+      "If this is a mistake or misunderstanding, please feel free to reach out to discuss and resolve the issue.",
+    body3:
+      "I appreciate your prompt attention to this matter and look forward to your cooperation.",
+    end: "Sincerely,",
+    name: "Jeb Bohol",
+  };
+
+  const handleNotifClose = () => {
+    setNotifOpen(false);
+  };
   useEffect(() => {
     const getAppointments = async () => {
       if (!user) return;
@@ -193,15 +217,14 @@ const CanceledAppointments = ({ onBackToActive }) => {
                       >
                         View Details
                       </MenuItem>
-                      {appointment.receipt && (
-                        <MenuItem
-                          onClick={() =>
-                            window.open(appointment.receipt, "_blank")
-                          }
-                        >
-                          View Receipt
-                        </MenuItem>
-                      )}
+                      <MenuItem
+                        onClick={() => {
+                          handleMenuClose();
+                          handleOpenDialog(appointment, "receipt");
+                        }}
+                      >
+                        View Receipt
+                      </MenuItem>
                       {appointment.refundReceipt && (
                         <MenuItem
                           onClick={() =>
@@ -238,40 +261,145 @@ const CanceledAppointments = ({ onBackToActive }) => {
           </Button>
         </DialogActions>
         <DialogContent>
-          <h3 className="text-lg font-semibold">
-            Request Refund for Appointment
-          </h3>
-          <p>
-            Refund Request: Upload Your GCash or PayPal QR Code Dear Patient, To
-            process your refund, kindly upload the QR code for your preferred
-            payment method. We accept refunds via: GCash PayPal Please ensure
-            the QR code is clear and accurate so that we can process your refund
-            swiftly. If you have any questions, feel free to reach out.
-          </p>
-          <input
-            type="file"
-            onChange={handleQrCodeUpload}
-            accept="image/*"
-            className="mt-4"
-          />
-          {/* Image Preview */}
-          {qrCodePreview && (
-            <div className="mt-4">
-              <img
-                src={qrCodePreview}
-                alt="QR Code Preview"
-                className="w-40 h-40 object-cover"
-              />
+          {selectedAppointment ? (
+            <div>
+              {selectedAppointment.action === "details" && (
+                <>
+                  <div className="text-[#2D4B40] flex flex-col gap-6">
+                    <p>
+                      <strong>Name:</strong> {selectedAppointment.firstname}{" "}
+                      {selectedAppointment.lastname}
+                    </p>
+                    <p>
+                      <strong>Email Address:</strong>{" "}
+                      {selectedAppointment.email}
+                    </p>
+                    <p>
+                      <strong>Complaint:</strong>{" "}
+                      {selectedAppointment.primaryComplaint}
+                    </p>
+                    <p>
+                      <strong>Service Availed:</strong>{" "}
+                      {selectedAppointment.appointmentType}
+                    </p>
+                    <p>
+                      <strong>History of Intervention:</strong>{" "}
+                      {selectedAppointment.historyOfIntervention !== "false"
+                        ? selectedAppointment.historyOfIntervention
+                        : "N/A"}
+                    </p>
+                    <p>
+                      <strong>Preferred Schedule:</strong>{" "}
+                      {new Date(selectedAppointment.date).toLocaleString(
+                        "en-US",
+                        {
+                          weekday: "long",
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        }
+                      )}
+                      <span> - </span>
+                      {selectedAppointment.time}
+                    </p>
+
+                    <p>
+                      <strong>Preferred Consultation Method:</strong>{" "}
+                      {selectedAppointment.consultationMethod}
+                    </p>
+                    <p>
+                      <strong>Total Payment:</strong> ₱
+                      {selectedAppointment.TotalPayment}
+                    </p>
+                  </div>
+                </>
+              )}
+              {selectedAppointment.action === "receipt" && (
+                <img src={selectedAppointment.receipt} alt="" />
+              )}
+              {selectedAppointment.action === "notes" && (
+                <p className="text-[#2D4B40]">
+                  {selectedAppointment.notes || "No Reason available."}
+                </p>
+              )}
+              {selectedAppointment.action === "refund" && (
+                <div className="flex-col flex gap-2">
+                  <h3 className="text-lg font-semibold">
+                    Refund Request: Upload Your GCash or PayPal QR Code{" "}
+                  </h3>
+                  <p>
+                    Dear Patient, To process your refund, kindly upload the QR
+                    code for your preferred payment method. We accept refunds
+                    via:
+                  </p>
+                  <ol>
+                    <li>1. GCash </li>
+                    <li>2. PayPal</li>
+                  </ol>
+                  <p>
+                    Please ensure the QR code is clear and accurate so that we
+                    can process your refund swiftly.
+                  </p>
+                  <p>If you have any questions, feel free to reach out.</p>
+                  <div className="mt-4 flex justify-center items-center">
+                    <label
+                      htmlFor="file-upload"
+                      className="cursor-pointer inline-flex gap-2 items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-[#2C6975] hover:bg-[#2C6e75] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    >
+                      <CloudDownloadOutlined /> <p>Upload Here</p>
+                    </label>
+                    <input
+                      id="file-upload"
+                      type="file"
+                      onChange={handleQrCodeUpload}
+                      accept="image/*"
+                      className="hidden"
+                    />
+                  </div>
+
+                  {/* Image Preview */}
+                  {qrCodePreview && (
+                    <div className="mt-4">
+                      <img
+                        src={qrCodePreview}
+                        alt="QR Code Preview"
+                        className="w-40 h-40 object-cover"
+                      />
+                    </div>
+                  )}
+                  <div className="flex justify-end items-center">
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      sx={{ background: "#2C6975" }}
+                      className="mt-4"
+                      onClick={handleRequestRefund}
+                    >
+                      Submit
+                    </Button>
+                  </div>
+                </div>
+              )}
+              {selectedAppointment.action === ""}
             </div>
+          ) : (
+            <p>Loading details...</p>
           )}
-          <Button
-            variant="contained"
-            color="primary"
-            className="mt-4"
-            onClick={handleRequestRefund}
-          >
-            Submit Refund Request
-          </Button>
+        </DialogContent>
+      </Dialog>
+      <Dialog open={notifOpen} onClose={handleNotifClose}>
+        <DialogActions onClick={handleNotifClose}>
+          <Close className="text-[#2C6975]" />
+        </DialogActions>
+        <DialogContent className="flex flex-col gap-4">
+          <h2 className="text-[#2C6975] font-semibold">{notif.title}</h2>
+          <p className="capitalize">{notif.header}</p>
+          <p>{notif.body}</p>
+          <p>{notif.body1}</p>
+          <p>{notif.body2}</p>
+          <p>{notif.body3}</p>
+          <p>{notif.end}</p>
+          <p>{notif.name}</p>
         </DialogContent>
       </Dialog>
     </div>
