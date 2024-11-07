@@ -166,7 +166,7 @@ const Appointments = ({ onBack }) => {
               <th className="p-4 font-semibold">Date</th>
               <th className="p-4 font-semibold">Type of Service</th>
               <th className="p-4 font-semibold">Consultation Method</th>
-              <th className="p-4 font-semibold">Receipt</th>
+              <th className="p-4 font-semibold">Action</th>
               <th className="p-4"></th>
             </tr>
           </thead>
@@ -266,13 +266,15 @@ const Appointments = ({ onBack }) => {
               getAvailableSlotsForSelectedDate().map((slot) => (
                 <Button
                   key={slot._id}
-                  variant={selectedSlot === slot ? "contained" : "outlined"}
+                  variant={
+                    selectedSlot === slot.time ? "contained" : "outlined"
+                  }
                   onClick={() => handleSlotClick(slot)}
                   sx={{
                     margin: "5px",
                     backgroundColor:
-                      selectedSlot === slot ? "#2c6975" : "inherit",
-                    color: selectedSlot === slot ? "#fff" : "inherit",
+                      selectedSlot === slot.time ? "#2c6975" : "inherit",
+                    color: selectedSlot === slot.time ? "#fff" : "inherit",
                   }}
                 >
                   {slot.time}

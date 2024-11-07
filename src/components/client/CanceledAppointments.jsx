@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import LoadingSpinner from "../custom/LoadingSpinner";
-import { Close } from "@mui/icons-material";
+import { Close, MoreHoriz } from "@mui/icons-material";
 import axios from "axios";
 import Swal from "sweetalert2";
 
@@ -54,7 +54,7 @@ const CanceledAppointments = ({ onBackToActive }) => {
   const handleCloseDialog = () => {
     setOpen(false);
     setSelectedAppointment(null);
-    setQrCodePreview(null); 
+    setQrCodePreview(null);
   };
 
   const handleMenuOpen = (event, appointment) => {
@@ -106,7 +106,7 @@ const CanceledAppointments = ({ onBackToActive }) => {
       setOpen(false);
       setAppointments(
         appointments.filter((app) => app._id !== selectedAppointment._id)
-      ); 
+      );
     } catch (err) {
       Swal.fire({
         icon: "error",
@@ -181,7 +181,7 @@ const CanceledAppointments = ({ onBackToActive }) => {
                   </td>
                   <td className="p-4">
                     <IconButton onClick={(e) => handleMenuOpen(e, appointment)}>
-                      <MoreVertIcon />
+                      <MoreHoriz />
                     </IconButton>
                     <Menu
                       anchorEl={anchorEl}
@@ -241,6 +241,13 @@ const CanceledAppointments = ({ onBackToActive }) => {
           <h3 className="text-lg font-semibold">
             Request Refund for Appointment
           </h3>
+          <p>
+            Refund Request: Upload Your GCash or PayPal QR Code Dear Patient, To
+            process your refund, kindly upload the QR code for your preferred
+            payment method. We accept refunds via: GCash PayPal Please ensure
+            the QR code is clear and accurate so that we can process your refund
+            swiftly. If you have any questions, feel free to reach out.
+          </p>
           <input
             type="file"
             onChange={handleQrCodeUpload}

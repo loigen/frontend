@@ -2,10 +2,9 @@ import React, { useState } from "react";
 import { ExpandMore, ExpandLess, ChevronLeft } from "@mui/icons-material";
 import { IconButton, Button, Tooltip } from "@mui/material";
 
-const FAQSection = ({ setView }) => {
+const FAQSection = ({ setView, showBack }) => {
   const [expandedIndex, setExpandedIndex] = useState(null);
   const [showAll, setShowAll] = useState(false);
-
   const faqs = [
     {
       question: "What is SafePlace, and who is it for?",
@@ -172,18 +171,23 @@ const FAQSection = ({ setView }) => {
 
   return (
     <div className="faq-section w-full mt-10 max-w-3xl mx-auto py-8 px-4 bg-white text-[#2c6975] shadow-md rounded-lg">
-      <p
-        onClick={() => setView("settings")}
-        className="text-[#2c6975] hover:underline cursor-pointer mb-4"
-      >
-        <Tooltip arrow title="Back">
-          <ChevronLeft />
-        </Tooltip>
-      </p>
+      {showBack && (
+        <p
+          onClick={() => setView("settings")}
+          className="text-[#2c6975] hover:underline cursor-pointer mb-4"
+        >
+          <Tooltip arrow title="Back">
+            <ChevronLeft />
+          </Tooltip>
+        </p>
+      )}
       <h2 className="text-2xl font-semibold text-center mb-8 text-[#2c6975]">
         Frequently Asked Questions
       </h2>
-      <div className="faq-list space-y-3 h-[50vh] overflow-y-scroll">
+      <div
+        className="faq-list space-y-3 h-[50vh] "
+        style={{ overflowY: showAll ? "scroll" : "" }}
+      >
         {displayedFAQs.map((faq, index) => (
           <div
             key={index}

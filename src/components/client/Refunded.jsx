@@ -70,7 +70,7 @@ const RefundedAppointments = ({ onBackToActive }) => {
               <th className="p-4 font-semibold">Date</th>
               <th className="p-4 font-semibold">Type of Service</th>
               <th className="p-4 font-semibold">Status</th>
-              <th className="p-4 font-semibold">Receipt</th>
+              <th className="p-4 font-semibold">Actions</th>
             </tr>
           </thead>
           <tbody>

@@ -794,6 +794,7 @@ const AppointmentsPage = () => {
                 >
                   <div>
                     <Typography variant="p">
+                      <strong>STEP 3:</strong>
                       Upload your proof of payment using the button below to
                       confirm your appointment.
                     </Typography>

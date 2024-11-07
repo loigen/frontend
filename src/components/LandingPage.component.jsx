@@ -13,7 +13,7 @@ import "./SpinningCarousel.css";
 import "../styles/landingpage.css";
 import SignupModal from "./Signup";
 import LoginModal from "./Login";
-import { Navbar, Footer } from "./custom";
+import { Navbar, Footer, FAQs } from "./custom";
 import About from "./About.component";
 import Services from "./Services";
 import Contact from "./contact.component";
@@ -372,6 +372,7 @@ const LandingPage = () => {
       {view === "Contact" && (
         <div className="mt-[5%]">
           <Contact />
+          <FAQs showBack={false} />
         </div>
       )}
       {view === "guestBlog" && (

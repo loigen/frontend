@@ -95,7 +95,7 @@ const BLog = () => {
   const handleUpdateBlog = async (updatedBlog) => {
     try {
       const response = await axios.put(
-        `https://backend-production-c8da.up.railway.app/blog/${updatedBlog._id}/edit`,
+        `https://backend-vp67.onrender.com/blog/${updatedBlog._id}/edit`,
         updatedBlog
       );
       Swal.fire({
@@ -124,14 +124,14 @@ const BLog = () => {
       setUserId(user._id);
 
       const blogsResponse = await axios.get(
-        `https://backend-production-c8da.up.railway.app/blog/allBlogs`
+        `https://backend-vp67.onrender.com/blog/allBlogs`
       );
       setBlogs(blogsResponse.data.blogs);
 
       if (view === "favorites" && user._id) {
         try {
           const favoritesResponse = await axios.get(
-            `https://backend-production-c8da.up.railway.app/blog/userFavorites/${user._id}`
+            `https://backend-vp67.onrender.com/blog/userFavorites/${user._id}`
           );
           setFavoriteBlogs(favoritesResponse.data.blogs || []);
         } catch (favoriteError) {
@@ -197,8 +197,8 @@ const BLog = () => {
     try {
       const isFavorite = favoriteBlogs.some((blog) => blog._id === blogId);
       const url = isFavorite
-        ? `https://backend-production-c8da.up.railway.app/blog/removeFromFavorites/${blogId}/${userId}`
-        : `https://backend-production-c8da.up.railway.app/blog/addToFavorites/${blogId}/${userId}`;
+        ? `https://backend-vp67.onrender.com/blog/removeFromFavorites/${blogId}/${userId}`
+        : `https://backend-vp67.onrender.com/blog/addToFavorites/${blogId}/${userId}`;
 
       const response = await axios.post(url);
       Swal.fire({

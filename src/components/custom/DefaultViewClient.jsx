@@ -108,7 +108,7 @@ const ActiveAppointments = () => {
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
-    setSelectedSlot(null); 
+    setSelectedSlot(null);
   };
 
   const handleSlotClick = (slot) => {
@@ -174,7 +174,7 @@ const ActiveAppointments = () => {
                 key={appointment._id}
                 appointment={appointment}
                 onOpenModal={handleOpenModal}
-                showGoToRoom={false}
+                showGoToRoom={true}
               />
             ))}
           </div>
@@ -248,24 +248,52 @@ const ActiveAppointments = () => {
               >
                 Appointment Info
               </h2>
-              <p id="appointment-info-description" className="text-sm mb-2">
-                <strong>Date:</strong>{" "}
-                {new Date(selectedAppointment.date).toLocaleString("en-US", {
-                  weekday: "long",
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                  hour: "numeric",
-                  minute: "numeric",
-                  hour12: true,
-                })}
+              <p
+                id="appointment-info-description"
+                className="text-sm mb-2 flex flex-col gap-6"
+              >
+                <p className="capitalize">
+                  <strong>Name:</strong> {selectedAppointment.firstname}{" "}
+                  {selectedAppointment.lastname}
+                </p>
+                <p>
+                  <strong>Email Address:</strong> {selectedAppointment.email}
+                </p>
+                <p className="capitalize">
+                  <strong>Complaint:</strong>{" "}
+                  {selectedAppointment.primaryComplaint}
+                </p>
+                <p className="capitalize">
+                  <strong>Service Availed:</strong>{" "}
+                  {selectedAppointment.appointmentType}
+                </p>
+                <p className="capitalize">
+                  <strong>History of Intervention:</strong>{" "}
+                  {selectedAppointment.historyOfIntervention !== "false"
+                    ? selectedAppointment.historyOfIntervention
+                    : "N/A"}
+                </p>
+                <p className="capitalize">
+                  <strong>Preferred Schedule:</strong>{" "}
+                  {new Date(selectedAppointment.date).toLocaleString("en-US", {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                  <span> - </span>
+                  {selectedAppointment.time}
+                </p>
+                <p className="capitalize">
+                  <strong>Preferred Consultation Method:</strong>{" "}
+                  {selectedAppointment.consultationMethod}
+                </p>
+                <p>
+                  <strong>Total Payment:</strong> ₱
+                  {selectedAppointment.TotalPayment}
+                </p>
               </p>
-              <p className="text-sm mb-2">
-                <strong>Service Type:</strong> {selectedAppointment.serviceType}
-              </p>
-              <p className="text-sm mb-2">
-                <strong>Status:</strong> {selectedAppointment.status}
-              </p>
+
               <button
                 onClick={handleCloseModal}
                 className="bg-[#2C6975] text-white px-4 py-2 rounded-lg mt-4"
@@ -311,13 +339,13 @@ const ActiveAppointments = () => {
               getAvailableSlotsForSelectedDate().map((slot) => (
                 <Button
                   key={slot._id}
-                  variant={selectedSlot === slot ? "contained" : "outlined"}
+                  variant={selectedSlot === slot.time ? "contained" : "outlined"}
                   onClick={() => handleSlotClick(slot)}
                   sx={{
                     margin: "5px",
                     backgroundColor:
-                      selectedSlot === slot ? "#2c6975" : "inherit",
-                    color: selectedSlot === slot ? "#fff" : "inherit",
+                      selectedSlot === slot.time ? "#2c6975" : "inherit",
+                    color: selectedSlot === slot.time ? "#fff" : "inherit",
                   }}
                 >
                   {slot.time}
@@ -378,7 +406,7 @@ const AppointmentCard = ({
       </button>
     </div>
     <p className="text-sm mb-4">{appointment.appointmentType}</p>
-    {showGoToRoom && (
+    {showGoToRoom && appointment.consultationMethod !== "face-to-face" && (
       <div className="flex justify-end">
         <a
           href={appointment.meetLink}

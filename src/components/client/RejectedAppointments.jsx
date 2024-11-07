@@ -14,6 +14,7 @@ import {
 import { Close, MoreHoriz } from "@mui/icons-material";
 import axios from "axios";
 import Swal from "sweetalert2";
+
 const RejectedAppointments = ({ onBackToActive }) => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -23,9 +24,25 @@ const RejectedAppointments = ({ onBackToActive }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [qrCode, setQrCode] = useState(null); // For storing QR code file
   const [qrCodePreview, setQrCodePreview] = useState(null); // For storing the image preview
-
+  const [notifOpen, setNotifOpen] = useState(false);
   const { user } = useAuth();
 
+  const notif = {
+    title: "Payment Issue Notification",
+    header: `Dear ${user.firstname} ${user.lastname},`,
+    body: "I hope this message finds you well. I wanted to bring to your attention an issue with the recent payment for your session(s). Upon reviewing the payment details and receipt you provided, it appears that there may be an error or inconsistency.",
+    body1:
+      "At this time, we have not received the payment reflected in the provided receipt. To continue providing services, I kindly request that you verify the payment and submit a valid receipt or make the necessary payment as soon as possible.",
+    body2:
+      "If this is a mistake or misunderstanding, please feel free to reach out to discuss and resolve the issue.",
+    body3:
+      "I appreciate your prompt attention to this matter and look forward to your cooperation.",
+    end: "Sincerely,",
+    name: "Jeb Bohol",
+  };
+  const handleNotifClose = () => {
+    setNotifOpen(false);
+  };
   const handleQrCodeUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -152,7 +169,7 @@ const RejectedAppointments = ({ onBackToActive }) => {
               <th className="p-4 font-semibold">Date</th>
               <th className="p-4 font-semibold">Type of Service</th>
               <th className="p-4 font-semibold">Consultation Method</th>
-              <th className="p-4 font-semibold">Receipt</th>
+              <th className="p-4 font-semibold">Actions</th>
               <th className="p-4"></th>
             </tr>
           </thead>
@@ -219,6 +236,9 @@ const RejectedAppointments = ({ onBackToActive }) => {
                         onClick={() => handleOpenDialog(appointment, "refund")}
                       >
                         Request Refund
+                      </MenuItem>
+                      <MenuItem onClick={() => setNotifOpen(true)}>
+                        View Reason
                       </MenuItem>
                     </Menu>
                   </td>
@@ -334,6 +354,21 @@ const RejectedAppointments = ({ onBackToActive }) => {
           ) : (
             <p>Loading details...</p>
           )}
+        </DialogContent>
+      </Dialog>
+      <Dialog open={notifOpen} onClose={handleNotifClose}>
+        <DialogActions onClick={handleNotifClose}>
+          <Close className="text-[#2C6975]" />
+        </DialogActions>
+        <DialogContent className="flex flex-col gap-4">
+          <h2 className="text-[#2C6975] font-semibold">{notif.title}</h2>
+          <p className="capitalize">{notif.header}</p>
+          <p>{notif.body}</p>
+          <p>{notif.body1}</p>
+          <p>{notif.body2}</p>
+          <p>{notif.body3}</p>
+          <p>{notif.end}</p>
+          <p>{notif.name}</p>
         </DialogContent>
       </Dialog>
     </div>
