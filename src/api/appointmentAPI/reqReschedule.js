@@ -8,7 +8,7 @@ export const reqRescheduleAppointment = async (
 ) => {
   try {
     const response = await axios.put(
-      `http://localhost:5000/Appointments/api/${appointmentId}/reqReschedule`,
+      `https://backend-vp67.onrender.com/Appointments/api/${appointmentId}/reqReschedule`,
       {
         newDate,
         newTime,
