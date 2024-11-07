@@ -32,7 +32,7 @@ const statuses = [
   { label: "Accepted", value: "accepted" },
   { label: "Completed", value: "completed" },
   { label: "Canceled", value: "canceled" },
-  { label: "Requested", value: "requested" },
+  { label: "Requested Refund", value: "requested" },
   { label: "Rejected", value: "rejected" },
   { label: "Pending", value: "pending" },
   { label: "Reschedule Request", value: "ReqRescheduled" },
