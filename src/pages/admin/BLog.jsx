@@ -107,6 +107,7 @@ const BLog = () => {
         )
       );
       closeEditModal();
+      fetchUserProfileAndBlogs();
     } catch (error) {
       Swal.fire({
         icon: "error",
@@ -136,9 +137,9 @@ const BLog = () => {
           console.error("Error fetching favorites:", favoriteError);
 
           Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: "No favorite blogs. Please add favorites.",
+            icon: "warning",
+            title: "Oopss",
+            text: "No favorite blogs yet",
             confirmButtonText: "Add Favorites",
           }).then((result) => {
             if (result.isConfirmed) {
@@ -625,7 +626,11 @@ const BLog = () => {
           </Container>
         )}
 
-        <Dialog open={isEditModalOpen} onClose={closeEditModal}>
+        <Dialog
+          open={isEditModalOpen}
+          onClose={closeEditModal}
+          sx={{ "& .MuiDialog-paper": { width: "80%", maxWidth: "800px" } }}
+        >
           <DialogTitle>Edit Blog</DialogTitle>
           <DialogContent>
             <TextField
@@ -774,7 +779,12 @@ const BLog = () => {
                 </Typography>
                 <Divider sx={{ mb: 2 }} />
                 <Typography variant="body1" fullWidth color="textSecondary">
-                  {fullBlogDetails.content}
+                  <div
+                    className="text-justify"
+                    dangerouslySetInnerHTML={{
+                      __html: fullBlogDetails.content.replace(/\n/g, "<br/>"),
+                    }}
+                  />
                 </Typography>
               </Box>
             </Box>

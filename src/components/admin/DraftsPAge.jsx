@@ -29,6 +29,7 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import { LoadingSpinner } from "../custom";
+import Swal from "sweetalert2";
 
 const theme = createTheme({
   palette: {
@@ -58,21 +59,19 @@ const DraftsPage = ({ searchQuery }) => {
     content: "",
     category: "",
   });
-
+  const fetchDrafts = async () => {
+    try {
+      const response = await axios.get(
+        `https://backend-vp67.onrender.com/blog/drafts`
+      );
+      setDrafts(response.data.drafts);
+    } catch (error) {
+      setError();
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
-    const fetchDrafts = async () => {
-      try {
-        const response = await axios.get(
-          `https://backend-vp67.onrender.com/blog/drafts`
-        );
-        setDrafts(response.data.drafts);
-      } catch (error) {
-        setError("Failed to fetch drafts");
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchDrafts();
   }, []);
 
@@ -104,12 +103,24 @@ const DraftsPage = ({ searchQuery }) => {
         `https://backend-vp67.onrender.com/blog/${selectedDraft._id}/update`,
         formValues
       );
+
+      // Update the drafts state
       setDrafts((prevDrafts) =>
         prevDrafts.map((draft) =>
           draft._id === selectedDraft._id ? { ...draft, ...formValues } : draft
         )
       );
+
+      // Display success alert
+      Swal.fire({
+        icon: "success",
+        title: "Draft Updated",
+        text: "Your draft has been successfully updated!",
+      });
+
+      // Close the modal or any other UI element
       handleClose();
+      fetchDrafts();
     } catch (error) {
       setError("Failed to update draft");
     }
@@ -120,11 +131,20 @@ const DraftsPage = ({ searchQuery }) => {
       await axios.put(
         `https://backend-vp67.onrender.com/blog/${draftId}/publish`
       );
-      setDrafts((prevDrafts) =>
-        prevDrafts.map((draft) =>
-          draft._id === draftId ? { ...draft, status: "published" } : draft
-        )
-      );
+
+      // Fetch the updated drafts list
+      fetchDrafts();
+
+      // Show success alert with auto-refresh after user clicks "OK"
+      Swal.fire({
+        icon: "success",
+        title: "Draft Published",
+        text: "Your draft has been successfully published!",
+        willClose: () => {
+          // Refresh the page after alert closes (user clicks "OK")
+          window.location.reload();
+        },
+      });
     } catch (error) {
       setError("Failed to publish draft");
     }
@@ -146,9 +166,11 @@ const DraftsPage = ({ searchQuery }) => {
     <ThemeProvider theme={theme}>
       <Container sx={{ mt: 4 }}>
         {filteredDrafts.length === 0 ? (
-          <Typography variant="body1" color="#2C6975">
-            No drafts found
-          </Typography>
+          <div className="flex justify-center h-full items-center">
+            <Typography variant="body1" color="#2C6975">
+              No drafts found
+            </Typography>
+          </div>
         ) : (
           <Grid container spacing={4}>
             {filteredDrafts.map((draft) => (
@@ -270,7 +292,11 @@ const DraftsPage = ({ searchQuery }) => {
           </Grid>
         )}
 
-        <Dialog open={open} onClose={handleClose}>
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          sx={{ "& .MuiDialog-paper": { width: "80%", maxWidth: "800px" } }}
+        >
           <DialogTitle>Edit Draft</DialogTitle>
           <DialogContent>
             <TextField

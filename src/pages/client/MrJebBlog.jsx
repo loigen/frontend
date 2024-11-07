@@ -38,12 +38,6 @@ import { useAuth } from "../../context/AuthProvider";
 import { LoadingSpinner } from "../../components/custom";
 import { Delete } from "@mui/icons-material";
 
-const categories = [
-  { id: "Technology", name: "Technology" },
-  { id: "Health", name: "Health" },
-  { id: "Lifestyle", name: "Lifestyle" },
-  { id: "Education", name: "Education" },
-];
 const API_URL = "https://backend-vp67.onrender.com";
 
 const blogTheme = createTheme({
@@ -70,7 +64,6 @@ const BLog = () => {
   const [error, setError] = useState(null);
   const [userId, setUserId] = useState(null);
   const [view, setView] = useState("all");
-  const [selectedCategory, setSelectedCategory] = useState("Technology");
   const [searchQuery, setSearchQuery] = useState("");
   const [favoriteBlogs, setFavoriteBlogs] = useState([]);
   const [expandedBlogs, setExpandedBlogs] = useState(new Set());
@@ -138,9 +131,9 @@ const BLog = () => {
           console.error("Error fetching favorites:", favoriteError);
 
           Swal.fire({
-            icon: "error",
+            icon: "warning",
             title: "Oopss",
-            text: "No favorite blogs. Please add favorites.",
+            text: "No favorite blogs yet.",
             confirmButtonText: "Add Favorites",
           }).then((result) => {
             if (result.isConfirmed) {
@@ -222,20 +215,7 @@ const BLog = () => {
     }
   };
 
-  // const handleToggleExpand = (blogId) => {
-  //   setExpandedBlogs((prev) => {
-  //     const newExpandedBlogs = new Set(prev);
-  //     if (newExpandedBlogs.has(blogId)) {
-  //       newExpandedBlogs.delete(blogId);
-  //     } else {
-  //       newExpandedBlogs.add(blogId);
-  //     }
-  //     return newExpandedBlogs;
-  //   });
-  // };
-
   const filteredBlogs = blogs
-    .filter((blog) => blog.category === selectedCategory)
     .filter((blog) =>
       blog.title.toLowerCase().includes(searchQuery.toLowerCase())
     )
@@ -587,7 +567,12 @@ const BLog = () => {
                 <Divider sx={{ mb: 2 }} />
 
                 <Typography variant="body1" fullWidth color="textSecondary">
-                  {fullBlogDetails.content}
+                  <div
+                    className="text-justify"
+                    dangerouslySetInnerHTML={{
+                      __html: fullBlogDetails.content.replace(/\n/g, "<br/>"),
+                    }}
+                  />
                 </Typography>
               </Box>
             </Box>
