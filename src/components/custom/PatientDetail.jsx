@@ -7,13 +7,16 @@ import Button from "@mui/material/Button";
 import { Close as CloseIcon } from "@mui/icons-material";
 import axios from "axios";
 import UserAppointments from "./userhistory"; // Update with the actual path
+import { saveAs } from "file-saver"; // Ensure to install file-saver: npm install file-saver
 
 const PatientDetails = ({ patient, onClose, handleRefund }) => {
   const [refundFile, setRefundFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
   const [note, setNote] = useState(""); // State for note input
   const [showAppointments, setShowAppointments] = useState(false); // State to toggle appointments view
-
+  function downloadImage(url) {
+    saveAs(url, "receipt.jpg");
+  }
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setRefundFile(file);
@@ -313,72 +316,6 @@ const PatientDetails = ({ patient, onClose, handleRefund }) => {
                 {patient.TotalPayment || "N/A"}
               </Typography>
             </Box>
-
-            {patient.status === "requested" && (
-              <Box
-                sx={{
-                  textAlign: "center",
-                  mt: 4,
-                  flexGrow: 1,
-                }}
-              >
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                  id="refund-file"
-                  style={{ display: "none" }}
-                />
-                <label htmlFor="refund-file" className="m-2">
-                  <Button
-                    variant="outlined"
-                    component="span"
-                    sx={{ mb: 2, color: "#2c6975", borderColor: "#2c6975" }}
-                  >
-                    Click to Upload Receipt
-                  </Button>
-                </label>
-
-                {previewUrl && (
-                  <Box sx={{ mb: 2, position: "relative" }}>
-                    <img
-                      src={previewUrl}
-                      alt="Refund Preview"
-                      style={{
-                        width: 200,
-                        height: 200,
-                        borderRadius: 4,
-                      }}
-                    />
-                    <IconButton
-                      onClick={handleRemovePreview}
-                      sx={{
-                        position: "absolute",
-                        top: 0,
-                        right: 0,
-                        color: "text.secondary",
-                        backgroundColor: "background.paper",
-                        borderRadius: "50%",
-                        boxShadow: 2,
-                        p: 0.5,
-                      }}
-                    >
-                      <CloseIcon />
-                    </IconButton>
-                  </Box>
-                )}
-
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleRefundClick}
-                  disabled={!refundFile}
-                  sx={{ mb: 2 }}
-                >
-                  Process Refund
-                </Button>
-              </Box>
-            )}
           </Box>
           {patient.status === "requested" && (
             <Box
@@ -420,6 +357,20 @@ const PatientDetails = ({ patient, onClose, handleRefund }) => {
                       padding: 4,
                     }}
                   />
+                  <button
+                    onClick={() => downloadImage(patient.receipt)}
+                    style={{
+                      marginTop: "8px",
+                      padding: "8px 16px",
+                      backgroundColor: "#1976d2",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "4px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Download Receipt
+                  </button>
                 </Box>
               ) : (
                 "No QR Code Available"
@@ -466,6 +417,20 @@ const PatientDetails = ({ patient, onClose, handleRefund }) => {
                       padding: 4,
                     }}
                   />
+                  <button
+                    onClick={() => downloadImage(patient.receipt)}
+                    style={{
+                      marginTop: "8px",
+                      padding: "8px 16px",
+                      backgroundColor: "#1976d2",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "4px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Download Receipt
+                  </button>
                 </Box>
               ) : (
                 "No Receipt Code Available"
@@ -514,6 +479,20 @@ const PatientDetails = ({ patient, onClose, handleRefund }) => {
                       padding: 4,
                     }}
                   />
+                  <button
+                    onClick={() => downloadImage(patient.receipt)}
+                    style={{
+                      marginTop: "8px",
+                      padding: "8px 16px",
+                      backgroundColor: "#1976d2",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "4px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Download Receipt
+                  </button>
                 </Box>
               ) : (
                 "No Receipt Code Available"

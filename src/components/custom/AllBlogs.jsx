@@ -32,12 +32,9 @@ const AllBlogs = () => {
         );
         setBlogs(response.data.blogs);
       } catch (error) {
-        console.error("Error fetching blogs:", error);
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "Failed to fetch blogs. Please try again later.",
-        });
+        <>
+          <p className="2-full text-center">No Blogs yet.</p>
+        </>;
       } finally {
         setLoading(false);
       }

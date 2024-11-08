@@ -9,6 +9,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import LoadingSpinner from "./LoadingSpinner";
+import dayjs from "dayjs";
 
 const UserAppointments = ({ userId }) => {
   const [appointments, setAppointments] = useState([]);
@@ -65,13 +66,16 @@ const UserAppointments = ({ userId }) => {
                 secondary={
                   <>
                     <Typography variant="body2" color="text.secondary">
-                      Date: {new Date(appointment.date).toLocaleString()}
+                      Schedule : {dayjs(appointment.date).format("MMM D, YYYY")}
+                      <span>, </span>
+                      {appointment.time}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
                       Status: {appointment.status}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      Details: {appointment.details || "No additional details."}
+                      Appointment Type:{" "}
+                      {appointment.appointmentType || "No additional details."}
                     </Typography>
                   </>
                 }

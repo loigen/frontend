@@ -29,6 +29,8 @@ const ActiveAppointments = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [isRescheduleModalOpen, setRescheduleModalOpen] = useState(false);
+  const today = new Date();
+  const todayStr = today.toLocaleDateString();
   useEffect(() => {
     const getAppointments = async () => {
       if (!user) return;
@@ -45,7 +47,10 @@ const ActiveAppointments = () => {
 
     getAppointments();
   }, [user]);
-
+  const todayAppointments = appointments.filter((appointment) => {
+    const appointmentDateStr = new Date(appointment.date).toLocaleDateString();
+    return appointmentDateStr === todayStr;
+  });
   const handleOpenModal = (appointment) => {
     setSelectedAppointment(appointment);
     setModalOpen(true);
@@ -118,7 +123,7 @@ const ActiveAppointments = () => {
   if (loading) return <LoadingSpinner />;
   if (error) return <div>Error: {error}</div>;
 
-  const acceptedAppointments = appointments.filter(
+  const acceptedAppointments = todayAppointments.filter(
     (appointment) => appointment.status === "accepted"
   );
   const rescheduledAppointments = appointments.filter(
@@ -139,7 +144,7 @@ const ActiveAppointments = () => {
           Today's Active Appointments
         </h3>
         {acceptedAppointments.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4">
             {acceptedAppointments.map((appointment) => (
               <AppointmentCard
                 key={appointment._id}
@@ -339,7 +344,9 @@ const ActiveAppointments = () => {
               getAvailableSlotsForSelectedDate().map((slot) => (
                 <Button
                   key={slot._id}
-                  variant={selectedSlot === slot.time ? "contained" : "outlined"}
+                  variant={
+                    selectedSlot === slot.time ? "contained" : "outlined"
+                  }
                   onClick={() => handleSlotClick(slot)}
                   sx={{
                     margin: "5px",
