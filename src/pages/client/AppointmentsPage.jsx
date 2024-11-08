@@ -5,7 +5,9 @@ import { createAppointment } from "../../api/appointmentAPI/createAppointmentApi
 import { updateSlotStatus } from "../../api/schedulesAPI/updateSlotStatus";
 import { LoadingSpinner } from "../../components/custom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import paypal from "../../images/PayPal.png";
+import UBQR from "../../images/UB.png";
+import paypal from "../../images/UBLogo.png";
+import gcashQR from "../../images/GcashQR.png";
 import gcash from "../../images/GCash.png";
 import {
   Box,
@@ -168,6 +170,14 @@ const AppointmentsPage = () => {
     loadAvailableSlots();
   }, []);
   const handleProceed = () => {
+    if (historyOfIntervention && !briefDetails) {
+      Swal.fire({
+        icon: "warning",
+        title: "No Breif Details Slot",
+        text: "Please provide breif details!",
+      });
+      return;
+    }
     if (!selectedSlot) {
       Swal.fire({
         icon: "warning",
@@ -765,17 +775,26 @@ const AppointmentsPage = () => {
                   <p>
                     <strong>Total Payment:</strong> ₱ {price}
                   </p>
-                  <Box display="flex" flexDirection="row" flexWrap="wrap">
-                    <div className="bg-white shadow-2xl px-2 py-1">
+                  <Box
+                    display="flex"
+                    flexDirection="row"
+                    justifyContent="space-between"
+                    flexWrap="wrap"
+                  >
+                    <div className=" py-1">
                       <img src={gcash} alt="" />
                     </div>
-                    gcash QR here
+                    <div className="w-[80%]  py-1">
+                      <img width={300} src={gcashQR} alt="" />
+                    </div>
                   </Box>
                   <Box display="flex" flexDirection="row" flexWrap="wrap">
-                    <div className="bg-white shadow-2xl px-2 py-1">
-                      <img src={paypal} alt="" />
+                    <div className="  py-1">
+                      <img width={100} src={paypal} alt="" />
                     </div>
-                    paypal QR here
+                    <div className="w-[80%]   py-1">
+                      <img width={300} src={UBQR} alt="" />
+                    </div>
                   </Box>
                 </Box>
                 <Box
