@@ -39,13 +39,6 @@ import { LoadingSpinner } from "../../components/custom";
 import { Delete } from "@mui/icons-material";
 const API_URL = "https://backend-vp67.onrender.com";
 
-const categories = [
-  { id: "Technology", name: "Technology" },
-  { id: "Health", name: "Health" },
-  { id: "Lifestyle", name: "Lifestyle" },
-  { id: "Education", name: "Education" },
-];
-
 const blogTheme = createTheme({
   palette: {
     primary: {
@@ -134,8 +127,6 @@ const BLog = () => {
           );
           setFavoriteBlogs(favoritesResponse.data.blogs || []);
         } catch (favoriteError) {
-          console.error("Error fetching favorites:", favoriteError);
-
           Swal.fire({
             icon: "warning",
             title: "Oopss",
@@ -149,12 +140,10 @@ const BLog = () => {
         }
       }
     } catch (error) {
-      console.error("Error fetching data:", error);
-      setError("Failed to fetch data. Please try again later.");
       Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Failed to fetch data. Please try again later.",
+        icon: "warning",
+        title: "Opps",
+        text: "No Blogs Yet. Please try again later.",
       });
     } finally {
       setLoading(false);

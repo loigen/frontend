@@ -67,50 +67,10 @@ const BLog = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [favoriteBlogs, setFavoriteBlogs] = useState([]);
   const [expandedBlogs, setExpandedBlogs] = useState(new Set());
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const { user } = useAuth();
-  const [editableBlog, setEditableBlog] = useState({
-    title: "",
-    content: "",
-    category: "Technology",
-  });
+
   const [fullBlogDetails, setFullBlogDetails] = useState(null);
 
-  const openEditModal = (blog) => {
-    setEditableBlog(blog);
-    setIsEditModalOpen(true);
-  };
-
-  const closeEditModal = () => {
-    setIsEditModalOpen(false);
-  };
-
-  const handleUpdateBlog = async (updatedBlog) => {
-    try {
-      const response = await axios.put(
-        `https://backend-vp67.onrender.com/blog/${updatedBlog._id}/edit`,
-        updatedBlog
-      );
-      Swal.fire({
-        icon: "success",
-        title: "Blog Updated",
-        text: response.data.message,
-      });
-      setBlogs((prevBlogs) =>
-        prevBlogs.map((blog) =>
-          blog._id === updatedBlog._id ? updatedBlog : blog
-        )
-      );
-      closeEditModal();
-    } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Failed to update blog",
-      });
-      console.error("Error updating blog:", error);
-    }
-  };
   const fetchUserProfileAndBlogs = async () => {
     setLoading(true);
     try {
@@ -128,8 +88,6 @@ const BLog = () => {
           );
           setFavoriteBlogs(favoritesResponse.data.blogs || []);
         } catch (favoriteError) {
-          console.error("Error fetching favorites:", favoriteError);
-
           Swal.fire({
             icon: "warning",
             title: "Oopss",
@@ -143,12 +101,10 @@ const BLog = () => {
         }
       }
     } catch (error) {
-      console.error("Error fetching data:", error);
-      setError("Failed to fetch data. Please try again later.");
       Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Failed to fetch data. Please try again later.",
+        icon: "warning",
+        title: "Opps",
+        text: "No Blogs Yet. Please try again later.",
       });
     } finally {
       setLoading(false);
@@ -157,35 +113,7 @@ const BLog = () => {
   useEffect(() => {
     fetchUserProfileAndBlogs();
   }, [view]);
-  const deleteBlog = async (blogId) => {
-    try {
-      const result = await Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Yes, delete it!",
-      });
 
-      if (result.isConfirmed) {
-        const response = await fetch(`${API_URL}/blog/${blogId}`, {
-          method: "DELETE",
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-          Swal.fire("Deleted!", data.message, "success");
-          fetchUserProfileAndBlogs();
-        } else {
-          Swal.fire("Error", data.message, "error");
-        }
-      }
-    } catch (error) {
-      console.error("Error deleting blog:", error);
-      Swal.fire("Error", "Could not delete the blog", "error");
-    }
-  };
   const handleToggleFavorite = async (blogId) => {
     try {
       const isFavorite = favoriteBlogs.some((blog) => blog._id === blogId);
