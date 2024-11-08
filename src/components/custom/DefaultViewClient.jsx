@@ -51,6 +51,10 @@ const ActiveAppointments = () => {
     const appointmentDateStr = new Date(appointment.date).toLocaleDateString();
     return appointmentDateStr === todayStr;
   });
+  const notTodayAppointments = appointments.filter((appointment) => {
+    const appointmentDateStr = new Date(appointment.date).toLocaleDateString();
+    return appointmentDateStr !== todayStr;
+  });
   const handleOpenModal = (appointment) => {
     setSelectedAppointment(appointment);
     setModalOpen(true);
@@ -124,9 +128,9 @@ const ActiveAppointments = () => {
   if (error) return <div>Error: {error}</div>;
 
   const acceptedAppointments = todayAppointments.filter(
-    (appointment) => appointment.status === "accepted"
+    (appointment) => appointment.status === "accepted" || "rescheduled"
   );
-  const rescheduledAppointments = appointments.filter(
+  const rescheduledAppointments = notTodayAppointments.filter(
     (appointment) => appointment.status === "rescheduled"
   );
   const requestedRescheduledAppointments = appointments.filter(
@@ -179,7 +183,7 @@ const ActiveAppointments = () => {
                 key={appointment._id}
                 appointment={appointment}
                 onOpenModal={handleOpenModal}
-                showGoToRoom={true}
+                showGoToRoom={false}
               />
             ))}
           </div>
