@@ -62,12 +62,12 @@ const Sidebar = () => {
     { text: "Home", icon: <HomeIcon />, link: "/home" },
     {
       text: "Patients",
-      icon: <Person2Icon  />,
+      icon: <Person2Icon />,
       link: "/patients",
     },
     {
       text: "Schedule",
-      icon: <CalendarTodayIcon  />,
+      icon: <CalendarTodayIcon />,
       link: "/schedule",
     },
     {
@@ -76,8 +76,8 @@ const Sidebar = () => {
       link: "/blog",
     },
     {
-      text: "Admin Settings",
-      icon: <SettingsIcon  />,
+      text: "Settings",
+      icon: <SettingsIcon />,
       link: "/AdminSettings",
     },
   ];
@@ -160,41 +160,41 @@ const Sidebar = () => {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            gap: "3px", // 3px gap between each link
+            gap: "5px", // 3px gap between each link
             overflow: "hidden",
           }}
         >
           {menuItems.map((item) => (
             <ListItem
-            button
-            component={NavLink}
-            to={item.link}
-            key={item.text}
-            sx={{
-              width: "100%",
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "center",
-              gap: "1rem",
-              borderLeft:
-                location.pathname === item.link
-                  ? "3px solid #68B2A0" // Border color for active link
-                  : "none",
-              borderRadius: "8px", // Rounded corners
-              backgroundColor:
-                location.pathname === item.link
-                  ? "#2C6975" // Background color for active link
-                  : "transparent",
-              color: location.pathname === item.link ? "white" : "#2C6975", // Default text color
-              transition: "background-color 0.3s ease, color 0.3s ease", // Smooth transition for background and text color
-              "&:hover": {
-                backgroundColor: "#2C6975", // Background color on hover
-                color: "white", // Text color on hover
-                "& .MuiListItemIcon-root": {
-                  color: "white", // Change icon color to white on hover
+              button
+              component={NavLink}
+              to={item.link}
+              key={item.text}
+              sx={{
+                width: "100%",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                gap: "1rem",
+                borderLeft:
+                  location.pathname === item.link
+                    ? "3px solid #68B2A0" // Border color for active link
+                    : "none",
+                borderRadius: "8px", // Rounded corners
+                backgroundColor:
+                  location.pathname === item.link
+                    ? "#2C6975" // Background color for active link
+                    : "transparent",
+                color: location.pathname === item.link ? "white" : "#2C6975", // Default text color
+                transition: "background-color 0.3s ease, color 0.3s ease", // Smooth transition for background and text color
+                "&:hover": {
+                  backgroundColor: "#2C6975", // Background color on hover
+                  color: "white", // Text color on hover
+                  "& .MuiListItemIcon-root": {
+                    color: "white", // Change icon color to white on hover
+                  },
                 },
-              },
-            }}
+              }}
               onClick={isMobile ? toggleDrawer : null}
             >
               <ListItemIcon
@@ -203,7 +203,7 @@ const Sidebar = () => {
                   justifyContent: "center",
                   alignContent: "center",
                   minWidth: open ? "auto" : 56,
-                  color: location.pathname === item.link ? "white" : "#2C6975"
+                  color: location.pathname === item.link ? "white" : "#2C6975",
                 }}
               >
                 {item.icon}
