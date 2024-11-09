@@ -375,9 +375,7 @@ const BLog = () => {
                       </Typography>
                     </Box>
                   ) : (
-                    <Typography>
-                      No blogs available for this category.
-                    </Typography>
+                    <Typography>No blogs available.</Typography>
                   )}
                 </Typography>
               </Grid>

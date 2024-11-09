@@ -41,9 +41,6 @@ const AdminSettings = () => {
         return <ChangePasswordForm setView={setView} />;
       case "manage":
         return <ManageUsers setView={setView} />;
-
-      case "Help":
-        return <Help setView={setView} />;
       case "userFeedback":
         return <FeedbackList setView={setView} />;
       default:
@@ -123,15 +120,6 @@ const AdminSettings = () => {
                       sx={{ color: "#2C6975" }}
                     >
                       User Feedback
-                    </Button>
-
-                    <Button
-                      startIcon={<QuestionMarkOutlinedIcon />}
-                      fullWidth
-                      onClick={() => setView("Help")}
-                      sx={{ mb: 1, color: "#2C6975" }}
-                    >
-                      Help
                     </Button>
                   </CardContent>
                 </Card>

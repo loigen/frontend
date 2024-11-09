@@ -142,7 +142,7 @@ const ChangePasswordForm = ({ setView }) => {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="md" className="mt-10">
       <Paper elevation={3} style={{ padding: "2rem" }}>
         <Box display="flex" justifyContent="flex-start" mb={2}>
           <IconButton onClick={() => setView("settings")}>
@@ -186,16 +186,17 @@ const ChangePasswordForm = ({ setView }) => {
             required
             disabled={isBlocked || isDisabled}
           />
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            fullWidth
-            disabled={isBlocked || isDisabled}
-            style={{ marginTop: "1rem", backgroundColor: "#2C6975" }}
-          >
-            Change Password
-          </Button>
+          <div className="flex justify-end">
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              disabled={isBlocked || isDisabled}
+              style={{ marginTop: "1rem", backgroundColor: "#2C6975" }}
+            >
+              Change Password
+            </Button>
+          </div>
         </form>
       </Paper>
     </Container>

@@ -33,6 +33,9 @@ import { useAuth } from "../../context/AuthProvider";
 // import { NavLink } from "react-router-dom";
 import FeedbackPage from "../../components/custom/FeedbackPage";
 import Contact from "../../components/client/contactForm";
+import { ChevronLeft } from "@mui/icons-material";
+import PrivacyPolicy from "../../components/client/PrivacyPolicy";
+
 // import { Contact } from "../../components";
 
 const UserSettings = () => {
@@ -52,18 +55,15 @@ const UserSettings = () => {
       case "UserGuide":
         return <UserGuide setView={setView} />;
       case "FAQs":
-        return <FAQs setView={setView} />;
+        return <FAQs showBack={true} setView={setView} />;
       case "feedback":
         return <FeedbackPage setView={setView} />;
+      case "privacy":
+        return <PrivacyPolicy showBack={true} setView={setView} />;
       case "ContactSupport":
         return (
           <>
-            <Box display="flex" justifyContent="flex-start" mb={2}>
-              <IconButton onClick={() => setView("settings")}>
-                <ArrowBackIcon />
-              </IconButton>
-            </Box>
-            <Contact />
+            <Contact showBack={true} setView={setView} />
           </>
         );
       default:
@@ -137,7 +137,7 @@ const UserSettings = () => {
                     <Button
                       startIcon={<PrivacyTipIcon />}
                       fullWidth
-                      onClick={() => setView("UserGuide")}
+                      onClick={() => setView("privacy")}
                       sx={{ mb: 1, color: "#2C6975" }}
                     >
                       Privacy Policy

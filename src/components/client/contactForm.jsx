@@ -8,7 +8,10 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import FacebookIcon from "@mui/icons-material/Facebook";
 
-const Contact = () => {
+import { ChevronLeft } from "@mui/icons-material";
+import { Tooltip } from "@mui/material";
+
+const Contact = ({ showBack, setView }) => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -65,6 +68,16 @@ const Contact = () => {
 
   return (
     <div>
+      {showBack && (
+        <p
+          onClick={() => setView("settings")}
+          className="text-[#2c6975] hover:underline ml-10 cursor-pointer mb-4"
+        >
+          <Tooltip arrow title="Back">
+            <ChevronLeft />
+          </Tooltip>
+        </p>
+      )}
       <div className="flex flex-col items-center justify-center">
         <div className="text-center mb-10">
           <h1 className="text-4xl font-semibold text-[#2C6975]">Contact Us</h1>

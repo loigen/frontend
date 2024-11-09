@@ -22,51 +22,39 @@ import TestimonialsPage from "./TestimonialsPage";
 import { FaRegClock } from "react-icons/fa6";
 import { GoBriefcase } from "react-icons/go";
 import { MdOutlineHighQuality } from "react-icons/md";
+import { Skeleton } from "@mui/material";
+import { LocationCityTwoTone, Phone, PhoneAndroid } from "@mui/icons-material";
 
-const testimonies = [
-  {
-    id: 1,
-    name: "Rizalyn Q.",
-    text: "I’ve never felt more understood. Dr. Jeb’s sessions helped me find clarity and relief in my struggles.",
-  },
-  {
-    id: 2,
-    name: "Loigen L.",
-    text: "Dr. Jeb truly listens, and I feel comfortable discussing my challenges with him.",
-  },
-  {
-    id: 3,
-    name: "Geraldine G.",
-    text: "The support has been life-changing. I’m so grateful for the insights and guidance.",
-  },
-  {
-    id: 1,
-    name: "Rizalyn Q.",
-    text: "I’ve never felt more understood. Dr. Jeb’s sessions helped me find clarity and relief in my struggles.",
-  },
-  {
-    id: 2,
-    name: "Loigen L.",
-    text: "Dr. Jeb truly listens, and I feel comfortable discussing my challenges with him.",
-  },
-  {
-    id: 3,
-    name: "Geraldine G.",
-    text: "The support has been life-changing. I’m so grateful for the insights and guidance.",
-  },
-];
-
+const API_URL = "https://backend-vp67.onrender.com";
 const LandingPage = () => {
   const [currentTestimonyIndex, setCurrentTestimonyIndex] = useState(0);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [activeNavLink, setActiveNavLink] = useState("ABOUT");
+  const [testimonies, setTestimonies] = useState([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const fetchFeedback = async () => {
+      try {
+        const response = await fetch(`${API_URL}/Feedback/feedback`);
+        const data = await response.json();
+        if (response.ok) {
+          setTestimonies(data.feedback);
+        } else {
+          console.error("Failed to load feedback:", data.message);
+        }
+      } catch (error) {
+        console.error("Error fetching feedback:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
+    fetchFeedback();
+  }, []);
   const totalSlides = 5;
   const [view, setView] = useState("Home");
-
-  const [visibleTestimonies, setVisibleTestimonies] = useState(1);
 
   const handleOpenRegisterModal = () => {
     setIsRegisterModalOpen(true);
@@ -267,6 +255,7 @@ const LandingPage = () => {
               </button>
               <button
                 className="rounded-full px-9 py-4 text-black  text-sm  font-medium"
+                onClick={() => setView("Services")}
                 style={{
                   background:
                     "linear-gradient(to right, #9BC8CA, #64c0c2, #2B8B8E)",
@@ -286,40 +275,55 @@ const LandingPage = () => {
                   Client Stories: Real Experiences, Real Results
                 </p>
 
-                <div
-                  className="mt-20 w-[80%] md:w-[40%] h-[200px] bg-white shadow-md rounded-lg p-6 border-b-4"
-                  style={{ borderColor: "#2C6975" }}
-                >
-                  {/* Show only the first testimony */}
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center ml-10">
-                      <div
-                        className="rounded-full h-10 w-10 flex items-center justify-center text-white"
-                        style={{ backgroundColor: "#2C6975" }}
-                      >
-                        <span className="font-bold text-lg">
-                          {testimonies[0].name.charAt(0)}
-                        </span>
+                {/* Show only the first testimony */}
+                {testimonies.length > 0 && (
+                  <div
+                    className="mt-20 w-[80%] md:w-[40%] h-[200px] bg-white shadow-md rounded-lg p-6 border-b-4"
+                    style={{ borderColor: "#2C6975" }}
+                  >
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center ml-10">
+                        <div
+                          className="rounded-full h-10 w-10 flex items-center justify-center text-white"
+                          style={{ backgroundColor: "#2C6975" }}
+                        >
+                          <span className="font-bold text-lg">
+                            {testimonies[0].displayName
+                              ? testimonies[0].email.charAt(0)
+                              : "A"}
+                          </span>
+                        </div>
+                        <div className="ml-4">
+                          <h3 className="font-semibold text-xl">
+                            {testimonies[0].displayName
+                              ? testimonies[0].email
+                              : "Anonymous"}
+                          </h3>
+                          <p className="text-gray-500 text-sm">
+                            {new Date(
+                              testimonies[0].createdAt
+                            ).toLocaleDateString()}
+                          </p>
+                        </div>
                       </div>
-                      <div className="ml-4">
-                        <h3 className="font-semibold text-xl">
-                          {testimonies[0].name}
-                        </h3>
-                        <p className="text-gray-500 text-sm">
-                          September 25, 2024
-                        </p>
+                      <div className="flex items-center">
+                        {[...Array(5)].map((_, i) => (
+                          <FaStar
+                            key={i}
+                            className={
+                              i < testimonies[0].rating
+                                ? "text-[#2C6975]"
+                                : "text-gray-300"
+                            }
+                          />
+                        ))}
                       </div>
                     </div>
-                    <div className="flex items-center">
-                      {[...Array(5)].map((_, i) => (
-                        <FaStar key={i} className="text-[#2C6975]" />
-                      ))}
-                    </div>
+                    <p className="text-gray-600 text-center">
+                      "{testimonies[0].feedback}"
+                    </p>
                   </div>
-                  <p className="text-gray-600 text-center">
-                    "{testimonies[0].text}"
-                  </p>
-                </div>
+                )}
 
                 {/* Update the View More button */}
                 <button
@@ -362,10 +366,16 @@ const LandingPage = () => {
         </>
       )}
       {view === "Testimonials" && (
-        <TestimonialsPage
-          testimonies={testimonies}
-          setView={() => setView("Home")}
-        />
+        <>
+          {loading ? (
+            <Skeleton />
+          ) : (
+            <TestimonialsPage
+              testimonies={testimonies}
+              setView={() => setView("Home")}
+            />
+          )}
+        </>
       )}
       {view === "About" && <About />}
       {view === "Services" && <Services />}
@@ -418,10 +428,13 @@ const LandingPage = () => {
             {/* Location Column */}
             <div>
               <h3 className="font-bold text-lg mb-4">Location</h3>
-              <p className="mb-2">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit
+              <p className="mb-2 flex items-center">
+                <LocationCityTwoTone />
+                Cebu City
               </p>
-              <p className="mb-4">Contact us: 0956 554 0992</p>
+              <p className="mb-4 flex items-center">
+                <PhoneAndroid /> +63 956 554 0992
+              </p>
             </div>
 
             {/* Keep Connected Column */}

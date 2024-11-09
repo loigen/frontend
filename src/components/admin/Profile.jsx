@@ -18,6 +18,7 @@ import { styled } from "@mui/material/styles";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import axios from "axios";
+import { fullWidth } from "validator/lib/isFullWidth";
 
 const PrimaryButton = styled(Button)(({ theme }) => ({
   backgroundColor: "#2c6975",
@@ -168,7 +169,7 @@ const Profile = ({ setView }) => {
   }
 
   return (
-    <Container component="main" maxWidth="sm">
+    <Container component="main" maxWidth="md">
       <Paper elevation={3} sx={{ padding: 4, borderRadius: 2 }}>
         {error && (
           <Typography color="error" gutterBottom>
@@ -231,6 +232,11 @@ const Profile = ({ setView }) => {
           noValidate
           autoComplete="off"
           onSubmit={(e) => e.preventDefault()}
+          sx={{
+            display: "grid",
+            gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" }, // 1 column on small, 2 columns on medium and up
+            gap: 2,
+          }}
         >
           <TextField
             label="First Name"
@@ -254,10 +260,33 @@ const Profile = ({ setView }) => {
               },
             }}
           />
+          {/* Repeat for each TextField as in your original code */}
           <TextField
             label="Last Name"
             name="lastname"
             value={formData.lastname}
+            onChange={handleInputChange}
+            disabled={!isEditing}
+            fullWidth
+            margin="normal"
+            variant="outlined"
+            sx={{
+              backgroundColor: "#f5f5f5",
+              borderRadius: 1,
+              "& .MuiOutlinedInput-root": {
+                "&:hover fieldset": {
+                  borderColor: "#4e8e9b",
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "#2c6975",
+                },
+              },
+            }}
+          />
+          <TextField
+            label="Middle Name"
+            name="middleName"
+            value={formData.middleName}
             onChange={handleInputChange}
             disabled={!isEditing}
             fullWidth
@@ -346,28 +375,7 @@ const Profile = ({ setView }) => {
               },
             }}
           />
-          <TextField
-            label="Middle Name"
-            name="middleName"
-            value={formData.middleName}
-            onChange={handleInputChange}
-            disabled={!isEditing}
-            fullWidth
-            margin="normal"
-            variant="outlined"
-            sx={{
-              backgroundColor: "#f5f5f5",
-              borderRadius: 1,
-              "& .MuiOutlinedInput-root": {
-                "&:hover fieldset": {
-                  borderColor: "#4e8e9b",
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "#2c6975",
-                },
-              },
-            }}
-          />
+
           <TextField
             label="Profession"
             name="Profession"
@@ -434,30 +442,14 @@ const Profile = ({ setView }) => {
               },
             }}
           />
-          <TextField
-            label="Sex"
-            name="sex"
-            value={formData.sex}
-            onChange={handleInputChange}
-            disabled={!isEditing}
-            fullWidth
-            margin="normal"
-            variant="outlined"
-            sx={{
-              backgroundColor: "#f5f5f5",
-              borderRadius: 1,
-              "& .MuiOutlinedInput-root": {
-                "&:hover fieldset": {
-                  borderColor: "#4e8e9b",
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "#2c6975",
-                },
-              },
-            }}
-          />
+
           {isEditing ? (
-            <Box display="flex" justifyContent="space-between" mt={2}>
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              mt={2}
+              gridColumn="span 2"
+            >
               <PrimaryButton
                 onClick={handleSaveChanges}
                 color="white"
@@ -468,7 +460,11 @@ const Profile = ({ setView }) => {
               <SecondaryButton onClick={handleCancel}>Cancel</SecondaryButton>
             </Box>
           ) : (
-            <PrimaryButton color="white" onClick={() => setIsEditing(true)}>
+            <PrimaryButton
+              color="white"
+              onClick={() => setIsEditing(true)}
+              sx={{ gridColumn: "span 2" }}
+            >
               Edit Profile
             </PrimaryButton>
           )}

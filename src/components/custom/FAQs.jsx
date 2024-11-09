@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import { ExpandMore, ExpandLess, ChevronLeft } from "@mui/icons-material";
+import {
+  ExpandMore,
+  ExpandLess,
+  ChevronLeft,
+  ChatBubbleOutline,
+} from "@mui/icons-material";
 import { IconButton, Button, Tooltip } from "@mui/material";
 
 const FAQSection = ({ setView, showBack }) => {
@@ -170,7 +175,7 @@ const FAQSection = ({ setView, showBack }) => {
   const displayedFAQs = showAll ? faqs : faqs.slice(0, 5);
 
   return (
-    <div className="faq-section w-full mt-10 max-w-3xl mx-auto py-8 px-4 bg-white text-[#2c6975] shadow-md rounded-lg">
+    <div className="faq-section w-full mt-10 mx-auto py-8 px-10  text-[#2c6975] shadow-md rounded-lg">
       {showBack && (
         <p
           onClick={() => setView("settings")}
@@ -181,17 +186,22 @@ const FAQSection = ({ setView, showBack }) => {
           </Tooltip>
         </p>
       )}
-      <h2 className="text-2xl font-semibold text-center mb-8 text-[#2c6975]">
+
+      <h2 className="text-2xl font-semibold text-left mb-2 text-[#000]">
         Frequently Asked Questions
       </h2>
+      <div className="flex flex-row gap-2 text-[black] mb-8 font-semibold">
+        <ChatBubbleOutline sx={{ color: "#2c6975" }} />
+        <p>Still need help? chat with us.</p>
+      </div>
       <div
-        className="faq-list space-y-3 h-[50vh] "
+        className="faq-list grid grid-cols-2 gap-2 text-black"
         style={{ overflowY: showAll ? "scroll" : "" }}
       >
         {displayedFAQs.map((faq, index) => (
           <div
             key={index}
-            className="faq-item border border-[#2c6975] rounded-lg p-4 transition duration-300 ease-in-out hover:bg-[#f1f6f9]"
+            className="faq-item rounded-lg p-4 transition duration-300 ease-in-out hover:bg-[#f1f6f9]"
           >
             <div
               className="flex justify-between items-center cursor-pointer"
@@ -210,14 +220,14 @@ const FAQSection = ({ setView, showBack }) => {
           </div>
         ))}
       </div>
-      <div className="text-center mt-6">
+      <div className="text-right mt-6">
         <Button
           variant="contained"
           onClick={() => setShowAll(!showAll)}
           sx={{ background: "#2c6975" }}
           className=" text-white hover:bg-[#1f4e58]"
         >
-          {showAll ? "View Less" : "View All"}
+          {showAll ? "Load Less" : "Load More"}
         </Button>
       </div>
     </div>
