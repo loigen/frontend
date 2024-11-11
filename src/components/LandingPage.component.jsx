@@ -491,7 +491,7 @@ const LandingPage = () => {
       />
 
       {view === "guestBlog" && (
-        <div className="mt-[3%]">
+        <div className="mt-[5%]">
           <BlogGuestPage />
         </div>
       )}

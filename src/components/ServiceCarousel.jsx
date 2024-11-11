@@ -1,3 +1,4 @@
+// import { AnimatePresence, motion } from "framer-motion";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
