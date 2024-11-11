@@ -63,9 +63,10 @@ export const ChatContextProvider = ({ children, user }) => {
     if (socket == null || user == null) return;
 
     socket.on("getMessage", (res) => {
-      if (currentChat?._id !== res.chatId) return;
-
-      setMessages((prev) => [...prev, res]);
+      console.log("Message received:", res);
+      if (currentChat?._id === res.chatId) {
+        setMessages((prev) => [...prev, res]);
+      }
     });
 
     socket.on("getNotification", (res) => {
