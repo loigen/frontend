@@ -5,7 +5,7 @@ import axios from "axios";
 export const fetchDailyAppointments = async () => {
   try {
     const response = await axios.get(
-      `https://backend-production-c8da.up.railway.app/Appointments/api/daily`
+      `https://backend-vp67.onrender.com/Appointments/api/daily`
     );
     return response.data;
   } catch (error) {

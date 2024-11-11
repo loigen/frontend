@@ -27,8 +27,8 @@ const UserDashboard = ({ children }) => {
       <div>
         <Topbar />
       </div>
-      <div className="contentBody flex flex-row justify-between h-full">
-        <div className="sidebarWrapper">
+      <div className="flex flex-row justify-between h-full">
+        <div style={{ zIndex: 100 }}>
           <Sidebar />
         </div>
         <div

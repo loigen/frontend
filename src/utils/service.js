@@ -1,4 +1,4 @@
-export const baseUrl = `${process.env.REACT_APP_API_URL}/api`;
+export const baseUrl = `https://backend-vp67.onrender.com/api`;
 
 export const postRequest = async (url, body) => {
   const response = await fetch(url, {

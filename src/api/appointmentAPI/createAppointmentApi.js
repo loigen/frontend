@@ -1,10 +1,11 @@
 import axios from "axios";
 import Swal from "sweetalert2";
+const API_URL = "https://backend-vp67.onrender.com";
 
 export const createAppointment = async (appointmentData) => {
   try {
     const response = await axios.post(
-      `https://backend-production-c8da.up.railway.app/Appointments/api/appointments`,
+      `${API_URL}/Appointments/api/appointments`,
       appointmentData,
       {
         withCredentials: true,

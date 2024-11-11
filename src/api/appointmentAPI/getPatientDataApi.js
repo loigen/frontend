@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 export const getPatientData = async () => {
   try {
     const response = await fetch(
-      `https://backend-production-c8da.up.railway.app/Appointments/api/data`
+      `https://backend-vp67.onrender.com/Appointments/api/data`
     );
     if (!response.ok) {
       throw new Error("Network response was not ok");

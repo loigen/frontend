@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://backend-production-c8da.up.railway.app/Appointments/api",
+  baseURL: "https://backend-vp67.onrender.com/Appointments/api",
 });
 
 export const markAppointmentAsCompleted = async (appointmentId) => {

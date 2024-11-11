@@ -68,7 +68,7 @@ const AppointmentStats = () => {
     return appointments.slice(0, 5).map((appointment, index) => (
       <Avatar
         key={index}
-        src={appointment.avatar}
+        src={appointment.user.profilePicture}
         alt="Profile"
         sx={{
           width: 40,

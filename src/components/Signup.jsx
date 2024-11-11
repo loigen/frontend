@@ -182,7 +182,7 @@ const SignupModal = ({ open, onClose, handleOpenLoginModal }) => {
 
     try {
       const response = await axios.post(
-        `https://backend-production-c8da.up.railway.app/auth/signup`,
+        `https://backend-vp67.onrender.com/auth/signup`,
         {
           firstname,
           lastname,

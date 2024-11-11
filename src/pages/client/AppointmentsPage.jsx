@@ -5,7 +5,9 @@ import { createAppointment } from "../../api/appointmentAPI/createAppointmentApi
 import { updateSlotStatus } from "../../api/schedulesAPI/updateSlotStatus";
 import { LoadingSpinner } from "../../components/custom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import paypal from "../../images/PayPal.png";
+import UBQR from "../../images/UB.png";
+import paypal from "../../images/UBLogo.png";
+import gcashQR from "../../images/GcashQR.png";
 import gcash from "../../images/GCash.png";
 import {
   Box,
@@ -15,6 +17,7 @@ import {
   FormControlLabel,
   Grid,
   MenuItem,
+  Modal,
   Radio,
   RadioGroup,
   Select,
@@ -73,30 +76,69 @@ const AppointmentsPage = () => {
   const [briefDetails, setBriefDetails] = useState("");
   const [consultationMethod, setConsultationMethod] = useState("");
   const fileInputRef = useRef(null); // Create a ref for the file input
+  const [appointmentPrice, setAppointmentPrice] = useState(0);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [appointmentDescription, setAppointmentDescription] = useState("");
+
+  const handleSelectAppointment = (type) => {
+    setAppointmentType(type.value);
+    setAppointmentPrice(type.price);
+    setAppointmentDescription(type.description);
+    handleOpenModal();
+  };
+
+  // Function to open and close modal
+  const handleOpenModal = () => setModalOpen(true);
+  const handleCloseModal = () => setModalOpen(false);
   const handleReplaceFile = () => {
     fileInputRef.current.click();
   };
   const appointmentTypes = [
-    { value: "", label: "Select an appointment type" },
+    { value: "", label: "Select an appointment type", description: "" },
     {
       value: "Individual Counceling",
-      label: "Individual Counceling",
-      price: 540,
+      label: "Individual Counseling",
+      price: 1000,
+      description:
+        "This service is ideal for anyone dealing with personal challenges, mental health concerns, or wanting to improve their self-awareness and well-being. Dr. Jeb will work one-on-one with you, offering a safe space to explore your thoughts, feelings, and experiences. Sessions focus on understanding personal struggles, developing healthy coping strategies, and fostering growth. This service is especially helpful for managing anxiety, stress, or self-esteem issues.",
     },
-    { value: "Family Counceling", label: "Family Counceling", price: 350 },
-    { value: "Couple Counceling", label: "Couple Counceling", price: 450 },
-    { value: "Therapy", label: "Therapy", price: 450 },
+    {
+      value: "Family Counceling",
+      label: "Family Counseling",
+      price: 2000,
+      description:
+        "Family counseling is geared toward families looking to improve communication, resolve conflicts, or work through complex family dynamics. Dr. Jeb provides a supportive environment where family members can openly discuss their issues, learn effective communication skills, and find solutions together. This service is useful for families experiencing ongoing conflicts, dealing with significant life changes, or aiming to strengthen family bonds.",
+    },
+    {
+      value: "Couple Counceling",
+      label: "Couple Counseling",
+      price: 1500,
+      description:
+        "Couple counseling is perfect for partners seeking to enhance their relationship, resolve conflicts, or reconnect emotionally. Dr. Jeb helps couples improve their communication, understand each other's perspectives, and develop healthy ways to navigate challenges. This service is valuable for managing conflicts, handling significant relationship changes, or building a more supportive and resilient partnership.",
+    },
+    {
+      value: "Therapy",
+      label: "Therapy",
+      price: 2000,
+      description:
+        "Therapy is tailored for individuals who need deeper support with mental health conditions like depression, trauma, or chronic anxiety. Dr. Jeb’s therapeutic approach provides a safe, empathetic space to work through painful emotions, understand past experiences, and develop healthier thought patterns and behaviors. Therapy sessions aim to help you achieve lasting mental and emotional well-being.",
+    },
     {
       value: "Psychological Report",
       label: "Psychological Report",
-      price: 450,
+      price: 10000,
+      description:
+        "A psychological report service is often needed for legal or official purposes, like for annulment or adoption cases. Dr. Jeb conducts a thorough assessment to provide a detailed psychological report that supports your needs in legal or other formal situations. The report is based on standardized assessments and insights gained through sessions, ensuring a professional evaluation that meets specific requirements.",
     },
     {
       value: "Seminars and WorkShop",
-      label: "Seminars and WorkShop",
-      price: 450,
+      label: "Seminars and Workshop",
+      price: 1000,
+      description:
+        "Dr. Jeb’s seminars and workshops cover a range of mental health topics, offering psychoeducation to individuals or groups interested in learning more about mental wellness. These sessions may cover stress management, self-care techniques, and more. Whether you’re looking to improve your own mental health or gain knowledge for personal growth, these workshops provide valuable tools and information.",
     },
   ];
+
   const handleHistoryChange = (event) => {
     setHistoryOfIntervention(event.target.value === "Yes");
   };
@@ -128,6 +170,14 @@ const AppointmentsPage = () => {
     loadAvailableSlots();
   }, []);
   const handleProceed = () => {
+    if (historyOfIntervention && !briefDetails) {
+      Swal.fire({
+        icon: "warning",
+        title: "No Breif Details Slot",
+        text: "Please provide breif details!",
+      });
+      return;
+    }
     if (!selectedSlot) {
       Swal.fire({
         icon: "warning",
@@ -146,7 +196,14 @@ const AppointmentsPage = () => {
       Swal.fire({
         icon: "warning",
         title: "No Consultaion Method",
-        text: "Please Provide primary complaint!",
+        text: "Please Provide Consultaion Method!",
+      });
+      return;
+    } else if (!appointmentType) {
+      Swal.fire({
+        icon: "warning",
+        title: "No Appointment Type",
+        text: "Please Provide Appointment Type!",
       });
       return;
     } else if (!agreementChecked) {
@@ -209,6 +266,7 @@ const AppointmentsPage = () => {
       appointmentData.append("date", selectedSlot.date);
       appointmentData.append("time", selectedSlot.time);
       appointmentData.append("appointmentType", appointmentType);
+      appointmentData.append("TotalPayment", appointmentPrice);
       appointmentData.append("userId", user._id);
       appointmentData.append("firstname", user.firstname);
       appointmentData.append("lastname", user.lastname);
@@ -313,7 +371,7 @@ const AppointmentsPage = () => {
                   {appointmentTypes.slice(1).map((type) => (
                     <Box
                       key={type.value}
-                      onClick={() => setAppointmentType(type.value)}
+                      onClick={() => handleSelectAppointment(type)}
                       display="flex"
                       flexDirection="row"
                       justifyContent="space-between"
@@ -344,6 +402,49 @@ const AppointmentsPage = () => {
                       <p className="text-teal-600">₱ {type.price}</p>
                     </Box>
                   ))}
+
+                  {/* Modal to display appointment details */}
+                  <Modal open={modalOpen} onClose={handleCloseModal}>
+                    <Box
+                      sx={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                        width: 400,
+                        bgcolor: "background.paper",
+                        borderRadius: 2,
+                        boxShadow: 24,
+                        p: 4,
+                      }}
+                    >
+                      <Typography
+                        variant="h6"
+                        component="h2"
+                        fontWeight="bold"
+                        color="#2D4B40"
+                      >
+                        {appointmentType} - ₱{appointmentPrice}
+                      </Typography>
+                      <Typography sx={{ mt: 1 }} color="#2D4B40">
+                        {appointmentDescription}
+                      </Typography>
+                      <div className="flex justify-end">
+                        <Button
+                          variant="contained"
+                          sx={{
+                            mt: 2,
+                            bgcolor: "#2D4B40",
+                            borderRadius: "100px",
+                            paddingX: "20px",
+                          }}
+                          onClick={handleCloseModal}
+                        >
+                          Done
+                        </Button>
+                      </div>
+                    </Box>
+                  </Modal>
                 </Box>
               </Box>
 
@@ -366,7 +467,7 @@ const AppointmentsPage = () => {
                     <Skeleton />
                   ) : getAvailableSlotsForSelectedDate().length === 0 ? (
                     <Typography
-                      variant="body1"
+                      variant="body"
                       sx={{
                         textAlign: "center",
                         margin: "10px",
@@ -674,17 +775,26 @@ const AppointmentsPage = () => {
                   <p>
                     <strong>Total Payment:</strong> ₱ {price}
                   </p>
-                  <Box display="flex" flexDirection="row" flexWrap="wrap">
-                    <div className="bg-white shadow-2xl px-2 py-1">
+                  <Box
+                    display="flex"
+                    flexDirection="row"
+                    justifyContent="space-between"
+                    flexWrap="wrap"
+                  >
+                    <div className=" py-1">
                       <img src={gcash} alt="" />
                     </div>
-                    gcash QR here
+                    <div className="w-[80%]  py-1">
+                      <img width={300} src={gcashQR} alt="" />
+                    </div>
                   </Box>
                   <Box display="flex" flexDirection="row" flexWrap="wrap">
-                    <div className="bg-white shadow-2xl px-2 py-1">
-                      <img src={paypal} alt="" />
+                    <div className="  py-1">
+                      <img width={100} src={paypal} alt="" />
                     </div>
-                    paypal QR here
+                    <div className="w-[80%]   py-1">
+                      <img width={300} src={UBQR} alt="" />
+                    </div>
                   </Box>
                 </Box>
                 <Box
@@ -703,6 +813,7 @@ const AppointmentsPage = () => {
                 >
                   <div>
                     <Typography variant="p">
+                      <strong>STEP 3:</strong>
                       Upload your proof of payment using the button below to
                       confirm your appointment.
                     </Typography>

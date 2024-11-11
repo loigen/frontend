@@ -12,7 +12,7 @@ export const rescheduleAppointment = async (
     console.log("New Time:", newTime); // Debugging line
 
     const response = await axios.put(
-      `https://backend-production-c8da.up.railway.app/Appointments/api/${appointmentId}/reschedule`,
+      `https://backend-vp67.onrender.com/Appointments/api/${appointmentId}/reschedule`,
       {
         newDate,
         newTime,

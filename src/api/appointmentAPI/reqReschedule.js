@@ -1,4 +1,5 @@
 import axios from "axios";
+import Swal from "sweetalert2";
 
 export const reqRescheduleAppointment = async (
   appointmentId,
@@ -7,7 +8,7 @@ export const reqRescheduleAppointment = async (
 ) => {
   try {
     const response = await axios.put(
-      `https://backend-production-c8da.up.railway.app/Appointments/api/${appointmentId}/reqReschedule`,
+      `https://backend-vp67.onrender.com/Appointments/api/${appointmentId}/reqReschedule`,
       {
         newDate,
         newTime,
@@ -19,15 +20,33 @@ export const reqRescheduleAppointment = async (
       }
     );
 
+    // Show success notification
+    Swal.fire({
+      icon: "success",
+      title: "Reschedule Requested",
+      text: "Your reschedule request has been submitted successfully.",
+      confirmButtonColor: "#2c6975",
+    });
+
     return response.data;
   } catch (error) {
     console.error("Error requesting reschedule appointment:", error);
 
-    // Handle axios error with detailed response
-    if (error.response && error.response.data && error.response.data.message) {
-      throw new Error(error.response.data.message);
-    } else {
-      throw new Error("Failed to request reschedule appointment.");
-    }
+    // Show error notification
+    Swal.fire({
+      icon: "error",
+      title: "Reschedule Failed",
+      text:
+        error.response && error.response.data && error.response.data.message
+          ? error.response.data.message
+          : "Failed to request reschedule appointment.",
+      confirmButtonColor: "#2c6975",
+    });
+
+    throw new Error(
+      error.response && error.response.data && error.response.data.message
+        ? error.response.data.message
+        : "Failed to request reschedule appointment."
+    );
   }
 };

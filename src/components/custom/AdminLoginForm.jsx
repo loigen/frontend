@@ -12,7 +12,7 @@ import {
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 // const API_URL = "http://localhost:5000";
-const API_URL = "https://backend-production-c8da.up.railway.app";
+const API_URL = "https://backend-vp67.onrender.com";
 const MAX_ATTEMPTS = 5;
 const LOCKOUT_DURATION = 3 * 60 * 60 * 1000;
 

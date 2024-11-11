@@ -12,8 +12,8 @@ import {
 import axios from "axios";
 import SweetAlert from "sweetalert2";
 
-const API_URL = "http://localhost:5000"; // Use localhost for development
-// const API_URL = "https://backend-production-c8da.up.railway.app"; // Uncomment this for production
+// const API_URL = "http://localhost:5000"; // Use localhost for development
+const API_URL = "https://backend-vp67.onrender.com"; // Uncomment this for production
 
 const AdminUserForm = () => {
   const [formData, setFormData] = useState({

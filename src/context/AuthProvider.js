@@ -9,7 +9,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const API_URL = "https://backend-production-c8da.up.railway.app";
+  const API_URL = "https://backend-vp67.onrender.com";
 
   useEffect(() => {
     const token = localStorage.getItem("token");

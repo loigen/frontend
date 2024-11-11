@@ -83,6 +83,10 @@ const PatientList = ({
               Type of Counseling
             </TableCell>
             <TableCell sx={{ fontWeight: "bold" }}>Sex</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>
+              Consultation Method
+            </TableCell>
+
             <TableCell sx={{ fontWeight: "bold" }} align="right">
               Actions
             </TableCell>
@@ -139,6 +143,8 @@ const PatientList = ({
 
                 <TableCell>{patient.typeOfCounseling}</TableCell>
                 <TableCell>{patient.user.sex}</TableCell>
+                <TableCell>{patient.consultationMethod}</TableCell>
+
                 <TableCell align="right">
                   <Tooltip title="More options" arrow>
                     <IconButton

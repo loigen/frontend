@@ -65,7 +65,7 @@ const Contact = () => {
 
   return (
     <div>
-      <div className="flex min-h-[100%] mt-3 flex-col items-center justify-center">
+      <div className="flex min-h-[100%] flex-col items-center justify-center mt-20">
         <div className="text-center mb-10">
           <h1 className="text-4xl font-semibold text-[#2C6975]">Contact Us</h1>
           <p className="text-gray-500">

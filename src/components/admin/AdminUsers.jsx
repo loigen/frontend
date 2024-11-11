@@ -32,7 +32,7 @@ const AdminUsers = () => {
     const fetchAdminUsers = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/user/adminUsers"
+          "https://backend-vp67.onrender.com/user/adminUsers"
         );
         setAdminUsers(response.data);
       } catch (err) {

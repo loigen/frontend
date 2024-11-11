@@ -150,7 +150,7 @@ const Sidebar = () => {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            gap: "3px", // 3px gap between each link
+            gap: "5px", // 3px gap between each link
             overflow: "hidden",
           }}
         >
@@ -193,7 +193,7 @@ const Sidebar = () => {
                   justifyContent: "center",
                   alignContent: "center",
                   minWidth: open ? "auto" : 56,
-                  color: location.pathname === item.link ? "white" : "#2C6975"
+                  color: location.pathname === item.link ? "white" : "#2C6975",
                 }}
               >
                 {item.icon}

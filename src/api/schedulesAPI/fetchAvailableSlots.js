@@ -5,7 +5,7 @@ import axios from "axios";
 export const fetchAvailableSlots = async () => {
   try {
     const response = await axios.get(
-      `https://backend-production-c8da.up.railway.app/schedules/slots`,
+      `https://backend-vp67.onrender.com/schedules/slots`,
       { withCredentials: true }
     );
     return response.data;

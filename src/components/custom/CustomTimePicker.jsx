@@ -25,7 +25,7 @@ const CustomTimePicker = ({
     const fetchAppointments = async () => {
       try {
         const response = await axios.get(
-          `https://backend-production-c8da.up.railway.app/Appointments/api/get-appointments`,
+          `https://backend-vp67.onrender.com/Appointments/api/get-appointments`,
           {
             params: {
               date: selectedDate,
@@ -59,7 +59,7 @@ const CustomTimePicker = ({
 
     try {
       const conflictResponse = await axios.get(
-        `https://backend-production-c8da.up.railway.app/Appointments/api/check-time`,
+        `https://backend-vp67.onrender.com/Appointments/api/check-time`,
         {
           params: {
             date: selectedDate,

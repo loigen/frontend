@@ -62,10 +62,10 @@ const AppointmentRequest = () => {
     if (confirmation.isConfirmed) {
       try {
         await axios.patch(
-          `https://backend-production-c8da.up.railway.app/Appointments/api/reject/${id}`
+          `https://backend-vp67.onrender.com/Appointments/api/reject/${id}`
         );
         await axios.patch(
-          `https://backend-production-c8da.up.railway.app/schedules/updateByDateTime`,
+          `https://backend-vp67.onrender.com/schedules/updateByDateTime`,
           { date, time }
         );
 
@@ -149,7 +149,7 @@ const AppointmentRequest = () => {
     if (appointmentToAccept) {
       try {
         await axios.patch(
-          `https://backend-production-c8da.up.railway.app/Appointments/api/accept/${appointmentToAccept._id}`,
+          `https://backend-vp67.onrender.com/Appointments/api/accept/${appointmentToAccept._id}`,
           {
             meetLink: validMeetLink,
             meetPlace: "",
@@ -196,7 +196,7 @@ const AppointmentRequest = () => {
     if (appointmentToAccept) {
       try {
         await axios.patch(
-          `https://backend-production-c8da.up.railway.app/Appointments/api/accept/${appointmentToAccept._id}`,
+          `https://backend-vp67.onrender.com/Appointments/api/accept/${appointmentToAccept._id}`,
           {
             meetPlace: meetPlace,
             meetLink: "",
@@ -229,7 +229,7 @@ const AppointmentRequest = () => {
     const fetchAppointments = async () => {
       try {
         const response = await axios.get(
-          `https://backend-production-c8da.up.railway.app/Appointments/api/pending`
+          `https://backend-vp67.onrender.com/Appointments/api/pending`
         );
         setAppointments(response.data);
       } catch (err) {

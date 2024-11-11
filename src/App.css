@@ -5,6 +5,19 @@
   scroll-behavior: smooth;
   font-family: "Poppins", sans-serif;
 }
+
+@media (min-width: 1024px) {
+  * {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 768px) {
+  * {
+    font-size: 15px;
+  }
+}
+
 /* For the OK button background */
 .swal2-confirm {
   background-color: #2c6975 !important;

@@ -1,7 +1,7 @@
 import Swal from "sweetalert2";
 import axios from "axios";
 
-const API_BASE_URL = `https://backend-production-c8da.up.railway.app`;
+const API_BASE_URL = `https://backend-vp67.onrender.com`;
 
 // Count free slots
 export const countFreeSlots = async () => {

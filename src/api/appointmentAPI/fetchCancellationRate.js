@@ -4,7 +4,7 @@ import Swal from "sweetalert2";
 export const fetchCancellationRate = async () => {
   try {
     const response = await axios.get(
-      `https://backend-production-c8da.up.railway.app/Appointments/api/cancellation-rate`
+      `https://backend-vp67.onrender.com/Appointments/api/cancellation-rate`
     );
     return response.data.cancellationRate;
   } catch (error) {

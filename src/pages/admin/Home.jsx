@@ -25,7 +25,7 @@ import { fetchUserCount } from "../../api/appointmentAPI/fetchUserCount";
 import { fetchCancellationRate } from "../../api/appointmentAPI/fetchCancellationRate";
 import { fetchCompletionRate } from "../../api/appointmentAPI/fetchCompletionRate";
 import { Close } from "@mui/icons-material";
-const API_URL = `https://backend-production-c8da.up.railway.app`;
+const API_URL = `https://backend-vp67.onrender.com`;
 
 const Home = () => {
   const [userCount, setUserCount] = useState(0);
@@ -143,8 +143,7 @@ const Home = () => {
   };
   return (
     <>
-      <div className="min-h-screen w-full h-full pt-16 pr-14 pl-14 pb-14">
-        {/* Top Stats */}
+      <div className="min-h-screen w-full mt-10 h-full pt-20 pr-14 pl-14 pb-14">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
           <div className="w-full max-w-[333px] h-[119px] bg-[#FFFFFF] p-4 rounded-lg flex items-center justify-center shadow-lg">
             <div className="relative w-16 h-16 rounded overflow-hidden">
@@ -167,7 +166,9 @@ const Home = () => {
               <b className="flex items-center justify-center h-full w-fit text-left text-1xl font-poppins">
                 {userCount}
               </b>
-              <p className="text-sm capitalize font-poppins">patients</p>
+              <p className="text-sm md:text-md capitalize font-poppins">
+                patients
+              </p>
             </div>
           </div>
 

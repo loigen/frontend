@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 export const fetchUserProfile = async () => {
   try {
     const response = await axios.get(
-      `https://backend-production-c8da.up.railway.app/user/profile`,
+      `https://backend-vp67.onrender.com/user/profile`,
       { withCredentials: true }
     );
     return response.data.user;

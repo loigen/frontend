@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://backend-production-c8da.up.railway.app/api/chats";
+const API_URL = "https://backend-vp67.onrender.com/api/chats";
 
 export const deleteChat = async (chatId) => {
   try {

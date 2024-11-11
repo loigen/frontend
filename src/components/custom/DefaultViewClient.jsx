@@ -5,7 +5,17 @@ import LoadingSpinner from "./LoadingSpinner";
 import { useAuth } from "../../context/AuthProvider";
 import { fetchAppointmentsByUserId } from "../../api/appointmentAPI/fetchAppointmentsByUserId";
 import { reqRescheduleAppointment } from "../../api/appointmentAPI/reqReschedule";
-
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  Skeleton,
+  Typography,
+} from "@mui/material";
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
+import { fetchAvailableSlots } from "../../api/schedulesAPI/fetchAvailableSlots";
 const ActiveAppointments = () => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -13,10 +23,14 @@ const ActiveAppointments = () => {
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const { user } = useAuth();
   const [isModalOpen, setModalOpen] = useState(false);
-  const [isRescheduleModalOpen, setRescheduleModalOpen] = useState(false);
   const [rescheduleDate, setRescheduleDate] = useState("");
   const [rescheduleTime, setRescheduleTime] = useState("");
-
+  const [availableSlots, setAvailableSlots] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedSlot, setSelectedSlot] = useState(null);
+  const [isRescheduleModalOpen, setRescheduleModalOpen] = useState(false);
+  const today = new Date();
+  const todayStr = today.toLocaleDateString();
   useEffect(() => {
     const getAppointments = async () => {
       if (!user) return;
@@ -33,7 +47,14 @@ const ActiveAppointments = () => {
 
     getAppointments();
   }, [user]);
-
+  const todayAppointments = appointments.filter((appointment) => {
+    const appointmentDateStr = new Date(appointment.date).toLocaleDateString();
+    return appointmentDateStr === todayStr;
+  });
+  const notTodayAppointments = appointments.filter((appointment) => {
+    const appointmentDateStr = new Date(appointment.date).toLocaleDateString();
+    return appointmentDateStr !== todayStr;
+  });
   const handleOpenModal = (appointment) => {
     setSelectedAppointment(appointment);
     setModalOpen(true);
@@ -44,26 +65,14 @@ const ActiveAppointments = () => {
     setSelectedAppointment(null);
   };
 
-  const openRescheduleModal = (appointment) => {
-    setSelectedAppointment(appointment);
-    setRescheduleModalOpen(true);
-  };
-
-  const closeRescheduleModal = () => {
-    setRescheduleModalOpen(false);
-    setSelectedAppointment(null);
-    setRescheduleDate("");
-    setRescheduleTime("");
-  };
-
   const handleRescheduleAppointment = async () => {
-    if (!selectedAppointment || !rescheduleDate || !rescheduleTime) return;
+    if (!selectedAppointment || !selectedSlot) return;
 
     try {
       await reqRescheduleAppointment(
         selectedAppointment._id,
-        rescheduleDate,
-        rescheduleTime
+        selectedDate,
+        selectedSlot
       );
       closeRescheduleModal();
       setLoading(false);
@@ -72,13 +81,56 @@ const ActiveAppointments = () => {
     }
   };
 
+  const openRescheduleModal = (appointment) => {
+    setSelectedAppointment(appointment);
+    setRescheduleModalOpen(true);
+  };
+
+  const closeRescheduleModal = () => {
+    setRescheduleModalOpen(false);
+    setSelectedAppointment(null);
+    setSelectedDate(new Date());
+    setSelectedSlot(null);
+  };
+
+  useEffect(() => {
+    loadAvailableSlots();
+  }, []);
+
+  const loadAvailableSlots = async () => {
+    try {
+      const slots = await fetchAvailableSlots();
+      setAvailableSlots(slots);
+    } catch (error) {
+      console.error("Error loading available slots:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getAvailableSlotsForSelectedDate = () => {
+    const selectedDateStr = selectedDate.toLocaleDateString();
+    return availableSlots.filter(
+      (slot) => new Date(slot.date).toLocaleDateString() === selectedDateStr
+    );
+  };
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+    setSelectedSlot(null);
+  };
+
+  const handleSlotClick = (slot) => {
+    setSelectedSlot(slot.time);
+  };
+
   if (loading) return <LoadingSpinner />;
   if (error) return <div>Error: {error}</div>;
 
-  const acceptedAppointments = appointments.filter(
-    (appointment) => appointment.status === "accepted"
+  const acceptedAppointments = todayAppointments.filter(
+    (appointment) => appointment.status === "accepted" || "rescheduled"
   );
-  const rescheduledAppointments = appointments.filter(
+  const rescheduledAppointments = notTodayAppointments.filter(
     (appointment) => appointment.status === "rescheduled"
   );
   const requestedRescheduledAppointments = appointments.filter(
@@ -96,7 +148,7 @@ const ActiveAppointments = () => {
           Today's Active Appointments
         </h3>
         {acceptedAppointments.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4">
             {acceptedAppointments.map((appointment) => (
               <AppointmentCard
                 key={appointment._id}
@@ -205,24 +257,52 @@ const ActiveAppointments = () => {
               >
                 Appointment Info
               </h2>
-              <p id="appointment-info-description" className="text-sm mb-2">
-                <strong>Date:</strong>{" "}
-                {new Date(selectedAppointment.date).toLocaleString("en-US", {
-                  weekday: "long",
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                  hour: "numeric",
-                  minute: "numeric",
-                  hour12: true,
-                })}
+              <p
+                id="appointment-info-description"
+                className="text-sm mb-2 flex flex-col gap-6"
+              >
+                <p className="capitalize">
+                  <strong>Name:</strong> {selectedAppointment.firstname}{" "}
+                  {selectedAppointment.lastname}
+                </p>
+                <p>
+                  <strong>Email Address:</strong> {selectedAppointment.email}
+                </p>
+                <p className="capitalize">
+                  <strong>Complaint:</strong>{" "}
+                  {selectedAppointment.primaryComplaint}
+                </p>
+                <p className="capitalize">
+                  <strong>Service Availed:</strong>{" "}
+                  {selectedAppointment.appointmentType}
+                </p>
+                <p className="capitalize">
+                  <strong>History of Intervention:</strong>{" "}
+                  {selectedAppointment.historyOfIntervention !== "false"
+                    ? selectedAppointment.historyOfIntervention
+                    : "N/A"}
+                </p>
+                <p className="capitalize">
+                  <strong>Preferred Schedule:</strong>{" "}
+                  {new Date(selectedAppointment.date).toLocaleString("en-US", {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                  <span> - </span>
+                  {selectedAppointment.time}
+                </p>
+                <p className="capitalize">
+                  <strong>Preferred Consultation Method:</strong>{" "}
+                  {selectedAppointment.consultationMethod}
+                </p>
+                <p>
+                  <strong>Total Payment:</strong> ₱
+                  {selectedAppointment.TotalPayment}
+                </p>
               </p>
-              <p className="text-sm mb-2">
-                <strong>Service Type:</strong> {selectedAppointment.serviceType}
-              </p>
-              <p className="text-sm mb-2">
-                <strong>Status:</strong> {selectedAppointment.status}
-              </p>
+
               <button
                 onClick={handleCloseModal}
                 className="bg-[#2C6975] text-white px-4 py-2 rounded-lg mt-4"
@@ -235,48 +315,77 @@ const ActiveAppointments = () => {
       </Modal>
 
       {/* Modal for rescheduling appointments */}
-      <Modal
+
+      <Dialog
         open={isRescheduleModalOpen}
         onClose={closeRescheduleModal}
-        aria-labelledby="reschedule-appointment-title"
+        maxWidth="sm"
       >
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-lg shadow-lg">
-          <h2
-            id="reschedule-appointment-title"
-            className="text-xl font-semibold mb-4"
-          >
-            Request Reschedule Appointment
-          </h2>
-          <input
-            type="date"
-            value={rescheduleDate}
-            onChange={(e) => setRescheduleDate(e.target.value)}
-            min={new Date().toISOString().split("T")[0]} // Set min to today's date
-            className="border p-2 mb-4 w-full"
-          />
+        <Box sx={{ mb: 3, flex: 1, padding: 2 }} className="shadow-2xl">
+          <Typography variant="h6" fontWeight={500} mb={2}>
+            Select your preferred schedule here
+          </Typography>
+          <Box padding={2}>
+            <Calendar
+              onChange={handleDateChange}
+              value={selectedDate}
+              minDate={new Date()}
+              className="custom-calendar bg-transparent"
+            />
+          </Box>
+          <Typography variant="body2">Available Time Slots</Typography>
+          <Box>
+            {loading ? (
+              <Skeleton />
+            ) : getAvailableSlotsForSelectedDate().length === 0 ? (
+              <Typography
+                variant="body2"
+                sx={{ textAlign: "center", margin: "10px", color: "#888" }}
+              >
+                No available slots for the selected date.
+              </Typography>
+            ) : (
+              getAvailableSlotsForSelectedDate().map((slot) => (
+                <Button
+                  key={slot._id}
+                  variant={
+                    selectedSlot === slot.time ? "contained" : "outlined"
+                  }
+                  onClick={() => handleSlotClick(slot)}
+                  sx={{
+                    margin: "5px",
+                    backgroundColor:
+                      selectedSlot === slot.time ? "#2c6975" : "inherit",
+                    color: selectedSlot === slot.time ? "#fff" : "inherit",
+                  }}
+                >
+                  {slot.time}
+                </Button>
+              ))
+            )}
+          </Box>
 
-          <input
-            type="time"
-            value={rescheduleTime}
-            onChange={(e) => setRescheduleTime(e.target.value)}
-            className="border p-2 mb-4 w-full"
-          />
-          <div className="flex flex-row gap-2">
-            <button
+          <DialogActions>
+            <Button
               onClick={handleRescheduleAppointment}
-              className="bg-[#2C6975] text-white px-4 py-2 rounded-lg mt-4"
+              disabled={!selectedSlot}
+              sx={{
+                backgroundColor: selectedSlot ? "#2c6975" : "gray",
+                color: selectedSlot ? "white" : "",
+              }}
             >
-              Confirm Request
-            </button>
-            <button
+              Confirm Reschedule
+            </Button>
+            <Button
+              variant="outlined"
               onClick={closeRescheduleModal}
-              className="text-gray-500 px-4 py-2 mt-4  border rounded-lg border-[#2C6975]"
+              sx={{ color: "#4a8e8b" }}
             >
               Cancel
-            </button>
-          </div>
-        </div>
-      </Modal>
+            </Button>
+          </DialogActions>
+        </Box>
+      </Dialog>
     </>
   );
 };
@@ -296,10 +405,9 @@ const AppointmentCard = ({
           year: "numeric",
           month: "long",
           day: "numeric",
-          hour: "numeric",
-          minute: "numeric",
-          hour12: true,
         })}
+        <span> - </span>
+        {appointment.time}
       </p>
       <button
         className="absolute top-4 right-4 text-[#68B2A0] hover:text-[#2c6975]"
@@ -309,7 +417,7 @@ const AppointmentCard = ({
       </button>
     </div>
     <p className="text-sm mb-4">{appointment.appointmentType}</p>
-    {showGoToRoom && (
+    {showGoToRoom && appointment.consultationMethod !== "face-to-face" && (
       <div className="flex justify-end">
         <a
           href={appointment.meetLink}
@@ -321,6 +429,7 @@ const AppointmentCard = ({
       </div>
     )}
     {/* Conditionally render the Request Reschedule button */}
+
     {(appointment.status === "pending" ||
       appointment.status === "accepted") && (
       <button
