@@ -65,12 +65,11 @@ const BlogGuestPage = () => {
         );
         setBlogs(blogsResponse.data.blogs);
       } catch (error) {
-        console.error("Error fetching data:", error);
-        setError("Failed to fetch data. Please try again later.");
+        setError();
         Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "Failed to fetch data. Please try again later.",
+          icon: "warning",
+          title: "Oopss",
+          text: "No blogs yet.",
         });
       } finally {
         setLoading(false);
@@ -214,9 +213,9 @@ const BlogGuestPage = () => {
                         </Typography>
                       </Box>
                     ) : (
-                      <Typography>
-                        No blogs available for this category.
-                      </Typography>
+                      <div className="h-[50vh]">
+                        <Typography>No blogs available.</Typography>
+                      </div>
                     )}
                   </Typography>
                 </Grid>

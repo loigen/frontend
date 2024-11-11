@@ -16,17 +16,16 @@ import SignupModal from "./Signup";
 import LoginModal from "./Login";
 import { Navbar, Footer, FAQs } from "./custom";
 import About from "./About.component";
-import Services from "./Services";
 import Contact from "./contact.component";
 import BlogGuestPage from "./BlogGuestPage";
 import TestimonialsPage from "./TestimonialsPage";
 import { FaRegClock } from "react-icons/fa6";
 import { GoBriefcase } from "react-icons/go";
 import { MdOutlineHighQuality } from "react-icons/md";
-import ServiceCarousel from './ServiceCarousel';
-import { useNavigate } from 'react-router-dom';
-import TermsOfUse from './TermsOfUse';
-import PrivacyPolicy from './PrivacyPolicy';
+import ServiceCarousel from "./ServiceCarousel";
+import { useNavigate } from "react-router-dom";
+import TermsOfUse from "./TermsOfUse";
+import PrivacyPolicy from "./PrivacyPolicy";
 import { Skeleton } from "@mui/material";
 import { LocationCityTwoTone, Phone, PhoneAndroid } from "@mui/icons-material";
 
@@ -46,7 +45,6 @@ const LandingPage = () => {
 
   const navigate = useNavigate();
 
-=======
   const [testimonies, setTestimonies] = useState([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -140,21 +138,11 @@ const LandingPage = () => {
       {view === "Home" && (
         <>
           <div
-
             className="welcome-section h-[100vh] w-full flex flex-col justify-center items-start text-white bg-cover bg-center md:items-start md:text-left text-center"
             style={{
               backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.6)), url(${drJebImage})`,
             }}
           >
-            <h2 className="text-4xl text-[#FFFFFF] ml-[50px]">Welcome to Dr. Jeb’s Practice:</h2>
-            <p className="text-4xl text-[#FFFFFF] text-center mt-10 ml-[150px]">Empowering Your</p>
-            <p className="text-5xl font-bold text-[#FFFFFF] mt-6">Mental Wellness Journey</p>
-            <p className="text-2xl text-[#FFFFFF] mt-8 mb-[10px] text-justify max-w-[600px] ml-5">
-              Find Relief, Growth, and Understanding through compassionate counseling.
-            </p>
-            <button onClick={handleOpenLoginModal} className="mt-12 px-10 py-4 bg-[#2C6975] text-2xl font-bold text-white rounded-full shadow-md hover:bg-[#1b4e54] ml-[140px]">
-              Schedule an Appointment
-            </button>
             <div className="w-full md:w-1/2 flex flex-col justify-center items-center gap-10">
               <h2 className="text-5xl text-[#FFFFFF]">
                 Welcome to Dr. Jeb’s Practice:
@@ -213,16 +201,16 @@ const LandingPage = () => {
             </div>
 
             <div className="text-center mb-4">
-              <h1 className="text-3xl font-bold text-[#2C6975] mt-10 cursor-pointer" 
-                  onClick={handleServiceClick}>
-
+              <h1
+                className="text-3xl font-bold text-[#2C6975] mt-10 cursor-pointer"
+                onClick={handleServiceClick}
+              >
                 Services
               </h1>
               <p className="text-3xl text-gray-700 mt-10 mb-10">
                 Empowering Therapy Solutions for every Individual
               </p>
             </div>
-            
 
             <div className="relative w-[300px] h-[200px] mt-5">
               <div className="carousel-wrapper absolute w-full h-full flex justify-center items-center">
@@ -236,15 +224,13 @@ const LandingPage = () => {
                   >
                     {index < 5 ? (
                       <span className="text-white text-center">
-                        {['Psychotherapy and Counseling', 'Psycho Education', 'Workshops and Training', 'Research', 'Psycho legal-reports'][index]}
-                      <span className="text-white">
                         {
                           [
-                            "COUNSELING",
-                            "THERAPY",
-                            "CHECK UP",
-                            "BOOK",
-                            "APPOINTMENT",
+                            "Psychotherapy and Counseling",
+                            "Psycho Education",
+                            "Workshops and Training",
+                            "Research",
+                            "Psycho legal-reports",
                           ][index]
                         }
                       </span>
@@ -402,95 +388,6 @@ const LandingPage = () => {
               </div>
             </div>
           </div>
-          <section className="bottomNavlinks mb-5">
-  {[
-    "Home",
-    "About",
-    "Services",
-    "Contact",
-    "Blog",
-    "Terms of Use",
-    "Privacy Policy",            
-  ].map((navLink) => (
-    <a
-      key={navLink}
-      href={`/${navLink.toLowerCase().replace(/ /g, "")}`}
-      className={`navlinks ${activeNavLink === navLink && activeNavLink !== "Home" ? "underline" : ""}`}
-      onClick={(e) => {
-        e.preventDefault();
-        handleNavLinkClick(navLink);
-      }}
-    >
-      {navLink}
-    </a>
-  ))}
-</section>
-
-          <footer className="bg-[#2C6975] text-white py-10">
-            <div className="container mx-auto px-10">
-              <div className="flex items-center justify-between mb-10">
-                <div className="w-[200px]">
-                  <img src={logo} alt="Logo" className="w-full h-auto" />
-                </div>
-                <div className="text-center max-w-2xl">
-                  <h3 className="font-bold text-2xl mb-4">Our Mission</h3>
-                  <p className="text-lg">
-                    Embracing diversity and empathy, providing a supportive platform for personal growth and mental wellness.
-                  </p>
-                  <p className="text-white text-xl mt-10">
-                    Opening Hours: Mon - Fri 8AM - 5 PM
-                  </p>
-                </div>
-                <div className="w-[200px]"></div>
-              </div>
-              {/* Divider */}
-              <div className="border-b border-white-600 mb-8"></div>
-
-              {/* Other Footer Content */}
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-8 mb-6">
-                {/* Location Column */}
-                <div>
-                  <h3 className="font-bold text-lg mb-4">Location</h3>
-                  <p className='mb-2'>Gestalt Wellness Institute, Veles Medical Arts Building</p>
-                  <p className="mb-4">Contact us: 0956 554 0992</p>
-                </div>
-
-                {/* Keep Connected Column */}
-                <div>
-                  <h3 className="font-bold text-lg mb-4">Keep Connected</h3>
-                  <div className="flex space-x-6">
-                    <a href="#linkedin" className="hover:text-gray-300">
-                      <FaLinkedin size={24} />
-                    </a>
-                    <a href="#facebook" className="hover:text-gray-300">
-                      <FaFacebook size={24} />
-                    </a>
-                  </div>
-                </div>
-
-                {/* Subscribe Column */}
-                <div>
-                  <h3 className="font-bold text-lg mb-4">Subscribe to Our Newsletter</h3>
-                  <div className="flex space-x-2">
-                    <input
-                      type="email"
-                      placeholder="Enter your email"
-                      className="px-4 py-2 rounded-lg text-gray-800 w-full"
-                    />
-                    <button className="bg-[#68B2A0] hover:bg-[#5a9b8a] px-4 py-2 rounded-lg whitespace-nowrap">
-                      Subscribe
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Copyright */}
-              <div className="border-t border-gray-600 pt-4">
-                <p className="text-sm text-center">© 2024 Dr. Jeb. All Rights Reserved.</p>
-              </div>
-            </div>
-          </footer>
-
         </>
       )}
       {view === "Testimonials" && (
@@ -510,11 +407,13 @@ const LandingPage = () => {
         <div className="pt-24 px-8">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
-              <h1 className="text-4xl font-bold text-[#2C6975] mb-4">Our Services</h1>
+              <h1 className="text-4xl font-bold text-[#2C6975] mb-4">
+                Our Services
+              </h1>
               <p className="text-xl text-gray-600 mb-12">
                 Comprehensive Mental Health Care Solutions
               </p>
-              
+
               {/* Service Carousel */}
               <ServiceCarousel />
 
@@ -529,7 +428,8 @@ const LandingPage = () => {
                       Professional Excellence
                     </h3>
                     <p className="text-gray-600">
-                      Licensed mental health professionals with years of experience.
+                      Licensed mental health professionals with years of
+                      experience.
                     </p>
                   </div>
                   <div className="p-6 bg-white rounded-lg shadow-md">
@@ -553,7 +453,7 @@ const LandingPage = () => {
 
               {/* Book Appointment CTA */}
               <div className="mt-16 mb-8 text-center">
-                <button 
+                <button
                   onClick={handleOpenLoginModal}
                   className="bg-[#2C6975] text-white px-8 py-3 rounded-full hover:bg-[#1b4e54] transition-colors duration-300"
                 >
@@ -564,36 +464,61 @@ const LandingPage = () => {
           </div>
         </div>
       )}
-      {view === "Contact" && <Contact />}
-      {view === "guestBlog" && <BlogGuestPage />}
+      {view === "Blog" && (
+        <div className="mt-[3%]">
+          <BlogGuestPage />
+        </div>
+      )}
       {view === "Terms of Use" && <TermsOfUse />}
       {view === "Privacy Policy" && <PrivacyPolicy />}
-    
-      <LoginModal open={isLoginModalOpen} onClose={handleCloseLoginModal} handleOpenRegisterModal={handleOpenRegisterModal} />
-      <SignupModal open={isRegisterModalOpen} onClose={handleCloseRegisterModal} handleOpenLoginModal={handleOpenLoginModal} />
-      {view === "Services" && <Services />}
       {view === "Contact" && (
         <div className="mt-[5%]">
           <Contact />
           <FAQs showBack={false} />
         </div>
       )}
+      <LoginModal
+        open={isLoginModalOpen}
+        onClose={handleCloseLoginModal}
+        handleOpenRegisterModal={handleOpenRegisterModal}
+      />
+      <SignupModal
+        open={isRegisterModalOpen}
+        onClose={handleCloseRegisterModal}
+        handleOpenLoginModal={handleOpenLoginModal}
+      />
+
       {view === "guestBlog" && (
         <div className="mt-[3%]">
           <BlogGuestPage />
         </div>
       )}
-      <section className="bottomNavlinks flex flex-row justify-between mb-5 mt-5">
-        {["Home", "About", "Services", "Contact", "guestBlog"].map(
-          (navLink) => (
-            <a
-              className="uppercase cursor-pointer"
-              onClick={() => setView(navLink)}
-            >
-              {navLink}
-            </a>
-          )
-        )}
+      <section className="bottomNavlinks mb-5">
+        {[
+          "Home",
+          "About",
+          "Services",
+          "Contact",
+          "Blog",
+          "Terms of Use",
+          "Privacy Policy",
+        ].map((navLink) => (
+          <a
+            key={navLink}
+            href={`/${navLink.toLowerCase().replace(/ /g, "")}`}
+            className={`navlinks ${
+              activeNavLink === navLink && activeNavLink !== "Home"
+                ? "underline"
+                : ""
+            }`}
+            onClick={(e) => {
+              e.preventDefault();
+              handleNavLinkClick(navLink);
+            }}
+          >
+            {navLink}
+          </a>
+        ))}
       </section>
       <footer className="bg-[#2C6975] text-white py-10">
         <div className="container mx-auto px-10">
@@ -669,7 +594,6 @@ const LandingPage = () => {
         handleOpenLoginModal={handleOpenLoginModal}
       />
     </div>
-
   );
 };
 

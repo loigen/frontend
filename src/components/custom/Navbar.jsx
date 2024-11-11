@@ -9,32 +9,15 @@ import {
   useTheme,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { useLocation } from "react-router-dom";
 import logo from "../../images/fullLogo.png";
 import SignupModal from "../Signup";
 import LoginModal from "../Login";
+
 const Navbar = ({ setView }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const location = useLocation();
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
-
-  const handleOpenRegisterModal = () => {
-    setIsRegisterModalOpen(true);
-    setIsLoginModalOpen(false);
-  };
-
-  const handleCloseRegisterModal = () => {
-    setIsRegisterModalOpen(false);
-  };
-  const handleOpenLoginModal = () => {
-    setIsLoginModalOpen(true);
-    setIsRegisterModalOpen(false);
-  };
-
-  const handleCloseLoginModal = () => {
-    setIsLoginModalOpen(false);
-  };
+  const [isActive, setIsActive] = useState("Home");
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -45,65 +28,44 @@ const Navbar = ({ setView }) => {
 
   const handleMenuItemClick = (route) => {
     setView(route);
+    setIsActive(route);
+    if (isMobile) setDrawerOpen(false); // Close drawer on mobile after selection
   };
 
-  const isActive = (route) => (location.pathname === route ? "active" : "");
+  const handleOpenRegisterModal = () => {
+    setIsRegisterModalOpen(true);
+    setIsLoginModalOpen(false);
+  };
+
+  const handleCloseRegisterModal = () => {
+    setIsRegisterModalOpen(false);
+  };
+
+  const handleOpenLoginModal = () => {
+    setIsLoginModalOpen(true);
+    setIsRegisterModalOpen(false);
+  };
+
+  const handleCloseLoginModal = () => {
+    setIsLoginModalOpen(false);
+  };
 
   const drawerContent = (
     <List>
-      <ListItem
-        button
-        onClick={() => handleMenuItemClick("Home")}
-        sx={{
-          cursor: "pointer",
-        }}
-      >
-        <ListItemText primary="Home" />
-      </ListItem>
-      <ListItem
-        button
-        onClick={() => handleMenuItemClick("About")}
-        sx={{
-          cursor: "pointer",
-        }}
-      >
-        <ListItemText primary="About" />
-      </ListItem>
-      <ListItem
-        button
-        onClick={() => handleMenuItemClick("Services")}
-        sx={{
-          cursor: "pointer",
-        }}
-      >
-        <ListItemText primary="Services" />
-      </ListItem>
-      <ListItem
-        button
-        onClick={() => handleMenuItemClick("Contact")}
-        sx={{
-          cursor: "pointer",
-        }}
-      >
-        <ListItemText primary="Contact" />
-      </ListItem>
-      <ListItem
-        button
-        onClick={() => handleMenuItemClick("guestBlog")}
-        sx={{
-          cursor: "pointer",
-        }}
-      >
-        <ListItemText primary="Blog" />
-      </ListItem>
-      <ListItem
-        button
-        onClick={handleOpenLoginModal}
-        className={isActive("/signin")}
-        sx={{
-          cursor: "pointer",
-        }}
-      >
+      {["Home", "About", "Services", "Contact", "guestBlog"].map((item) => (
+        <ListItem
+          button
+          key={item}
+          onClick={() => handleMenuItemClick(item)}
+          sx={{
+            cursor: "pointer",
+            borderBottom: isActive === item ? "4px solid #2c6975" : "none",
+          }}
+        >
+          <ListItemText primary={item} />
+        </ListItem>
+      ))}
+      <ListItem button onClick={handleOpenLoginModal}>
         <ListItemText primary="Signin/Signup" />
       </ListItem>
     </List>
@@ -113,7 +75,7 @@ const Navbar = ({ setView }) => {
     <>
       <header className="flex justify-between items-center py-4 px-6 bg-white shadow-md w-full sticky top-0 z-50">
         <div className="flex items-center space-x-2">
-          <img src={logo} alt="" className="w-40" />{" "}
+          <img src={logo} alt="Logo" className="w-40" />
         </div>
         <nav className="flex space-x-6 text-gray-600">
           {isMobile ? (
@@ -123,7 +85,6 @@ const Navbar = ({ setView }) => {
                 color="inherit"
                 aria-label="menu"
                 onClick={handleDrawerToggle}
-                sx={{ mr: 2 }}
               >
                 <MenuIcon />
               </IconButton>
@@ -145,40 +106,29 @@ const Navbar = ({ setView }) => {
               </Drawer>
             </>
           ) : (
-            <div className="cursor-pointer flex-row flex items-center gap-10 px-10b">
+            <div className="cursor-pointer flex items-center gap-10 px-10">
+              {["Home", "About", "Services", "Contact", "Blog"].map((item) => (
+                <div
+                  key={item}
+                  className="navlinks"
+                  onClick={() => handleMenuItemClick(item)}
+                  style={{
+                    borderBottom:
+                      isActive === item ? "4px solid #2c6975" : "none",
+                    paddingBottom: "4px",
+                  }}
+                >
+                  {item}
+                </div>
+              ))}
               <div
                 className="navlinks"
-                onClick={() => handleMenuItemClick("Home")}
-              >
-                Home
-              </div>
-              <div
-                className="navlinks"
-                onClick={() => handleMenuItemClick("About")}
-              >
-                About
-              </div>
-              <div
-                className="navlinks"
-                onClick={() => handleMenuItemClick("Services")}
-              >
-                Services
-              </div>
-              <div
-                className="navlinks"
-                onClick={() => handleMenuItemClick("Contact")}
-              >
-                Contact
-              </div>
-              <div
-                className="navlinks"
-                onClick={() => handleMenuItemClick("guestBlog")}
-              >
-                Blog
-              </div>
-              <div
-                className={`navlinks ${isActive("/signin")}`}
                 onClick={handleOpenLoginModal}
+                style={{
+                  borderBottom:
+                    isActive === "Signin/Signup" ? "2px solid #007BFF" : "none",
+                  paddingBottom: "4px",
+                }}
               >
                 Signin/Signup
               </div>

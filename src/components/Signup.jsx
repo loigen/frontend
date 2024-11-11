@@ -22,6 +22,8 @@ import axios from "axios";
 import validator from "validator";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
+import { color } from "framer-motion";
+import { fullWidth } from "validator/lib/isFullWidth";
 
 const validateSignupData = (
   firstname,
@@ -98,7 +100,7 @@ const SignupModal = ({ open, onClose, handleOpenLoginModal }) => {
   const [agreement, setAgreement] = useState(false);
   const [step, setStep] = useState(1);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-
+  const [showModal, setShowModal] = useState(false);
   const [passwordValidations, setPasswordValidations] = useState({
     minLength: false,
     specialChar: false,
@@ -563,22 +565,31 @@ const SignupModal = ({ open, onClose, handleOpenLoginModal }) => {
                 >
                   {passwordsMatch ? "Password Match" : "Password do not match"}
                 </Alert>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={agreement}
-                      onChange={(e) => setAgreement(e.target.checked)}
-                      sx={{
-                        "&.Mui-checked": {
-                          color: "#2c6975",
-                        },
-                      }}
-                      required
-                    />
-                  }
-                  label="I agree to the terms and conditions"
-                  sx={{ mt: 2 }}
-                />
+                <div className="flex flex-row items-center">
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={agreement}
+                        onChange={(e) => setAgreement(e.target.checked)}
+                        sx={{
+                          "&.Mui-checked": {
+                            color: "#2c6975",
+                          },
+                        }}
+                        required
+                      />
+                    }
+                  />
+                  <p>
+                    I agree to the{" "}
+                    <span
+                      className="text-blue-700 underline"
+                      onClick={() => setShowModal(true)}
+                    >
+                      Terms and Conditions
+                    </span>
+                  </p>
+                </div>
               </Box>
             )}
           </Box>
@@ -630,7 +641,73 @@ const SignupModal = ({ open, onClose, handleOpenLoginModal }) => {
           )}
         </DialogActions>
       </Dialog>
+      <Dialog open={showModal} onClose={showModal} maxWidth="md" fullWidth>
+        <DialogTitle>
+          <h1 className="text-2xl font-bold text-[#2C6975] text-center">
+            Terms of Use
+          </h1>
+        </DialogTitle>
+        <DialogContent>
+          <div className="space-y-6">
+            <section>
+              <p className="mb-4">
+                Welcome to SafePlace. By accessing or using the SafePlace
+                platform, you agree to comply with these Terms of Use. If you
+                disagree with any part of the terms, you may not access the
+                platform.
+              </p>
+            </section>
 
+            <section>
+              <h2 className="text-xl font-semibold text-[#2C6975] mb-3">
+                Service Overview
+              </h2>
+              <p className="text-gray-700">
+                SafePlace is an online appointment management system designed to
+                facilitate the scheduling and communication needs of Dr. Jeb
+                Bohol's practice.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-xl font-semibold text-[#2C6975] mb-3">
+                User Responsibilities
+              </h2>
+              <div className="ml-4">
+                <h3 className="font-semibold mb-2">For Patients:</h3>
+                <ul className="list-disc ml-6 text-gray-700 mb-4">
+                  <li>
+                    You agree to provide accurate information when scheduling
+                    appointments and uploading payment receipts.
+                  </li>
+                  <li>
+                    Appointment bookings and communication with Dr. Bohol must
+                    be used solely for legitimate healthcare purposes.
+                  </li>
+                </ul>
+
+                <h3 className="font-semibold mb-2">For Dr. Bohol:</h3>
+                <ul className="list-disc ml-6 text-gray-700">
+                  <li>
+                    You are responsible for setting availability, approving
+                    appointments, and manually sending email reminders as
+                    needed.
+                  </li>
+                </ul>
+              </div>
+            </section>
+          </div>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="outlined"
+            onClick={() => setShowModal(false)}
+            color="primary"
+          >
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={5000}

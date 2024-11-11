@@ -147,7 +147,7 @@ function App() {
           />
 
           <Route path="/not-authorized" element={<NotAuthorized />} />
-          <Route path="*" element={<Navigate to="/not-authorized" />} />
+          <Route path="*" element={<NotAuthorized />} />
         </Routes>
       </Router>
     </ChatContextProvider>
