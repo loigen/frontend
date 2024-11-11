@@ -69,7 +69,7 @@ const FeedbackList = ({ setView }) => {
     const fetchFeedback = async () => {
       try {
         const response = await axios.get(
-          `https://backend-production-c8da.up.railway.app/Feedback/feedback`
+          `https://backend-vp67.onrender.com/Feedback/feedback`
         );
         setFeedbackList(response.data.feedback);
         setLoading(false);
