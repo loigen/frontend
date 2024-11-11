@@ -144,20 +144,22 @@ const LandingPage = () => {
             }}
           >
             <div className="w-full md:w-1/2 flex flex-col justify-center items-center gap-10">
-              <h2 className="text-5xl text-[#FFFFFF]">
+              <h2 className="lg:text-5xl md:3xl text-2xl text-[#FFFFFF]">
                 Welcome to Dr. Jeb’s Practice:
               </h2>
-              <p className="text-3xl text-[#FFFFFF]">Empowering Your</p>
+              <p className="lg:text-3xl md:2xl text-xl  text-[#FFFFFF]">
+                Empowering Your
+              </p>
               <p className="text-5xl font-bold text-[#FFFFFF]">
                 Mental Wellness Journey
               </p>
-              <p className="text-xl text-[#FFFFFF]">
+              <p className="lg:text-xl md:text-lg text-md text-[#FFFFFF]">
                 Find Relief, Growth, and Understanding through compassionate
                 counseling.
               </p>
               <button
                 onClick={handleOpenLoginModal}
-                className="px-10 py-4 bg-[#2C6975] text-2xl font-bold text-white rounded-full shadow-md hover:bg-[#1b4e54] sm:mx-auto"
+                className="px-10 py-4 bg-[#2C6975] text-2xl md:text-md  font-bold text-white rounded-full shadow-md hover:bg-[#1b4e54] sm:mx-auto"
               >
                 Schedule an Appointment
               </button>
@@ -465,7 +467,7 @@ const LandingPage = () => {
         </div>
       )}
       {view === "Blog" && (
-        <div className="mt-[3%]">
+        <div className="mt-[5%]">
           <BlogGuestPage />
         </div>
       )}
