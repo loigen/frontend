@@ -115,7 +115,7 @@ const Navbar = ({ setView }) => {
         <div className="flex items-center space-x-2">
           <h1 className="text-2xl font-bold text-teal-700">Safe Place</h1>
         </div>
-        <nav className="flex space-x-6 text-gray-600 ">
+        <nav className="flex space-x-6 text-gray-600">
           {isMobile ? (
             <>
               <IconButton
@@ -145,39 +145,39 @@ const Navbar = ({ setView }) => {
               </Drawer>
             </>
           ) : (
-            <div className="cursor-pointer flex-row flex items-center gap-10 px-10">
+            <div className="cursor-pointer flex-row flex items-center gap-10 px-10b">
               <div
-                className={` hover:text-[#68B2A0]`}
+                className="navlinks"
                 onClick={() => handleMenuItemClick("Home")}
               >
                 Home
               </div>
               <div
-                className={` hover:text-[#68B2A0]`}
+                className="navlinks"
                 onClick={() => handleMenuItemClick("About")}
               >
                 About
               </div>
               <div
-                className={`  hover:text-[#68B2A0]`}
+                className="navlinks"
                 onClick={() => handleMenuItemClick("Services")}
               >
                 Services
               </div>
               <div
-                className={` hover:text-[#68B2A0]`}
+                className="navlinks"
                 onClick={() => handleMenuItemClick("Contact")}
               >
                 Contact
               </div>
               <div
-                className={`  hover:text-[#68B2A0]`}
+                className="navlinks"
                 onClick={() => handleMenuItemClick("guestBlog")}
               >
                 Blog
               </div>
               <div
-                className={` ${isActive("/signin")} hover:text-[#68B2A0]`}
+                className={`navlinks ${isActive("/signin")}`}
                 onClick={handleOpenLoginModal}
               >
                 Signin/Signup
