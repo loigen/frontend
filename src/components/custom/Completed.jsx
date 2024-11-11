@@ -34,7 +34,7 @@ const CompletedAppointments = ({ onBackToActive }) => {
         );
         setAppointments(filteredAppointments);
       } catch (err) {
-        setError(err.message);
+        setError();
       } finally {
         setLoading(false);
       }

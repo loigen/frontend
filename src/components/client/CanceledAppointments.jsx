@@ -21,7 +21,6 @@ import {
 import axios from "axios";
 import Swal from "sweetalert2";
 
-
 const CanceledAppointments = ({ onBackToActive }) => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -61,7 +60,7 @@ const CanceledAppointments = ({ onBackToActive }) => {
         );
         setAppointments(filteredAppointments);
       } catch (err) {
-        setError(err.message);
+        setError();
       } finally {
         setLoading(false);
       }

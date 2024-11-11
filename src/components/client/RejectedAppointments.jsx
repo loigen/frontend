@@ -324,7 +324,7 @@ const RejectedAppointments = ({ onBackToActive }) => {
                   <h3 className="text-lg font-semibold">
                     Refund Request: Upload Your GCash or PayPal QR Code{" "}
                   </h3>
-                  
+
                   <input
                     type="file"
                     onChange={handleQrCodeUpload}

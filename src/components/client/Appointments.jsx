@@ -70,7 +70,7 @@ const Appointments = ({ onBack }) => {
       const slots = await fetchAvailableSlots();
       setAvailableSlots(slots);
     } catch (error) {
-      console.error("Error loading available slots:", error);
+      setError(null);
     } finally {
       setLoading(false);
     }
