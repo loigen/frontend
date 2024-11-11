@@ -14,6 +14,10 @@ import {
   Button,
   Checkbox,
   createTheme,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   FormControlLabel,
   Grid,
   MenuItem,
@@ -39,6 +43,7 @@ import {
 import ActiveAppointments from "../../components/custom/DefaultViewClient";
 import { teal } from "@mui/material/colors";
 import { CloudUploadOutlined } from "@mui/icons-material";
+import { color } from "framer-motion";
 
 const theme = createTheme({
   palette: {
@@ -54,7 +59,6 @@ const AppointmentsPage = () => {
   const [isHoveredCompleted, setIsHoveredCompleted] = useState(false);
   const [isHoveredCanceled, setIsHoveredCanceled] = useState(false);
   const [isHoveredAccepted, setIsHoveredAccepted] = useState(false);
-
   const [isHoveredRejected, setIsHoveredRejected] = useState(false);
   const [isHoveredRefunded, setIsHoveredRefunded] = useState(false);
   const [isHoveredoption, setIsHoveredoption] = useState(false);
@@ -79,6 +83,7 @@ const AppointmentsPage = () => {
   const [appointmentPrice, setAppointmentPrice] = useState(0);
   const [modalOpen, setModalOpen] = useState(false);
   const [appointmentDescription, setAppointmentDescription] = useState("");
+  const [open, setopen] = useState(false);
 
   const handleSelectAppointment = (type) => {
     setAppointmentType(type.value);
@@ -165,8 +170,11 @@ const AppointmentsPage = () => {
       setLoading(false);
     }
   };
-
+  const handleIntroClose = () => {
+    setopen(false);
+  };
   useEffect(() => {
+    setopen(true);
     loadAvailableSlots();
   }, []);
   const handleProceed = () => {
@@ -1094,6 +1102,18 @@ const AppointmentsPage = () => {
           </div>
         </Box>
       )}
+      <Dialog open={open} onClose={handleIntroClose}>
+        <DialogTitle>Welcome to the System!</DialogTitle>
+        <DialogContent>
+          Here is an introduction on how to use the system. Follow the
+          instructions and enjoy!
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleIntroClose} color="primary">
+            Got it!
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };

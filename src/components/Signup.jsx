@@ -583,7 +583,7 @@ const SignupModal = ({ open, onClose, handleOpenLoginModal }) => {
                   <p>
                     I agree to the{" "}
                     <span
-                      className="text-blue-700 underline"
+                      className="text-blue-700 underline cursor-pointer"
                       onClick={() => setShowModal(true)}
                     >
                       Terms and Conditions

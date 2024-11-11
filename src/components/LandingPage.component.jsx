@@ -303,7 +303,7 @@ const LandingPage = () => {
                 {/* Show only the first testimony */}
                 {testimonies.length > 0 && (
                   <div
-                    className="mt-20 w-[80%] md:w-[40%] h-[200px] bg-white shadow-md rounded-lg p-6 border-b-4"
+                    className="mt-20 w-[90%] md:w-[40%]  bg-white shadow-md rounded-lg p-6 border-b-4"
                     style={{ borderColor: "#2C6975" }}
                   >
                     <div className="flex items-center justify-between mb-4">
@@ -542,7 +542,7 @@ const LandingPage = () => {
           <div className="border-b border-white-600 mb-8"></div>
 
           {/* Other Footer Content */}
-          <div className="flex justify-between gap-8 mb-6">
+          <div className="flex justify-between flex-col md:flex-row gap-8 mb-6">
             {/* Location Column */}
             <div>
               <h3 className="font-bold text-lg mb-4">Location</h3>
