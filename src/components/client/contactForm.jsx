@@ -4,9 +4,7 @@ import image from "../../images/Frame 1.png";
 import PhoneIcon from "@mui/icons-material/Phone";
 import EmailIcon from "@mui/icons-material/Email";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import TwitterIcon from "@mui/icons-material/Twitter";
-import InstagramIcon from "@mui/icons-material/Instagram";
-import FacebookIcon from "@mui/icons-material/Facebook";
+import { FaFacebook, FaLinkedin, } from "react-icons/fa";
 
 import { ChevronLeft } from "@mui/icons-material";
 import { Tooltip } from "@mui/material";
@@ -121,11 +119,14 @@ const Contact = ({ showBack, setView }) => {
               </div>
             </div>
 
-            <div className="mt-8 flex space-x-4 items-end">
-              <TwitterIcon className="cursor-pointer" />
-              <InstagramIcon className="cursor-pointer" />
-              <FacebookIcon className="cursor-pointer" />
-            </div>
+            <div className="flex space-x-6">
+                    <a href="#linkedin" className="hover:text-gray-300">
+                      <FaLinkedin size={24} />
+                    </a>
+                    <a href="#facebook" className="hover:text-gray-300">
+                      <FaFacebook size={24} />
+                    </a>
+                  </div>
           </div>
 
           {/* Right Section: Contact Form */}
