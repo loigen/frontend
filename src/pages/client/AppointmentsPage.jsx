@@ -44,6 +44,7 @@ import ActiveAppointments from "../../components/custom/DefaultViewClient";
 import { teal } from "@mui/material/colors";
 import { CloudUploadOutlined } from "@mui/icons-material";
 import { color } from "framer-motion";
+import IntroDialog from "../../components/custom/IntroPage";
 
 const theme = createTheme({
   palette: {
@@ -1102,18 +1103,7 @@ const AppointmentsPage = () => {
           </div>
         </Box>
       )}
-      <Dialog open={open} onClose={handleIntroClose}>
-        <DialogTitle>Welcome to the System!</DialogTitle>
-        <DialogContent>
-          Here is an introduction on how to use the system. Follow the
-          instructions and enjoy!
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleIntroClose} color="primary">
-            Got it!
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <IntroDialog open={open} onClose={handleIntroClose} />
     </>
   );
 };

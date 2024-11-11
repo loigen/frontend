@@ -16,6 +16,8 @@ import {
   FormControlLabel,
   Snackbar,
   Alert,
+  InputAdornment,
+  IconButton,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import axios from "axios";
@@ -24,6 +26,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { color } from "framer-motion";
 import { fullWidth } from "validator/lib/isFullWidth";
+import { VisibilityOff, Visibility } from "@mui/icons-material";
 
 const validateSignupData = (
   firstname,
@@ -101,13 +104,15 @@ const SignupModal = ({ open, onClose, handleOpenLoginModal }) => {
   const [step, setStep] = useState(1);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [passwordValidations, setPasswordValidations] = useState({
     minLength: false,
     specialChar: false,
     upperCase: false,
     number: false,
   });
-
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+  const handleMouseDownPassword = (event) => event.preventDefault();
   useEffect(() => {
     setIsButtonDisabled(
       step === 1
@@ -438,12 +443,25 @@ const SignupModal = ({ open, onClose, handleOpenLoginModal }) => {
                     },
                   }}
                   label="Password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={handlePasswordChange}
                   fullWidth
                   margin="normal"
                   required
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={handleClickShowPassword}
+                          onMouseDown={handleMouseDownPassword}
+                          edge="end"
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
                 {/* Password validation checks */}
                 <Box

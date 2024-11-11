@@ -14,11 +14,15 @@ import {
   DialogActions,
   Alert,
   Stack,
+  IconButton,
+  InputAdornment,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import logo from "../images/bigLogo.png";
 import { useAuth } from "../context/AuthProvider";
 import Swal from "sweetalert2";
+import { VisibilityOff, Visibility } from "@mui/icons-material";
+import { fullWidth } from "validator/lib/isFullWidth";
 
 const API_URL = "https://backend-vp67.onrender.com";
 
@@ -32,11 +36,15 @@ const LoginModal = ({
     useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
   const [rememberMe, setRememberMe] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const navigate = useNavigate();
   const [errorMessages, setErrorMessages] = useState([]);
 
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+  const handleMouseDownPassword = (event) => event.preventDefault();
   useEffect(() => {
     const remembered = localStorage.getItem("rememberMe");
     if (remembered) {
@@ -198,12 +206,12 @@ const LoginModal = ({
             id="password"
             label="Password"
             variant="outlined"
-            type="password"
+            type={showPassword ? "text" : "password"}
             fullWidth
             sx={{
               "& .MuiOutlinedInput-root": {
                 "& fieldset": {
-                  borderColor: "#",
+                  borderColor: "#d3d3d3",
                 },
                 "&:hover fieldset": {
                   borderColor: "#4e8e9b",
@@ -217,6 +225,19 @@ const LoginModal = ({
             onChange={(e) => setPassword(e.target.value)}
             margin="normal"
             required
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
           <FormControlLabel
             control={
