@@ -234,7 +234,7 @@ const Profile = ({ setView }) => {
           onSubmit={(e) => e.preventDefault()}
           sx={{
             display: "grid",
-            gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" }, // 1 column on small, 2 columns on medium and up
+            gridTemplateColumns: { sm: "1fr", md: "1fr 1fr" }, // 1 column on small, 2 columns on medium and up
             gap: 2,
           }}
         >

@@ -464,97 +464,99 @@ const SignupModal = ({ open, onClose, handleOpenLoginModal }) => {
                   }}
                 />
                 {/* Password validation checks */}
-                <Box
-                  display="flex"
-                  flexDirection="column"
-                  gap={0.1}
-                  sx={{ mt: 2 }}
-                >
-                  <Typography variant="subtitle1">
-                    Password must contain:
-                  </Typography>
+                {password && (
                   <Box
                     display="flex"
-                    alignItems="center"
-                    sx={{
-                      mt: 1,
-                      p: 1,
-                      backgroundColor: passwordValidations.minLength
-                        ? "#e6f7e9"
-                        : "#fdecea",
-                    }}
+                    flexDirection="column"
+                    gap={0.1}
+                    sx={{ mt: 2 }}
                   >
-                    {passwordValidations.minLength ? (
-                      <CheckCircleIcon color="success" />
-                    ) : (
-                      <CancelIcon color="error" />
-                    )}
-                    <Typography sx={{ ml: 1 }}>
-                      At least 8 characters
+                    <Typography variant="subtitle1">
+                      Password must contain:
                     </Typography>
-                  </Box>
+                    <Box
+                      display="flex"
+                      alignItems="center"
+                      sx={{
+                        mt: 1,
+                        p: 1,
+                        backgroundColor: passwordValidations.minLength
+                          ? "#e6f7e9"
+                          : "#fdecea",
+                      }}
+                    >
+                      {passwordValidations.minLength ? (
+                        <CheckCircleIcon color="success" />
+                      ) : (
+                        <CancelIcon color="error" />
+                      )}
+                      <Typography sx={{ ml: 1 }}>
+                        At least 8 characters
+                      </Typography>
+                    </Box>
 
-                  <Box
-                    display="flex"
-                    alignItems="center"
-                    sx={{
-                      mt: 1,
-                      p: 1,
-                      backgroundColor: passwordValidations.specialChar
-                        ? "#e6f7e9"
-                        : "#fdecea",
-                    }}
-                  >
-                    {passwordValidations.specialChar ? (
-                      <CheckCircleIcon color="success" />
-                    ) : (
-                      <CancelIcon color="error" />
-                    )}
-                    <Typography sx={{ ml: 1 }}>
-                      At least 1 special character
-                    </Typography>
-                  </Box>
+                    <Box
+                      display="flex"
+                      alignItems="center"
+                      sx={{
+                        mt: 1,
+                        p: 1,
+                        backgroundColor: passwordValidations.specialChar
+                          ? "#e6f7e9"
+                          : "#fdecea",
+                      }}
+                    >
+                      {passwordValidations.specialChar ? (
+                        <CheckCircleIcon color="success" />
+                      ) : (
+                        <CancelIcon color="error" />
+                      )}
+                      <Typography sx={{ ml: 1 }}>
+                        At least 1 special character
+                      </Typography>
+                    </Box>
 
-                  <Box
-                    display="flex"
-                    alignItems="center"
-                    sx={{
-                      mt: 1,
-                      p: 1,
-                      backgroundColor: passwordValidations.upperCase
-                        ? "#e6f7e9"
-                        : "#fdecea",
-                    }}
-                  >
-                    {passwordValidations.upperCase ? (
-                      <CheckCircleIcon color="success" />
-                    ) : (
-                      <CancelIcon color="error" />
-                    )}
-                    <Typography sx={{ ml: 1 }}>
-                      At least 1 uppercase letter
-                    </Typography>
-                  </Box>
+                    <Box
+                      display="flex"
+                      alignItems="center"
+                      sx={{
+                        mt: 1,
+                        p: 1,
+                        backgroundColor: passwordValidations.upperCase
+                          ? "#e6f7e9"
+                          : "#fdecea",
+                      }}
+                    >
+                      {passwordValidations.upperCase ? (
+                        <CheckCircleIcon color="success" />
+                      ) : (
+                        <CancelIcon color="error" />
+                      )}
+                      <Typography sx={{ ml: 1 }}>
+                        At least 1 uppercase letter
+                      </Typography>
+                    </Box>
 
-                  <Box
-                    display="flex"
-                    alignItems="center"
-                    sx={{
-                      mt: 1,
-                      p: 1,
-                      backgroundColor: passwordValidations.number
-                        ? "#e6f7e9"
-                        : "#fdecea",
-                    }}
-                  >
-                    {passwordValidations.number ? (
-                      <CheckCircleIcon color="success" />
-                    ) : (
-                      <CancelIcon color="error" />
-                    )}
-                    <Typography sx={{ ml: 1 }}>At least 1 number</Typography>
+                    <Box
+                      display="flex"
+                      alignItems="center"
+                      sx={{
+                        mt: 1,
+                        p: 1,
+                        backgroundColor: passwordValidations.number
+                          ? "#e6f7e9"
+                          : "#fdecea",
+                      }}
+                    >
+                      {passwordValidations.number ? (
+                        <CheckCircleIcon color="success" />
+                      ) : (
+                        <CancelIcon color="error" />
+                      )}
+                      <Typography sx={{ ml: 1 }}>At least 1 number</Typography>
+                    </Box>
                   </Box>
-                </Box>
+                )}
                 <TextField
                   sx={{
                     "& .MuiOutlinedInput-root": {
@@ -574,15 +576,19 @@ const SignupModal = ({ open, onClose, handleOpenLoginModal }) => {
                   margin="normal"
                   required
                 />
-                <Alert
-                  severity={passwordsMatch ? "success" : "error"}
-                  icon={passwordsMatch ? <CheckCircleIcon /> : <CancelIcon />}
-                  sx={{
-                    backgroundColor: passwordsMatch ? "#e6f7e9" : "#fdecea",
-                  }}
-                >
-                  {passwordsMatch ? "Password Match" : "Password do not match"}
-                </Alert>
+                {repeatPassword && (
+                  <Alert
+                    severity={passwordsMatch ? "success" : "error"}
+                    icon={passwordsMatch ? <CheckCircleIcon /> : <CancelIcon />}
+                    sx={{
+                      backgroundColor: passwordsMatch ? "#e6f7e9" : "#fdecea",
+                    }}
+                  >
+                    {passwordsMatch
+                      ? "Password Match"
+                      : "Password do not match"}
+                  </Alert>
+                )}
                 <div className="flex flex-row items-center">
                   <FormControlLabel
                     control={

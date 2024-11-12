@@ -195,7 +195,7 @@ const FAQSection = ({ setView, showBack }) => {
         <p>Still need help? chat with us.</p>
       </div>
       <div
-        className="faq-list grid grid-cols-2 gap-2 text-black"
+        className="faq-list grid md:grid-cols-2 grid-cols-1 gap-2 text-black"
         style={{ overflowY: showAll ? "scroll" : "" }}
       >
         {displayedFAQs.map((faq, index) => (

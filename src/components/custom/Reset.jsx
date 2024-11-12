@@ -45,7 +45,7 @@ export default class Reset extends Component {
         onSubmit={this.handleSubmit}
       >
         {!submitted ? (
-          <div className="w-1/4 shadow-2xl shadow-[#2C6975] p-2 rounded-lg  items-center gap-2 h-1/4 flex flex-col justify-center">
+          <div className="shadow-2xl shadow-[#2C6975] p-2 rounded-lg  items-center gap-2 h-1/4 flex flex-col justify-center">
             <h3 className="font-sans font-bold text-4xl">Forgot Password</h3>
 
             <div className="mb-3 w-full border-b-2 border-[#2C6975]">
@@ -66,7 +66,7 @@ export default class Reset extends Component {
             </div>
           </div>
         ) : (
-          <div className="reset-link w-1/4 shadow-2xl shadow-[#2C6975] p-2 rounded-lg  items-center gap-2 h-1/4 flex flex-col justify-center">
+          <div className="reset-link shadow-2xl shadow-[#2C6975] p-2 rounded-lg  items-center gap-2 h-1/4 flex flex-col justify-center">
             <p>Your password reset link has been sent to your email.</p>
           </div>
         )}

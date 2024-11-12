@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Swal from "sweetalert2";
+import "../../styles/Schedules.css";
 import { fetchAvailableSlots } from "../../api/schedulesAPI/fetchAvailableSlots";
 import { createAppointment } from "../../api/appointmentAPI/createAppointmentApi";
 import { updateSlotStatus } from "../../api/schedulesAPI/updateSlotStatus";

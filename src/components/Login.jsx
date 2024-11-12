@@ -115,13 +115,13 @@ const LoginModal = ({
       } else if (status === 404) {
         Swal.fire({
           icon: "warning",
-          title: "User Not Found",
+          title: "Oopss",
           text: "User not found",
         });
       } else if (status === 401) {
         Swal.fire({
           icon: "error",
-          title: "Incorrect Password",
+          title: "Oopss",
           text: "Incorrect password",
         });
       } else if (status === 403) {
@@ -134,7 +134,7 @@ const LoginModal = ({
         Swal.fire({
           icon: "error",
           title: "Server Error",
-          text: errorMessage,
+          text: "Admin user not found",
         });
       }
     } finally {
@@ -155,8 +155,13 @@ const LoginModal = ({
         />
       </DialogTitle>
       <DialogContent>
-        <Box alignItems="center" className="flex justify-center md:block hidden" mb={4}>
-          <img src={logo} alt="Logo" style={{ width: "150px" }} />
+        <Box alignItems="center" className="flex justify-center " mb={4}>
+          <img
+            className="md:block hidden"
+            src={logo}
+            alt="Logo"
+            style={{ width: "150px" }}
+          />
         </Box>
         <Box textAlign="center" mb={2}>
           <Typography variant="h5" component="h1" gutterBottom>

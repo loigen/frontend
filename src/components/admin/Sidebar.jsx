@@ -16,7 +16,7 @@ import Person2Icon from "@mui/icons-material/Person2";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import BookIcon from "@mui/icons-material/Book";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { ChevronLeft } from "@mui/icons-material";
+import { ChevronLeft, Close } from "@mui/icons-material";
 import logo from "../../images/safeplacelogo.png";
 import { styled, useTheme } from "@mui/material/styles";
 
@@ -112,10 +112,10 @@ const Sidebar = () => {
                 transform: open ? "none" : "translateX(50%)", // Centering when closed
               }}
             >
-              <MenuIcon
+              <Close
                 sx={{
-                  color: "#2C6975", // Custom color
-                  fontSize: "32px", // Optional: adjust size
+                  color: "#2C6975",
+                  fontSize: "32px",
                 }}
               />
             </StyledIconButton>

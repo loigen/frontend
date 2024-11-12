@@ -3,6 +3,15 @@
   border: none;
   width: 100%;
 }
+/* Example of targeting mobile view and setting month to abbreviated text */
+@media (max-width: 600px) {
+  /* Assuming .react-calendar__navigation__label is the class for month label */
+  .react-calendar__navigation__label {
+    font-size: 1em; /* Adjust the font size if needed */
+    width: 3ch; /* Shrinks the width to fit abbreviated month names */
+    text-align: center;
+  }
+}
 
 .custom-calendar .react-calendar__tile--active {
   border: 2px solid #2c6975;
