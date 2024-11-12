@@ -112,7 +112,7 @@ const Sidebar = () => {
                 transform: open ? "none" : "translateX(50%)", // Centering when closed
               }}
             >
-              <Close
+              <MenuIcon
                 sx={{
                   color: "#2C6975",
                   fontSize: "32px",
