@@ -46,6 +46,7 @@ import { teal } from "@mui/material/colors";
 import { CloudUploadOutlined } from "@mui/icons-material";
 import { color } from "framer-motion";
 import IntroDialog from "../../components/custom/IntroPage";
+import { saveAs } from "file-saver"; // Ensure to install file-saver: npm install file-saver
 
 const theme = createTheme({
   palette: {
@@ -86,7 +87,9 @@ const AppointmentsPage = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [appointmentDescription, setAppointmentDescription] = useState("");
   const [open, setopen] = useState(false);
-
+  function downloadImage(url) {
+    saveAs(url, "SafeplaceQrCode.jpg");
+  }
   const handleSelectAppointment = (type) => {
     setAppointmentType(type.value);
     setAppointmentPrice(type.price);
@@ -176,7 +179,20 @@ const AppointmentsPage = () => {
     setopen(false);
   };
   useEffect(() => {
-    setopen(true);
+    const currentDate = new Date();
+    const accountCreationDate = new Date(user.createdAt); // Assuming 'user' is the logged-in user's data
+
+    // Calculate the difference in days
+    const differenceInTime = currentDate - accountCreationDate;
+    const differenceInDays = differenceInTime / (1000 * 3600 * 24);
+
+    // Set 'setopen' to true if the account was created 5 or fewer days ago, otherwise false
+    if (differenceInDays <= 5) {
+      setopen(true);
+    } else {
+      setopen(false);
+    }
+
     loadAvailableSlots();
   }, []);
   const handleProceed = () => {
@@ -787,21 +803,51 @@ const AppointmentsPage = () => {
                   </p>
                   <Box
                     display="flex"
-                    flexDirection="row"
+                    flexDirection="column"
                     justifyContent="space-between"
                     flexWrap="wrap"
                   >
                     <div className=" py-1">
                       <img src={gcash} alt="" />
                     </div>
+                    <button
+                      onClick={() => downloadImage(gcashQR)}
+                      className="w-fit"
+                      style={{
+                        marginTop: "8px",
+                        padding: "8px 16px",
+                        backgroundColor: "#1976d2",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Download GCash QR
+                    </button>
                     <div className="w-[80%]  py-1">
                       <img width={300} src={gcashQR} alt="" />
                     </div>
                   </Box>
-                  <Box display="flex" flexDirection="row" flexWrap="wrap">
+                  <Box display="flex" flexDirection="column" flexWrap="wrap">
                     <div className="  py-1">
                       <img width={100} src={paypal} alt="" />
                     </div>
+                    <button
+                      onClick={() => downloadImage(UBQR)}
+                      className="w-fit"
+                      style={{
+                        marginTop: "8px",
+                        padding: "8px 16px",
+                        backgroundColor: "orange",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Download UnionBank QR Code
+                    </button>
                     <div className="w-[80%]   py-1">
                       <img width={300} src={UBQR} alt="" />
                     </div>

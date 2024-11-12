@@ -82,6 +82,7 @@ const LoginModal = ({
 
       localStorage.setItem("token", response.data.token);
       setUser(response.data);
+
       await fetchProfile();
 
       if (rememberMe) {
