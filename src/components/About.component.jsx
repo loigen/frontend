@@ -5,7 +5,7 @@ const About = () => {
     <div className="min-h-screen  mt-20">
       {/* Header */}
       {/* Profile Section */}
-      <section className="flex flex-col items-center pt-10">
+      <section className="flex flex-col items-center md:pl-0 pl-[5%] pt-10">
         <img
           src={sirjeb}
           alt="Dr. Jeb Bohol"

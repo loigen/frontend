@@ -52,7 +52,7 @@ const Navbar = ({ setView }) => {
 
   const drawerContent = (
     <List>
-      {["Home", "About", "Services", "Contact", "guestBlog"].map((item) => (
+      {["Home", "About", "Services", "Contact", "Blog"].map((item) => (
         <ListItem
           button
           key={item}

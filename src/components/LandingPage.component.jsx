@@ -303,54 +303,58 @@ const LandingPage = () => {
                 </p>
 
                 {/* Show only the first testimony */}
-                {testimonies.length > 0 && (
-                  <div
-                    className="mt-20 w-[90%] md:w-[40%]  bg-white shadow-md rounded-lg p-6 border-b-4"
-                    style={{ borderColor: "#2C6975" }}
-                  >
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center ml-10">
-                        <div
-                          className="rounded-full h-10 w-10 flex items-center justify-center text-white"
-                          style={{ backgroundColor: "#2C6975" }}
-                        >
-                          <span className="font-bold text-lg">
-                            {testimonies[0].displayName
-                              ? testimonies[0].email.charAt(0)
-                              : "A"}
-                          </span>
+                {testimonies.filter((t) => t.rating === 5).length > 0 &&
+                  (() => {
+                    const fiveStarTestimonies = testimonies.filter(
+                      (t) => t.rating === 5
+                    );
+                    const randomTestimony =
+                      fiveStarTestimonies[
+                        Math.floor(Math.random() * fiveStarTestimonies.length)
+                      ];
+
+                    return (
+                      <div
+                        className="mt-20 w-[90%] md:w-[40%] bg-white shadow-md rounded-lg p-6 border-b-4"
+                        style={{ borderColor: "#2C6975" }}
+                      >
+                        <div className="flex items-center flex-col md:flex-row justify-between mb-4">
+                          <div className="flex items-center ml-10">
+                            <div
+                              className="rounded-full h-10 w-10 flex items-center justify-center text-white"
+                              style={{ backgroundColor: "#2C6975" }}
+                            >
+                              <span className="font-bold text-lg">
+                                {randomTestimony.displayName
+                                  ? randomTestimony.email.charAt(0)
+                                  : "A"}
+                              </span>
+                            </div>
+                            <div className="ml-4">
+                              <h3 className="font-semibold text-xl">
+                                {randomTestimony.displayName
+                                  ? randomTestimony.email
+                                  : "Anonymous"}
+                              </h3>
+                              <p className="text-gray-500 text-sm">
+                                {new Date(
+                                  randomTestimony.createdAt
+                                ).toLocaleDateString()}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="flex items-center">
+                            {[...Array(5)].map((_, i) => (
+                              <FaStar key={i} className="text-[#2C6975]" />
+                            ))}
+                          </div>
                         </div>
-                        <div className="ml-4">
-                          <h3 className="font-semibold text-xl">
-                            {testimonies[0].displayName
-                              ? testimonies[0].email
-                              : "Anonymous"}
-                          </h3>
-                          <p className="text-gray-500 text-sm">
-                            {new Date(
-                              testimonies[0].createdAt
-                            ).toLocaleDateString()}
-                          </p>
-                        </div>
+                        <p className="text-gray-600 text-center">
+                          "{randomTestimony.feedback}"
+                        </p>
                       </div>
-                      <div className="flex items-center">
-                        {[...Array(5)].map((_, i) => (
-                          <FaStar
-                            key={i}
-                            className={
-                              i < testimonies[0].rating
-                                ? "text-[#2C6975]"
-                                : "text-gray-300"
-                            }
-                          />
-                        ))}
-                      </div>
-                    </div>
-                    <p className="text-gray-600 text-center">
-                      "{testimonies[0].feedback}"
-                    </p>
-                  </div>
-                )}
+                    );
+                  })()}
 
                 {/* Update the View More button */}
                 <button
@@ -467,7 +471,7 @@ const LandingPage = () => {
         </div>
       )}
       {view === "Blog" && (
-        <div className="mt-[5%]">
+        <div className="md:mt-[5%] mt-[15%]">
           <BlogGuestPage />
         </div>
       )}
@@ -495,7 +499,7 @@ const LandingPage = () => {
           <BlogGuestPage />
         </div>
       )}
-      <section className="bottomNavlinks mb-5">
+      <section className="bottomNavlinks px-4 mb-5">
         {[
           "Home",
           "About",

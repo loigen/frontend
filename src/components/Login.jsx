@@ -155,7 +155,7 @@ const LoginModal = ({
         />
       </DialogTitle>
       <DialogContent>
-        <Box alignItems="center" className="flex justify-center" mb={4}>
+        <Box alignItems="center" className="flex justify-center md:block hidden" mb={4}>
           <img src={logo} alt="Logo" style={{ width: "150px" }} />
         </Box>
         <Box textAlign="center" mb={2}>
