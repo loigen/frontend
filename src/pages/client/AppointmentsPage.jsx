@@ -43,7 +43,7 @@ import {
 } from "../../components/client";
 import ActiveAppointments from "../../components/custom/DefaultViewClient";
 import { teal } from "@mui/material/colors";
-import { CloudUploadOutlined } from "@mui/icons-material";
+import { Close, CloudUploadOutlined } from "@mui/icons-material";
 import { color } from "framer-motion";
 import IntroDialog from "../../components/custom/IntroPage";
 import { saveAs } from "file-saver"; // Ensure to install file-saver: npm install file-saver
@@ -87,6 +87,7 @@ const AppointmentsPage = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [appointmentDescription, setAppointmentDescription] = useState("");
   const [open, setopen] = useState(false);
+  const [openTerms, setOpenTerms] = useState(false);
   function downloadImage(url) {
     saveAs(url, "SafeplaceQrCode.jpg");
   }
@@ -179,22 +180,29 @@ const AppointmentsPage = () => {
     setopen(false);
   };
   useEffect(() => {
-    const currentDate = new Date();
-    const accountCreationDate = new Date(user.createdAt); // Assuming 'user' is the logged-in user's data
+    // Check if the "hasShown" flag exists in localStorage
+    const hasShown = localStorage.getItem("hasShown");
 
-    // Calculate the difference in days
-    const differenceInTime = currentDate - accountCreationDate;
-    const differenceInDays = differenceInTime / (1000 * 3600 * 24);
+    // If the flag does not exist, run the logic and set the flag
+    if (!hasShown) {
+      const currentDate = new Date();
+      const accountCreationDate = new Date(user.createdAt); // Assuming 'user' is the logged-in user's data
 
-    // Set 'setopen' to true if the account was created 5 or fewer days ago, otherwise false
-    if (differenceInDays <= 5) {
-      setopen(true);
-    } else {
-      setopen(false);
+      // Calculate the difference in days
+      const differenceInTime = currentDate - accountCreationDate;
+      const differenceInDays = differenceInTime / (1000 * 3600 * 24);
+
+      // Set 'setopen' to true if the account was created 5 or fewer days ago, otherwise false
+      if (differenceInDays <= 5) {
+        setopen(true);
+        localStorage.setItem("hasShown", "true"); // Store the flag so it doesn't show again
+      } else {
+        setopen(false);
+      }
     }
 
     loadAvailableSlots();
-  }, []);
+  }, []); // Empty dependency array to ensure it runs only once on mount
   const handleProceed = () => {
     if (historyOfIntervention && !briefDetails) {
       Swal.fire({
@@ -628,6 +636,7 @@ const AppointmentsPage = () => {
 
                   {/* Agreement Checkbox */}
                   <FormControlLabel
+                    onClick={() => setOpenTerms(true)}
                     control={
                       <Checkbox
                         checked={agreementChecked}
@@ -1151,6 +1160,67 @@ const AppointmentsPage = () => {
         </Box>
       )}
       <IntroDialog open={open} onClose={handleIntroClose} />
+      <Dialog open={openTerms} onClose={() => setOpenTerms(false)}>
+        <DialogTitle>
+          <strong>
+            Terms and Conditions for Appointment Booking and Payment
+          </strong>
+        </DialogTitle>
+        <DialogContent>
+          <p className="text-sm">
+            Please read the following terms and conditions carefully before
+            proceeding with payment for your appointment. By continuing, you
+            agree to the following:
+          </p>
+          <p className="mt-4 text-sm">Appointment Confirmation</p>
+          <li className="text-xs pl-4">
+            Your appointment will be confirmed only after payment has been
+            successfully verified by Dr. Jeb. You can view the status of your
+            booked appointment on the appointment page.
+          </li>
+          <p className="mt-4 text-sm"> Payment and Refund Policy</p>
+          <li className="text-xs pl-4">
+            All payments are non-refundable, except when an appointment request
+            has not been approved. Cancellation requests must be made before the
+            appointment has been approved. Rescheduling requests are allowed
+            only for approved appointments. If an appointment is rejected, a
+            refund will be issued, along with the reason for rejection.
+          </li>
+          <p className="mt-4 text-sm">Rescheduling</p>
+          <li className="text-xs pl-4">
+            You may reschedule your appointment through the appointment page.
+            Rescheduling is subject to provider availability and requires
+            administrative approval.
+          </li>{" "}
+          <p className="mt-4 text-sm">Missed Appointments</p>
+          <li className="text-xs pl-4">
+            If you miss your scheduled appointment without prior notice, you may
+            not be eligible for a refund or rescheduling.
+          </li>{" "}
+          <p className="mt-4 text-sm">Privacy and Data Security</p>{" "}
+          <li className="text-xs pl-4">
+            All information shared during the booking and payment process is
+            secure and will be handled in accordance with our Privacy Policy.
+            Please ensure your personal and payment details are accurate and up
+            to date.
+          </li>{" "}
+          <p className="mt-4 text-sm">Changes to Terms</p>{" "}
+          <li className="text-xs pl-4">
+            We reserve the right to update these terms and conditions at any
+            time. Changes will take effect upon posting, and we encourage you to
+            review them regularly.
+          </li>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => setOpenTerms(false)}
+            variant="outlined"
+            sx={{ color: "#2c6975" }}
+          >
+            Got it
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };
