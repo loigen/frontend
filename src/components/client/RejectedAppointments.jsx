@@ -26,6 +26,8 @@ const RejectedAppointments = ({ onBackToActive }) => {
   const [qrCodePreview, setQrCodePreview] = useState(null); // For storing the image preview
   const [notifOpen, setNotifOpen] = useState(false);
   const { user } = useAuth();
+  const [isHovered, setIsHovered] = useState(false);
+
 
   const notif = {
     title: "Payment Issue Notification",
@@ -131,11 +133,20 @@ const RejectedAppointments = ({ onBackToActive }) => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="min-h-screen p-8 bg-gray-50">
+    <div className="min-h-screen p-8 bg-white ml-5 mr-5 rounded-md">
       {/* Back Button */}
-      <div className="mb-6">
+      <div className="mb-6 pt-8">
         <button
-          className="text-[#2C6975] flex items-center"
+          className="flex items-center p-3 rounded-md"
+          style={{
+            backgroundColor:
+              isHovered
+                ? "rgba(44, 105, 117, 0.13)"
+                : "white",
+            color: "#2C6975",
+          }}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
           onClick={onBackToActive}
         >
           <svg
@@ -176,8 +187,8 @@ const RejectedAppointments = ({ onBackToActive }) => {
           <tbody>
             {appointments.length === 0 ? (
               <tr>
-                <td colSpan="5" className="text-center p-4">
-                  No rejected appointments found.
+                <td colSpan={4} className="text-center p-4 text-gray-500">
+                  No rejected appointments found
                 </td>
               </tr>
             ) : (

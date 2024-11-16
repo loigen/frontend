@@ -21,6 +21,8 @@ const RefundedAppointments = ({ onBackToActive }) => {
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
   const [open, setOpen] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+
   useEffect(() => {
     const getAppointments = async () => {
       if (!user) return;
@@ -62,11 +64,18 @@ const RefundedAppointments = ({ onBackToActive }) => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="min-h-screen p-8 bg-gray-50">
+    <div className="min-h-screen p-8 bg-white ml-5 mr-5 rounded-md">
       {/* Back Button */}
-      <div className="mb-6">
+      <div className="mb-6 pt-8">
         <button
-          className="text-[#2C6975] flex items-center"
+          className="flex items-center p-3 rounded-md"
+          style={{
+            backgroundColor:
+              isHovered
+                ? "rgba(44, 105, 117, 0.13)"
+                : "white",
+            color: "#2C6975",
+          }}
           onClick={onBackToActive}
         >
           <svg
@@ -106,8 +115,8 @@ const RefundedAppointments = ({ onBackToActive }) => {
           <tbody>
             {appointments.length === 0 ? (
               <tr>
-                <td colSpan="4" className="text-center p-4">
-                  No refunded appointments found.
+                <td colSpan={4} className="text-center p-4 text-gray-500">
+                  No refunded appointments found
                 </td>
               </tr>
             ) : (
