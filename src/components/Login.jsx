@@ -69,16 +69,56 @@ const LoginModal = ({
       onClose();
     }
   }, [user, navigate, onClose]);
-
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
+
+    let failedAttempts = parseInt(localStorage.getItem("failedAttempts")) || 0;
+    const lockTime = parseInt(localStorage.getItem("lockTime")) || 0;
+    const lockoutCount = parseInt(localStorage.getItem("lockoutCount")) || 0;
+
+    // Calculate the lock time based on lockoutCount
+    let lockDuration = 15 * 60 * 1000; // Default 15 minutes in ms
+
+    if (lockoutCount === 1) {
+      lockDuration = 60 * 60 * 1000; // 1 hour for 2nd lock
+    } else if (lockoutCount === 2) {
+      lockDuration = 2 * 60 * 60 * 1000; // 2 hours for 3rd lock
+    } else if (lockoutCount > 2) {
+      lockDuration = (lockoutCount + 1) * 60 * 60 * 1000; // Increase by 1 hour for each subsequent lock
+    }
+
+    // Check if account is locked
+    if (failedAttempts >= 5) {
+      const currentTime = new Date().getTime();
+
+      // If the lock time is still valid, show lock message
+      if (currentTime - lockTime < lockDuration) {
+        Swal.fire({
+          icon: "error",
+          title: "Account Locked",
+          text: `You have reached the maximum number of login attempts in this browser. Please try again in ${
+            lockDuration / 1000 / 60
+          } minutes.`,
+        });
+        setLoading(false);
+        return;
+      } else {
+        // Reset failed attempts if lock time has expired
+        localStorage.setItem("failedAttempts", 0);
+        localStorage.removeItem("lockTime");
+      }
+    }
 
     try {
       const response = await axios.post(`${API_URL}/auth/login`, {
         email,
         password,
       });
+
+      // Reset failed attempts on successful login
+      localStorage.setItem("failedAttempts", 0);
+      localStorage.setItem("lockoutCount", 0); // Reset lockout count after successful login
 
       localStorage.setItem("token", response.data.token);
       setUser(response.data);
@@ -107,6 +147,20 @@ const LoginModal = ({
       const errorMessage =
         error.response?.data?.error || "An error occurred. Please try again.";
 
+      // Increment failed attempts
+      failedAttempts += 1;
+      localStorage.setItem("failedAttempts", failedAttempts);
+
+      // Update lockout count after every 5 failed attempts
+      if (failedAttempts % 5 === 0) {
+        const currentLockoutCount = lockoutCount + 1;
+        localStorage.setItem("lockoutCount", currentLockoutCount);
+
+        // Lock the account and set lock time
+        const currentTime = new Date().getTime();
+        localStorage.setItem("lockTime", currentTime);
+      }
+
       if (status === 400) {
         Swal.fire({
           icon: "warning",
@@ -116,13 +170,13 @@ const LoginModal = ({
       } else if (status === 404) {
         Swal.fire({
           icon: "warning",
-          title: "Oopss",
+          title: "Oops",
           text: "User not found",
         });
       } else if (status === 401) {
         Swal.fire({
           icon: "error",
-          title: "Oopss",
+          title: "Oops",
           text: "Incorrect password",
         });
       } else if (status === 403) {
