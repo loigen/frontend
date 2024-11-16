@@ -75,6 +75,7 @@ const ActiveAppointments = () => {
         selectedSlot
       );
       closeRescheduleModal();
+      window.location.reload();
       setLoading(false);
     } catch (error) {
       setError(error.message);
@@ -128,8 +129,10 @@ const ActiveAppointments = () => {
   if (error) return <div>Error: {error}</div>;
 
   const acceptedAppointments = todayAppointments.filter(
-    (appointment) => appointment.status === "accepted" || "rescheduled"
+    (appointment) =>
+      appointment.status === "accepted" || appointment.status === "rescheduled"
   );
+
   const rescheduledAppointments = notTodayAppointments.filter(
     (appointment) => appointment.status === "rescheduled"
   );
