@@ -8,15 +8,74 @@ import { Close as CloseIcon } from "@mui/icons-material";
 import axios from "axios";
 import UserAppointments from "./userhistory"; // Update with the actual path
 import { saveAs } from "file-saver"; // Ensure to install file-saver: npm install file-saver
+import Swal from "sweetalert2";
 
 const PatientDetails = ({ patient, onClose, handleRefund }) => {
   const [refundFile, setRefundFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
   const [note, setNote] = useState(""); // State for note input
   const [showAppointments, setShowAppointments] = useState(false); // State to toggle appointments view
+  const [isTruncated, setIsTruncated] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editableNote, setEditableNote] = useState(patient.note);
+  const toggleTruncate = () => {
+    setIsTruncated((prev) => !prev);
+  };
+  const saveNote = async () => {
+    try {
+      const response = await axios.patch(
+        `https://backend-vp67.onrender.com/Appointments/api/edit-note/${patient.id}`,
+        { note: editableNote }
+      );
+
+      // Handle non-success HTTP status codes
+      if (response.status !== 200) {
+        return Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: response.data.message || "Failed to update the note",
+        });
+      }
+
+      const { appointment } = response.data;
+
+      // Update the note locally with the response data
+      patient.note = appointment.note;
+      setIsEditing(false);
+
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: "Note updated successfully",
+      });
+    } catch (error) {
+      // Provide specific error feedback
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text:
+          error.response?.data?.message ||
+          "An unexpected error occurred while updating the note",
+      });
+    }
+  };
+
+  const cancelEdit = () => {
+    setEditableNote(patient.note); // Revert changes
+    setIsEditing(false);
+  };
+  const truncateText = (text, maxLength) => {
+    if (!text || text.length <= maxLength) {
+      return text;
+    }
+    const truncated = text.slice(0, maxLength).trim();
+    return truncated + "...";
+  };
+
   function downloadImage(url) {
     saveAs(url, "receipt.jpg");
   }
+
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setRefundFile(file);
@@ -138,7 +197,54 @@ const PatientDetails = ({ patient, onClose, handleRefund }) => {
                 <Typography variant="subtitle1" sx={{ mb: 1 }}>
                   Existing Note:
                 </Typography>
-                <Typography>{patient.note}</Typography>
+                {isEditing ? (
+                  <textarea
+                    className="w-full p-2 border border-gray-300 rounded text-sm"
+                    rows={4}
+                    value={editableNote}
+                    onChange={(e) => setEditableNote(e.target.value)}
+                  />
+                ) : (
+                  <Typography variant="body1" fullWidth>
+                    <div
+                      className="text-justify text-sm"
+                      dangerouslySetInnerHTML={{
+                        __html: isTruncated
+                          ? truncateText(
+                              patient.note.replace(/\n/g, "<br/>"),
+                              100
+                            ) // Truncated
+                          : patient.note.replace(/\n/g, "<br/>"), // Full text
+                      }}
+                    />
+                  </Typography>
+                )}
+                <div className="flex items-center mt-2 space-x-4">
+                  {!isEditing && (
+                    <button
+                      onClick={toggleTruncate}
+                      className="text-blue-500 hover:underline"
+                    >
+                      {isTruncated ? "See More" : "See Less"}
+                    </button>
+                  )}
+                  <button
+                    onClick={isEditing ? saveNote : () => setIsEditing(true)}
+                    className={`${
+                      isEditing ? "text-green-500" : "text-blue-500"
+                    } hover:underline`}
+                  >
+                    {isEditing ? "Save" : "Edit"}
+                  </button>
+                  {isEditing && (
+                    <button
+                      onClick={cancelEdit}
+                      className="text-red-500 hover:underline"
+                    >
+                      Cancel
+                    </button>
+                  )}
+                </div>
               </Box>
             )}
           </>

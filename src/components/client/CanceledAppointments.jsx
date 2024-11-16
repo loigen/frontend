@@ -150,10 +150,7 @@ const CanceledAppointments = ({ onBackToActive }) => {
         <button
           className="flex items-center p-3 rounded-md"
           style={{
-            backgroundColor:
-              isHovered
-                ? "rgba(44, 105, 117, 0.13)"
-                : "white",
+            backgroundColor: isHovered ? "rgba(44, 105, 117, 0.13)" : "white",
             color: "#2C6975",
           }}
           onMouseEnter={() => setIsHovered(true)}
@@ -293,7 +290,7 @@ const CanceledAppointments = ({ onBackToActive }) => {
                     <p>
                       <strong>History of Intervention:</strong>{" "}
                       {selectedAppointment.historyOfIntervention !== "false"
-                        ? selectedAppointment.historyOfIntervention
+                        ? selectedAppointment.briefDetails
                         : "N/A"}
                     </p>
                     <p>

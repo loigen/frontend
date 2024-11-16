@@ -293,7 +293,7 @@ const RejectedAppointments = ({ onBackToActive }) => {
                     <p>
                       <strong>History of Intervention:</strong>{" "}
                       {selectedAppointment.historyOfIntervention !== "false"
-                        ? selectedAppointment.historyOfIntervention
+                        ? selectedAppointment.briefDetails
                         : "N/A"}
                     </p>
                     <p>

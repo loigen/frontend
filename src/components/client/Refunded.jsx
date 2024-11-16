@@ -108,7 +108,7 @@ const RefundedAppointments = ({ onBackToActive }) => {
             <tr className="bg-gray-100 text-left">
               <th className="p-4 font-semibold">Date</th>
               <th className="p-4 font-semibold">Type of Service</th>
-              <th className="p-4 font-semibold">Status</th>
+              <th className="p-4 font-semibold">Consultation Method</th>
               <th className="p-4 font-semibold">Actions</th>
             </tr>
           </thead>
@@ -127,8 +127,8 @@ const RefundedAppointments = ({ onBackToActive }) => {
                   </td>
                   <td className="p-4">{appointment.appointmentType}</td>
                   <td className="p-4">
-                    <span className="p-1 text-slate-50 rounded bg-green-500">
-                      {appointment.status}
+                    <span className="p-4 text-teal-600 font-semibold rounded">
+                      {appointment.consultationMethod}
                     </span>
                   </td>
                   <td className="p-4">
@@ -209,7 +209,7 @@ const RefundedAppointments = ({ onBackToActive }) => {
                     <p>
                       <strong>History of Intervention:</strong>{" "}
                       {selectedAppointment.historyOfIntervention !== "false"
-                        ? selectedAppointment.historyOfIntervention
+                        ? selectedAppointment.briefDetails
                         : "N/A"}
                     </p>
                     <p>
