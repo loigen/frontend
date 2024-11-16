@@ -32,6 +32,7 @@ const Appointments = ({ onBack }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [isRescheduleModalOpen, setRescheduleModalOpen] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   const handleRescheduleAppointment = async () => {
     if (!selectedAppointment || !selectedSlot) return;
@@ -134,9 +135,18 @@ const Appointments = ({ onBack }) => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="min-h-screen p-8 bg-gray-50">
-      <div className="mb-6">
-        <button className="text-[#2C6975] flex items-center" onClick={onBack}>
+    <div className="min-h-screen p-8 bg-white ml-5 mr-5 rounded-md">
+      <div className="mb-6 pt-8">
+        <button
+          className="flex items-center p-3 rounded-md"
+          style={{
+            backgroundColor: isHovered ? "rgba(44, 105, 117, 0.13)" : "white",
+            color: "#2C6975",
+          }}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          onClick={onBack}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-5 w-5 mr-1"
@@ -173,8 +183,8 @@ const Appointments = ({ onBack }) => {
           <tbody>
             {appointments.length === 0 ? (
               <tr>
-                <td colSpan="5" className="text-center p-4">
-                  No accepted appointments found.
+                <td colSpan={4} className="text-center p-4 text-gray-500">
+                  No accepted appointments found
                 </td>
               </tr>
             ) : (

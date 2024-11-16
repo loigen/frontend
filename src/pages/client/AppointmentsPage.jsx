@@ -43,7 +43,7 @@ import {
 } from "../../components/client";
 import ActiveAppointments from "../../components/custom/DefaultViewClient";
 import { teal } from "@mui/material/colors";
-import {  CloudUploadOutlined } from "@mui/icons-material";
+import { CloudUploadOutlined } from "@mui/icons-material";
 import IntroDialog from "../../components/custom/IntroPage";
 import { saveAs } from "file-saver"; // Ensure to install file-saver: npm install file-saver
 
