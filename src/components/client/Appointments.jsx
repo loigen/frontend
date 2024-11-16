@@ -103,7 +103,7 @@ const Appointments = ({ onBack }) => {
         );
         setAppointments(filteredAppointments);
       } catch (err) {
-        setError(err.message);
+        setError();
       } finally {
         setLoading(false);
       }
