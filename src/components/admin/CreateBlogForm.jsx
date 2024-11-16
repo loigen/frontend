@@ -38,6 +38,7 @@ const BlogModal = ({ isOpen, onClose }) => {
       setTitle("");
       setContent("");
       onClose();
+      window.location.reload();
     } catch (error) {
       Swal.fire({
         icon: "error",
@@ -75,6 +76,7 @@ const BlogModal = ({ isOpen, onClose }) => {
       setTitle("");
       setContent("");
       onClose();
+      window.location.reload();
     } catch (error) {
       Swal.fire({
         icon: "error",

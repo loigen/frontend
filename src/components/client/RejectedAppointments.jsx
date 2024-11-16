@@ -221,7 +221,7 @@ const RejectedAppointments = ({ onBackToActive }) => {
                           handleOpenDialog(appointment, "notes");
                         }}
                       >
-                        View Reason
+                        View Notes
                       </MenuItem>
                       {appointment.refundReceipt && (
                         <MenuItem

@@ -110,6 +110,7 @@ const BLog = () => {
       console.error("Error updating blog:", error);
     }
   };
+  
   const fetchUserProfileAndBlogs = async () => {
     setLoading(true);
     try {

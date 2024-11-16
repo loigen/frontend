@@ -43,7 +43,7 @@ import {
 } from "../../components/client";
 import ActiveAppointments from "../../components/custom/DefaultViewClient";
 import { teal } from "@mui/material/colors";
-import {  CloudUploadOutlined } from "@mui/icons-material";
+import { CloudUploadOutlined } from "@mui/icons-material";
 import IntroDialog from "../../components/custom/IntroPage";
 import { saveAs } from "file-saver"; // Ensure to install file-saver: npm install file-saver
 
@@ -179,29 +179,25 @@ const AppointmentsPage = () => {
     setopen(false);
   };
   useEffect(() => {
-    // Check if the "hasShown" flag exists in localStorage
     const hasShown = localStorage.getItem("hasShown");
 
-    // If the flag does not exist, run the logic and set the flag
     if (!hasShown) {
       const currentDate = new Date();
-      const accountCreationDate = new Date(user.createdAt); // Assuming 'user' is the logged-in user's data
+      const accountCreationDate = new Date(user.createdAt);
 
-      // Calculate the difference in days
       const differenceInTime = currentDate - accountCreationDate;
       const differenceInDays = differenceInTime / (1000 * 3600 * 24);
 
-      // Set 'setopen' to true if the account was created 5 or fewer days ago, otherwise false
       if (differenceInDays <= 5) {
         setopen(true);
-        localStorage.setItem("hasShown", "true"); // Store the flag so it doesn't show again
+        localStorage.setItem("hasShown", "true");
       } else {
         setopen(false);
       }
     }
 
     loadAvailableSlots();
-  }, []); // Empty dependency array to ensure it runs only once on mount
+  }, []);
   const handleProceed = () => {
     if (historyOfIntervention && !briefDetails) {
       Swal.fire({
