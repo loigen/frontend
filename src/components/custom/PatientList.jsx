@@ -60,6 +60,7 @@ const PatientList = ({
     try {
       await updateAppointmentStatusToRescheduled(appointmentId);
       Swal.fire("Success", "Appointment rescheduled successfully!", "success");
+      window.location.reload();
       // Optionally refresh the patients list here
     } catch (error) {
       Swal.fire(

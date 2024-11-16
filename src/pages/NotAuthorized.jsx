@@ -23,7 +23,7 @@ const NotAuthorized = () => {
                 variant="outlined"
                 className=""
                 sx={{ color: "#2c6975", borderColor: "#2c6975" }}
-                onClick={() => navigate(-1)}
+                onClick={() => navigate(-3)}
               >
                 Go back
               </Button>
@@ -43,7 +43,6 @@ const NotAuthorized = () => {
                 variant="outlined"
                 className=""
                 sx={{ bgcolor: "#2c6975", color: "white" }}
-                
                 onClick={() => navigate(-1)}
               >
                 Go back

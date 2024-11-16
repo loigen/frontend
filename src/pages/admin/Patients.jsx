@@ -141,6 +141,7 @@ const Patients = () => {
       );
       Swal.fire("Success", "Refund processed successfully", "success");
       setSelectedPatient(null);
+      window.location.reload();
     } catch (error) {
       console.error("Error processing refund:", error);
       Swal.fire("Error", "Failed to process refund", "error");
@@ -171,6 +172,7 @@ const Patients = () => {
         );
 
         Swal.fire("Success", "Appointment marked as completed", "success");
+        window.location.reload();
       } catch (error) {
         console.error("Error completing appointment", error);
         Swal.fire("Error", "Failed to complete appointment", "error");
@@ -199,6 +201,7 @@ const Patients = () => {
           icon: "success",
           confirmButtonText: "Close",
         });
+        window.location.reload();
       } catch (error) {
         Swal.fire({
           title: "Error",
