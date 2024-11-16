@@ -24,6 +24,7 @@ const CompletedAppointments = ({ onBackToActive }) => {
   const [open, setOpen] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     const getAppointments = async () => {
@@ -66,11 +67,17 @@ const CompletedAppointments = ({ onBackToActive }) => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="min-h-screen p-8 bg-gray-50">
+    <div className="min-h-screen p-8 bg-white ml-5 mr-5 rounded-md">
       {/* Back Button */}
-      <div className="mb-6">
+      <div className="mb-6 pt-8">
         <button
-          className="text-[#2C6975] flex items-center"
+          className="flex items-center p-3 rounded-md"
+          style={{
+            backgroundColor: isHovered ? "rgba(44, 105, 117, 0.13)" : "white",
+            color: "#2C6975",
+          }}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
           onClick={onBackToActive}
         >
           <svg
@@ -96,24 +103,26 @@ const CompletedAppointments = ({ onBackToActive }) => {
         Completed Appointments
       </h2>
 
-      {/* Empty State */}
-      {appointments.length === 0 ? (
-        <div className="text-center text-gray-500">
-          <p>No completed appointments found.</p>
-        </div>
-      ) : (
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white shadow-lg rounded-lg">
-            <thead>
-              <tr className="bg-gray-100 text-left">
-                <th className="p-4 font-semibold">Date</th>
-                <th className="p-4 font-semibold">Type of Service</th>
-                <th className="p-4 font-semibold">Consultation Method</th>
-                <th className="p-4 font-semibold">Actions</th>
+      {/* Table */}
+      <div className="overflow-x-auto">
+        <table className="min-w-full bg-white shadow-lg rounded-lg">
+          <thead>
+            <tr className="bg-gray-100 text-left">
+              <th className="p-4 font-semibold">Date</th>
+              <th className="p-4 font-semibold">Type of Service</th>
+              <th className="p-4 font-semibold">Consultation Method</th>
+              <th className="p-4 font-semibold">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+          {appointments.length === 0 ? (
+              <tr>
+                <td colSpan={4} className="text-center p-4 text-gray-500">
+                No completed appointments found
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {appointments.map((appointment) => (
+            ) : (
+              appointments.map((appointment) => (
                 <tr key={appointment._id} className="border-b">
                   <td className="p-4">
                     {new Date(appointment.date).toLocaleDateString()}
@@ -158,11 +167,13 @@ const CompletedAppointments = ({ onBackToActive }) => {
                     </Menu>
                   </td>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
+
+  
 
       {/* Details Dialog */}
       <Dialog open={open} onClose={handleCloseDialog} maxWidth="sm">
