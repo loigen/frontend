@@ -110,7 +110,7 @@ const BLog = () => {
       console.error("Error updating blog:", error);
     }
   };
-  
+
   const fetchUserProfileAndBlogs = async () => {
     setLoading(true);
     try {
@@ -349,9 +349,6 @@ const BLog = () => {
               </MenuItem>
               <MenuItem sx={{ color: "#2C6975" }} value="favorites">
                 Favorites
-              </MenuItem>
-              <MenuItem sx={{ color: "#2C6975" }} value="newest">
-                Newest
               </MenuItem>
               <MenuItem sx={{ color: "#2C6975" }} value="drafts">
                 Drafts

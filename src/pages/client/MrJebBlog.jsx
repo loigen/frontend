@@ -254,9 +254,6 @@ const BLog = () => {
               <MenuItem sx={{ color: "#2C6975" }} value="favorites">
                 Favorites
               </MenuItem>
-              <MenuItem sx={{ color: "#2C6975" }} value="newest">
-                Newest
-              </MenuItem>
             </Select>
           </FormControl>
         </Box>
