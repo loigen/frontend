@@ -10,6 +10,7 @@ import {
   IconButton,
   Menu,
   MenuItem,
+  Typography,
 } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import LoadingSpinner from "./LoadingSpinner";
@@ -232,7 +233,21 @@ const CompletedAppointments = ({ onBackToActive }) => {
               )}
               {selectedAppointment.action === "notes" && (
                 <p className="text-[#2D4B40]">
-                  {selectedAppointment.notes || "No notes available."}
+                  {selectedAppointment.note ? (
+                    <Typography variant="body1" fullWidth>
+                      <div
+                        className="text-justify"
+                        dangerouslySetInnerHTML={{
+                          __html: selectedAppointment.note.replace(
+                            /\n/g,
+                            "<br/>"
+                          ),
+                        }}
+                      />
+                    </Typography>
+                  ) : (
+                    "No notes available."
+                  )}
                 </p>
               )}
             </div>

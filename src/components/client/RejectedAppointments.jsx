@@ -28,7 +28,6 @@ const RejectedAppointments = ({ onBackToActive }) => {
   const { user } = useAuth();
   const [isHovered, setIsHovered] = useState(false);
 
-
   const notif = {
     title: "Payment Issue Notification",
     header: `Dear ${user.firstname} ${user.lastname},`,
@@ -139,10 +138,7 @@ const RejectedAppointments = ({ onBackToActive }) => {
         <button
           className="flex items-center p-3 rounded-md"
           style={{
-            backgroundColor:
-              isHovered
-                ? "rgba(44, 105, 117, 0.13)"
-                : "white",
+            backgroundColor: isHovered ? "rgba(44, 105, 117, 0.13)" : "white",
             color: "#2C6975",
           }}
           onMouseEnter={() => setIsHovered(true)}
@@ -226,14 +222,7 @@ const RejectedAppointments = ({ onBackToActive }) => {
                       >
                         View Receipt
                       </MenuItem>
-                      <MenuItem
-                        onClick={() => {
-                          handleMenuClose();
-                          handleOpenDialog(appointment, "notes");
-                        }}
-                      >
-                        View Notes
-                      </MenuItem>
+
                       {appointment.refundReceipt && (
                         <MenuItem
                           onClick={() =>

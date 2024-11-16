@@ -239,11 +239,7 @@ const CanceledAppointments = ({ onBackToActive }) => {
                           View Refund Receipt
                         </MenuItem>
                       )}
-                      <MenuItem
-                        onClick={() => handleOpenDialog(appointment, "notes")}
-                      >
-                        View Notes
-                      </MenuItem>
+
                       <MenuItem
                         onClick={() => handleOpenDialog(appointment, "refund")}
                       >

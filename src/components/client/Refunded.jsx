@@ -70,10 +70,7 @@ const RefundedAppointments = ({ onBackToActive }) => {
         <button
           className="flex items-center p-3 rounded-md"
           style={{
-            backgroundColor:
-              isHovered
-                ? "rgba(44, 105, 117, 0.13)"
-                : "white",
+            backgroundColor: isHovered ? "rgba(44, 105, 117, 0.13)" : "white",
             color: "#2C6975",
           }}
           onClick={onBackToActive}
@@ -165,11 +162,6 @@ const RefundedAppointments = ({ onBackToActive }) => {
                           View Receipt
                         </MenuItem>
                       )}
-                      <MenuItem
-                        onClick={() => handleOpenDialog(appointment, "notes")}
-                      >
-                        View Notes
-                      </MenuItem>
                     </Menu>
                   </td>
                 </tr>

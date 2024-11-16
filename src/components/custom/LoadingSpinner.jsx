@@ -4,7 +4,10 @@ import "../../styles/loadingSpinner.css";
 const LoadingSpinner = () => {
   return (
     <div className="loading-container">
-      <div className="loading-spinner"></div>
+      <div className="spinner-wrapper">
+        <div className="loading-spinner"></div>
+        <p className="spinner-text">SafePlace</p>
+      </div>
       <p>Loading, Please Wait...</p>
     </div>
   );

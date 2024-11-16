@@ -6,13 +6,32 @@
   height: 100vh;
 }
 
+.spinner-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .loading-spinner {
-  width: 50px;
-  height: 50px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   border: 4px solid rgba(0, 0, 0, 0.1);
   border-top-color: #2c6975;
   animation: spin 1s linear infinite;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.spinner-text {
+  position: absolute; /* Keeps the text centered inside the spinner */
+  font-size: 12px; /* Adjust size as needed */
+  font-weight: bold;
+  color: #2c6975;
+  text-align: center;
+  z-index: 1; /* Ensures text is above spinner */
 }
 
 @keyframes spin {

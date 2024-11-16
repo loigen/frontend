@@ -15,6 +15,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import { useAuth } from "../../context/AuthProvider";
 import LogoutButton from "../LogoutButton";
+import MessageNotification from "./MessageNotification";
 const Topbar = () => {
   const { user, logout, loading: authLoading, error: authError } = useAuth();
   const [avatar, setAvatar] = useState(null);
@@ -112,7 +113,8 @@ const Topbar = () => {
       <div className="flex flex-row w-full justify-end gap-10">
         <ul className="flex flex-row gap-4 md:gap-6 items-center">
           <li>
-            <Notification user={user} />
+            <MessageNotification user={user} />
+            {/* <Notification user={user} /> */}
           </li>
         </ul>
 
