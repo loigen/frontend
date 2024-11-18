@@ -618,15 +618,17 @@ const PatientDetails = ({ patient, onClose, handleRefund }) => {
             View All Appointments
           </Button>
         </Box>
-        <Box sx={{ mt: 4 }}>
-          <Button
-            variant="contained"
-            onClick={() => setShowReceipt(true)} // Show appointments
-            sx={{ mr: 2, bgcolor: "#2C6975", borderRadius: "100px" }}
-          >
-            View Payment Receipt
-          </Button>{" "}
-        </Box>
+        {patient.status === "requested" && (
+          <Box sx={{ mt: 4 }}>
+            <Button
+              variant="contained"
+              onClick={() => setShowReceipt(true)} // Show appointments
+              sx={{ mr: 2, bgcolor: "#2C6975", borderRadius: "100px" }}
+            >
+              View Payment Receipt
+            </Button>{" "}
+          </Box>
+        )}
 
         {showAppointments && (
           <Box sx={{ mt: 4 }}>
