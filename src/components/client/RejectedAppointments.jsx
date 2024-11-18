@@ -11,7 +11,7 @@ import {
   Menu,
   MenuItem,
 } from "@mui/material";
-import { Close, MoreHoriz } from "@mui/icons-material";
+import { Close, CloudDownloadOutlined, MoreHoriz } from "@mui/icons-material";
 import axios from "axios";
 import Swal from "sweetalert2";
 
@@ -322,15 +322,37 @@ const RejectedAppointments = ({ onBackToActive }) => {
               {selectedAppointment.action === "refund" && (
                 <div>
                   <h3 className="text-lg font-semibold">
-                    Refund Request: Upload Your GCash or PayPal QR Code{" "}
+                    Refund Request: Upload Your GCash or UnionBack QR Code{" "}
                   </h3>
-
-                  <input
-                    type="file"
-                    onChange={handleQrCodeUpload}
-                    accept="image/*"
-                    className="mt-4"
-                  />
+                  <p>
+                    Dear Patient, To process your refund, kindly upload the QR
+                    code for your preferred payment method. We accept refunds
+                    via:
+                  </p>
+                  <ol>
+                    <li>1. GCash </li>
+                    <li>2. PayPal</li>
+                  </ol>
+                  <p>
+                    Please ensure the QR code is clear and accurate so that we
+                    can process your refund swiftly.
+                  </p>
+                  <p>If you have any questions, feel free to reach out.</p>
+                  <div className="mt-4 flex justify-center items-center">
+                    <label
+                      htmlFor="file-upload"
+                      className="cursor-pointer inline-flex gap-2 items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-[#2C6975] hover:bg-[#2C6e75] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    >
+                      <CloudDownloadOutlined /> <p>Upload Here</p>
+                    </label>
+                    <input
+                      id="file-upload"
+                      type="file"
+                      onChange={handleQrCodeUpload}
+                      accept="image/*"
+                      className="hidden"
+                    />
+                  </div>
                   {/* Image Preview */}
                   {qrCodePreview && (
                     <div className="mt-4">

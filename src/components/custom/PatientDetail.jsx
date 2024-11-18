@@ -4,11 +4,12 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
-import { Close as CloseIcon } from "@mui/icons-material";
+import { Close, Close as CloseIcon } from "@mui/icons-material";
 import axios from "axios";
 import UserAppointments from "./userhistory"; // Update with the actual path
 import { saveAs } from "file-saver"; // Ensure to install file-saver: npm install file-saver
 import Swal from "sweetalert2";
+import { Tooltip } from "@mui/material";
 
 const PatientDetails = ({ patient, onClose, handleRefund }) => {
   const [refundFile, setRefundFile] = useState(null);
@@ -18,6 +19,7 @@ const PatientDetails = ({ patient, onClose, handleRefund }) => {
   const [isTruncated, setIsTruncated] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [editableNote, setEditableNote] = useState(patient.note);
+  const [showReceipt, setShowReceipt] = useState(false);
   const toggleTruncate = () => {
     setIsTruncated((prev) => !prev);
   };
@@ -616,6 +618,15 @@ const PatientDetails = ({ patient, onClose, handleRefund }) => {
             View All Appointments
           </Button>
         </Box>
+        <Box sx={{ mt: 4 }}>
+          <Button
+            variant="contained"
+            onClick={() => setShowReceipt(true)} // Show appointments
+            sx={{ mr: 2, bgcolor: "#2C6975", borderRadius: "100px" }}
+          >
+            View Payment Receipt
+          </Button>{" "}
+        </Box>
 
         {showAppointments && (
           <Box sx={{ mt: 4 }}>
@@ -629,6 +640,28 @@ const PatientDetails = ({ patient, onClose, handleRefund }) => {
               Close Appointments
             </Button>
           </Box>
+        )}
+        {showReceipt && (
+          <>
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              className="mt-5"
+              flexDirection="column"
+            >
+              <div className="w-full flex justify-end">
+                <Tooltip title="close" arrow>
+                  <Close
+                    className="cursor-pointer"
+                    onClick={() => setShowReceipt(false)}
+                  />
+                </Tooltip>
+              </div>
+              <b>Payment Receipt</b>
+              <img src={patient.receipt} alt="" />
+            </Box>
+          </>
         )}
       </Box>
     </Modal>

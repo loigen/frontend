@@ -326,7 +326,7 @@ const CanceledAppointments = ({ onBackToActive }) => {
               {selectedAppointment.action === "refund" && (
                 <div className="flex-col flex gap-2">
                   <h3 className="text-lg font-semibold">
-                    Refund Request: Upload Your GCash or PayPal QR Code{" "}
+                    Refund Request: Upload Your GCash or UnionBack QR Code{" "}
                   </h3>
                   <p>
                     Dear Patient, To process your refund, kindly upload the QR
