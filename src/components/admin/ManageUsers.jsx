@@ -72,12 +72,12 @@ const ManageUsers = ({ setView }) => {
       );
       Swal.fire({
         icon: "success",
-        title: "User Blocked",
-        text: "The user has been successfully blocked.",
+        title: "User Disabled",
+        text: "The user has been successfully disabled.",
       });
     } catch (err) {
       setError(
-        "Error blocking user: " + (err.response?.data?.error || err.message)
+        "Error Disabling user: " + (err.response?.data?.error || err.message)
       );
       Swal.fire({
         icon: "error",
@@ -101,8 +101,8 @@ const ManageUsers = ({ setView }) => {
       );
       Swal.fire({
         icon: "success",
-        title: "User Unblocked",
-        text: "The user has been successfully unblocked.",
+        title: "User Enabled",
+        text: "The user has been successfully Enabled.",
       });
     } catch (err) {
       setError(
@@ -111,7 +111,7 @@ const ManageUsers = ({ setView }) => {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: "Failed to unblock user.",
+        text: "Failed to enable user.",
       });
     } finally {
       setActionLoading(null);
@@ -248,8 +248,8 @@ const ManageUsers = ({ setView }) => {
                             disabled={actionLoading === user._id}
                           >
                             {actionLoading === user._id
-                              ? "Blocking..."
-                              : "Block"}
+                              ? "Disabling..."
+                              : "Disable"}
                           </Button>
                         ) : (
                           <Button
@@ -260,8 +260,8 @@ const ManageUsers = ({ setView }) => {
                             disabled={actionLoading === user._id}
                           >
                             {actionLoading === user._id
-                              ? "Unblocking..."
-                              : "Unblock"}
+                              ? "Enabling..."
+                              : "Enable"}
                           </Button>
                         )}
                       </Box>

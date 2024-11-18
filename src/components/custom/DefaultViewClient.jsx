@@ -410,7 +410,9 @@ const AppointmentCard = ({
           day: "numeric",
         })}
         <span> - </span>
-        {appointment.time}
+        {appointment.status === "ReqRescheduled"
+          ? appointment.requestedTime
+          : appointment.time}
       </p>
       <button
         className="absolute top-4 right-4 text-[#68B2A0] hover:text-[#2c6975]"

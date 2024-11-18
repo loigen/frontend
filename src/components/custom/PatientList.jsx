@@ -18,6 +18,7 @@ import {
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import Swal from "sweetalert2";
 import { updateAppointmentStatusToRescheduled } from "../../api/appointmentAPI/updateAppointmentStatusToRescheduled"; // Adjust the import path as needed
+import { disapproveRescheduleRequest } from "../../api/appointmentAPI/disapproveRequest";
 
 const PatientList = ({
   patients,
@@ -66,6 +67,20 @@ const PatientList = ({
       Swal.fire(
         "Error",
         error.message || "Failed to reschedule appointment",
+        "error"
+      );
+    }
+  };
+  const handleReject = async (appointmentId) => {
+    try {
+      await disapproveRescheduleRequest(appointmentId);
+      Swal.fire("Success", "Request disapproved successfully!", "success");
+      window.location.reload();
+      // Optionally refresh the patients list here
+    } catch (error) {
+      Swal.fire(
+        "Error",
+        error.message || "Failed to disapprove appointment",
         "error"
       );
     }
@@ -235,6 +250,30 @@ const PatientList = ({
                         }}
                       >
                         Approve
+                      </MenuItem>
+                    )}
+                    {selectedPatient?.status === "ReqRescheduled" && (
+                      <MenuItem
+                        onClick={async () => {
+                          try {
+                            await handleReject(selectedPatient.id);
+                            Swal.fire(
+                              "Success",
+                              "Appointment Disapproved successfully!",
+                              "success"
+                            );
+                          } catch (error) {
+                            Swal.fire(
+                              "Error",
+                              error.message ||
+                                "Failed to disapprove appointment",
+                              "error"
+                            );
+                          }
+                          handleMenuClose();
+                        }}
+                      >
+                        Disapprove
                       </MenuItem>
                     )}
                   </Menu>

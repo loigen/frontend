@@ -19,6 +19,7 @@ import {
 } from "../../api/manageUsers/userService";
 import Swal from "sweetalert2";
 import { LoadingSpinner } from "../custom";
+import { useAuth } from "../../context/AuthProvider";
 
 const AdminUsers = () => {
   const [adminUsers, setAdminUsers] = useState([]);
@@ -27,14 +28,18 @@ const AdminUsers = () => {
   const [actionLoading, setActionLoading] = useState(null);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5); // Default rows per page
-
+  const { user } = useAuth();
   useEffect(() => {
     const fetchAdminUsers = async () => {
       try {
         const response = await axios.get(
           "https://backend-vp67.onrender.com/user/adminUsers"
         );
-        setAdminUsers(response.data);
+        // Filter out the current user based on their ID
+        const filteredUsers = response.data.filter(
+          (adminUser) => adminUser._id !== user._id
+        );
+        setAdminUsers(filteredUsers);
       } catch (err) {
         setError(err.response?.data?.message || "Error fetching admin users");
       } finally {
@@ -43,7 +48,7 @@ const AdminUsers = () => {
     };
 
     fetchAdminUsers();
-  }, []);
+  }, [user._id]);
 
   const handleBlock = async (userId) => {
     setActionLoading(userId);
@@ -57,8 +62,8 @@ const AdminUsers = () => {
       );
       Swal.fire({
         icon: "success",
-        title: "User Blocked",
-        text: "The user has been successfully blocked.",
+        title: "User Disabled",
+        text: "The user has been successfully disabled.",
       });
     } catch (err) {
       setError(
@@ -67,7 +72,7 @@ const AdminUsers = () => {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: "Failed to block user.",
+        text: "Failed to disable user.",
       });
     } finally {
       setActionLoading(null);
@@ -86,17 +91,17 @@ const AdminUsers = () => {
       );
       Swal.fire({
         icon: "success",
-        title: "User Unblocked",
-        text: "The user has been successfully unblocked.",
+        title: "User Enabled",
+        text: "The user has been successfully enabled.",
       });
     } catch (err) {
       setError(
-        "Error unblocking user: " + (err.response?.data?.error || err.message)
+        "Error enabling user: " + (err.response?.data?.error || err.message)
       );
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: "Failed to unblock user.",
+        text: "Failed to enable user.",
       });
     } finally {
       setActionLoading(null);
@@ -170,7 +175,9 @@ const AdminUsers = () => {
                           fullWidth
                           disabled={actionLoading === user._id}
                         >
-                          {actionLoading === user._id ? "Blocking..." : "Block"}
+                          {actionLoading === user._id
+                            ? "Disabling..."
+                            : "Disable"}
                         </Button>
                       ) : (
                         <Button
@@ -181,8 +188,8 @@ const AdminUsers = () => {
                           disabled={actionLoading === user._id}
                         >
                           {actionLoading === user._id
-                            ? "Unblocking..."
-                            : "Unblock"}
+                            ? "Enabling..."
+                            : "Enable"}
                         </Button>
                       )}
                     </Box>
