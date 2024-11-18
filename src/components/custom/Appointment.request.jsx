@@ -37,7 +37,6 @@ const AppointmentRequest = () => {
     } else {
       setIsModalOpen(true);
     }
-    window.location.reload();
   };
 
   const handleReject = async (id, date, time) => {
@@ -84,7 +83,6 @@ const AppointmentRequest = () => {
           },
           buttonsStyling: false, // Apply your custom styles
         });
-        window.location.reload();
       } catch (error) {
         Swal.fire({
           title: "Error",
@@ -214,6 +212,7 @@ const AppointmentRequest = () => {
         setAppointments((prevAppointments) =>
           prevAppointments.filter((app) => app._id !== appointmentToAccept._id)
         );
+        window.location.reload();
       } catch (error) {
         Swal.fire({
           title: "Error",
