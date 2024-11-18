@@ -95,9 +95,7 @@ const PatientList = ({
             <TableCell sx={{ fontWeight: "bold" }}>Time</TableCell>
             <TableCell sx={{ fontWeight: "bold" }}>Name</TableCell>
             <TableCell sx={{ fontWeight: "bold" }}>Status</TableCell>
-            <TableCell sx={{ fontWeight: "bold" }}>
-              Type of Counseling
-            </TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Type of Service</TableCell>
             <TableCell sx={{ fontWeight: "bold" }}>Sex</TableCell>
             <TableCell sx={{ fontWeight: "bold" }}>
               Consultation Method

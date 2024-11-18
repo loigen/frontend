@@ -417,7 +417,13 @@ const Home = () => {
                       <strong className="font-bold">Time:</strong>{" "}
                       {selectedAppointment.time}
                     </p>
-
+                    {selectedAppointment.consultationMethod ===
+                      "face-to-face" && (
+                      <p className="mb-2">
+                        <strong className="font-bold">Meeting Place:</strong>{" "}
+                        {selectedAppointment.meetPlace}
+                      </p>
+                    )}
                     <p className="mb-2">
                       <strong className="font-bold">Primary Complaint:</strong>{" "}
                       {selectedAppointment.primaryComplaint}

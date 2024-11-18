@@ -37,6 +37,7 @@ const AppointmentRequest = () => {
     } else {
       setIsModalOpen(true);
     }
+    window.location.reload();
   };
 
   const handleReject = async (id, date, time) => {
@@ -83,6 +84,7 @@ const AppointmentRequest = () => {
           },
           buttonsStyling: false, // Apply your custom styles
         });
+        window.location.reload();
       } catch (error) {
         Swal.fire({
           title: "Error",
@@ -168,6 +170,7 @@ const AppointmentRequest = () => {
           text: "Appointment has been succesfully accepted!",
           icon: "Success",
         });
+        window.location.reload();
       } catch (error) {
         Swal.fire({
           title: "Error",

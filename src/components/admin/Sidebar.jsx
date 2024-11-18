@@ -49,7 +49,7 @@ const MiniDrawer = styled(Drawer)(({ theme, open }) => ({
 }));
 
 const Sidebar = () => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const location = useLocation();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
