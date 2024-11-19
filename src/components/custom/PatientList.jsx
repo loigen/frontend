@@ -58,31 +58,60 @@ const PatientList = ({
   };
 
   const handleReschedule = async (appointmentId) => {
-    try {
-      await updateAppointmentStatusToRescheduled(appointmentId);
-      Swal.fire("Success", "Appointment rescheduled successfully!", "success");
-      window.location.reload();
-      // Optionally refresh the patients list here
-    } catch (error) {
-      Swal.fire(
-        "Error",
-        error.message || "Failed to reschedule appointment",
-        "error"
-      );
+    const confirmReschedule = await Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to reschedule this appointment?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, reschedule it!",
+      cancelButtonText: "No, cancel!",
+    });
+
+    if (confirmReschedule.isConfirmed) {
+      try {
+        await updateAppointmentStatusToRescheduled(appointmentId);
+        await Swal.fire(
+          "Success",
+          "Appointment rescheduled successfully!",
+          "success"
+        );
+        window.location.reload();
+      } catch (error) {
+        Swal.fire(
+          "Error",
+          error.message || "Failed to reschedule appointment",
+          "error"
+        );
+      }
     }
   };
+
   const handleReject = async (appointmentId) => {
-    try {
-      await disapproveRescheduleRequest(appointmentId);
-      Swal.fire("Success", "Request disapproved successfully!", "success");
-      window.location.reload();
-      // Optionally refresh the patients list here
-    } catch (error) {
-      Swal.fire(
-        "Error",
-        error.message || "Failed to disapprove appointment",
-        "error"
-      );
+    const confirmReject = await Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to reject this reschedule request?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, reject it!",
+      cancelButtonText: "No, cancel!",
+    });
+
+    if (confirmReject.isConfirmed) {
+      try {
+        await disapproveRescheduleRequest(appointmentId);
+        await Swal.fire(
+          "Success",
+          "Request disapproved successfully!",
+          "success"
+        );
+        window.location.reload();
+      } catch (error) {
+        Swal.fire(
+          "Error",
+          error.message || "Failed to disapprove appointment",
+          "error"
+        );
+      }
     }
   };
 
