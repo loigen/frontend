@@ -119,8 +119,17 @@ const PatientList = ({
                 sx={{ cursor: "pointer" }}
                 className="capitalize"
               >
-                <TableCell>{patient.date}</TableCell>
-                <TableCell>{patient.time}</TableCell>
+                <TableCell>
+                  {" "}
+                  {patient.status === "ReqRescheduled"
+                    ? patient.requestedDate
+                    : patient.date}
+                </TableCell>
+                <TableCell>
+                  {patient.status === "ReqRescheduled"
+                    ? patient.requestedTime
+                    : patient.time}
+                </TableCell>
                 <TableCell>
                   {patient.user.firstname}
                   <span> </span>
