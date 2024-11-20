@@ -422,6 +422,11 @@ const AppointmentCard = ({
       </button>
     </div>
     <p className="text-sm mb-4">{appointment.appointmentType}</p>
+    {appointment.consultationMethod === "face-to-face" && (
+      <>
+        <b>MeetPlace: {appointment.meetPlace}</b>
+      </>
+    )}
     {showGoToRoom && appointment.consultationMethod !== "face-to-face" && (
       <div className="flex justify-end">
         <a

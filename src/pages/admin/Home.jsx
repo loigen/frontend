@@ -339,7 +339,11 @@ const Home = () => {
                       <p className="mt-2 text-gray-700 capitalize">
                         {appointment.appointmentType}
                       </p>
-
+                      {appointment.consultationMethod === "face-to-face" && (
+                        <>
+                          <b>MeetPlace: {appointment.meetPlace}</b>
+                        </>
+                      )}
                       {appointment.consultationMethod !== "face-to-face" && (
                         <>
                           <div

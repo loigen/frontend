@@ -268,6 +268,11 @@ const Schedules = () => {
                         <strong>Consultation Method:</strong>{" "}
                         {appointment.consultationMethod}
                       </p>
+                      {appointment.consultationMethod === "face-to-face" && (
+                        <>
+                          <b>MeetPlace: {appointment.meetPlace}</b>
+                        </>
+                      )}
                       {appointment.consultationMethod !== "face-to-face" && (
                         <>
                           <div
