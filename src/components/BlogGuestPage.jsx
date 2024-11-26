@@ -92,11 +92,9 @@ const BlogGuestPage = () => {
   };
 
   const filteredBlogs = blogs
-    .filter((blog) => blog.category === selectedCategory)
     .filter((blog) =>
       blog.title.toLowerCase().includes(searchQuery.toLowerCase())
     )
-
     .sort((a, b) => {
       if (view === "newest") {
         return new Date(b.createdDate) - new Date(a.createdDate);
