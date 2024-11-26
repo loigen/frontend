@@ -38,9 +38,13 @@ const ActiveAppointments = () => {
       try {
         const data = await fetchAppointmentsByUserId(user._id);
 
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Reset time to midnight for comparison
+
         // Filter for today or future appointments
         const upcomingAppointments = data.filter((appointment) => {
           const appointmentDate = new Date(appointment.date);
+          appointmentDate.setHours(0, 0, 0, 0); // Reset time for comparison
           return appointmentDate >= today; // Include today and beyond
         });
 

@@ -27,7 +27,6 @@ const AdminUserForm = () => {
     sex: "",
     password: "",
     birthdate: "",
-    bio: "",
   });
 
   const handleChange = (e) => {
@@ -72,7 +71,6 @@ const AdminUserForm = () => {
         sex: "",
         password: "",
         birthdate: "",
-        bio: "",
       });
     } catch (error) {
       SweetAlert.fire({
@@ -194,17 +192,6 @@ const AdminUserForm = () => {
               InputLabelProps={{
                 shrink: true,
               }}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Bio"
-              name="bio"
-              value={formData.bio}
-              onChange={handleChange}
-              multiline
-              rows={4}
             />
           </Grid>
         </Grid>
