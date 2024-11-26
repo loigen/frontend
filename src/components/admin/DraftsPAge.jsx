@@ -57,7 +57,6 @@ const DraftsPage = ({ searchQuery }) => {
   const [formValues, setFormValues] = useState({
     title: "",
     content: "",
-    category: "",
   });
   const fetchDrafts = async () => {
     try {
@@ -80,7 +79,6 @@ const DraftsPage = ({ searchQuery }) => {
     setFormValues({
       title: draft.title,
       content: draft.content,
-      category: draft.category,
     });
     setOpen(true);
   };
@@ -319,19 +317,6 @@ const DraftsPage = ({ searchQuery }) => {
               rows={4}
               sx={{ mb: 2 }}
             />
-            <FormControl fullWidth margin="normal">
-              <InputLabel>Category</InputLabel>
-              <Select
-                name="category"
-                value={formValues.category}
-                onChange={handleChange}
-                label="Category"
-              >
-                <MenuItem value="Tech">Tech</MenuItem>
-                <MenuItem value="Lifestyle">Lifestyle</MenuItem>
-                <MenuItem value="Education">Education</MenuItem>
-              </Select>
-            </FormControl>
           </DialogContent>
           <DialogActions>
             <Button variant="contained" color="primary" onClick={handleUpdate}>
