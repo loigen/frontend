@@ -51,7 +51,6 @@ const Profile = ({ setView }) => {
     lastname: user?.lastname || "",
     email: user?.email || "",
     bio: user?.bio || "",
-    birthdate: user?.birthdate || "",
     middleName: user?.middleName || "",
     Profession: user?.Profession || "",
     EducationBackground: user?.EducationBackground || "",
@@ -149,7 +148,6 @@ const Profile = ({ setView }) => {
       lastname: user.lastname,
       email: user.email,
       bio: user.bio,
-      birthdate: user.birthdate,
       middleName: user.middleName,
       Profession: user.Profession,
       EducationBackground: user.EducationBackground,
@@ -337,32 +335,6 @@ const Profile = ({ setView }) => {
             fullWidth
             margin="normal"
             variant="outlined"
-            sx={{
-              backgroundColor: "#f5f5f5",
-              borderRadius: 1,
-              "& .MuiOutlinedInput-root": {
-                "&:hover fieldset": {
-                  borderColor: "#4e8e9b",
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "#2c6975",
-                },
-              },
-            }}
-          />
-          <TextField
-            label="Birthdate"
-            name="birthdate"
-            type="date"
-            value={formData.birthdate}
-            onChange={handleInputChange}
-            disabled={!isEditing}
-            fullWidth
-            margin="normal"
-            variant="outlined"
-            InputLabelProps={{
-              shrink: true,
-            }}
             sx={{
               backgroundColor: "#f5f5f5",
               borderRadius: 1,
