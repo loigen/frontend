@@ -33,11 +33,12 @@ function LoginPage() {
   const [isTimerActive, setIsTimerActive] = useState(false);
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-
+  const [sentToEmail, setSentToEmail] = useState(false);
   const handleOtpRequested = (email) => {
     setOtpRequested(true);
     setEmail(email);
     setIsTimerActive(true);
+    setSentToEmail(true);
   };
 
   useEffect(() => {
@@ -85,6 +86,13 @@ function LoginPage() {
               <LoginForm onOtpRequested={handleOtpRequested} />
             ) : (
               <Box display="flex" flexDirection="column" alignItems="center">
+                {sentToEmail && (
+                  <>
+                    <Typography color="primary">
+                      OTP sent through Gmail, please check!
+                    </Typography>
+                  </>
+                )}
                 <OTPForm email={email} />
                 {countdown > 0 ? (
                   <Typography variant="body1" sx={{ mt: 2 }}>
