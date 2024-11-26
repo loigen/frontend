@@ -37,7 +37,14 @@ const ActiveAppointments = () => {
 
       try {
         const data = await fetchAppointmentsByUserId(user._id);
-        setAppointments(data); // Store all appointments
+
+        // Filter for today or future appointments
+        const upcomingAppointments = data.filter((appointment) => {
+          const appointmentDate = new Date(appointment.date);
+          return appointmentDate >= today; // Include today and beyond
+        });
+
+        setAppointments(upcomingAppointments); // Store only upcoming appointments
       } catch (err) {
         setError();
       } finally {
@@ -47,6 +54,7 @@ const ActiveAppointments = () => {
 
     getAppointments();
   }, [user]);
+
   const todayAppointments = appointments.filter((appointment) => {
     const appointmentDateStr = new Date(appointment.date).toLocaleDateString();
     return appointmentDateStr === todayStr;
@@ -422,11 +430,12 @@ const AppointmentCard = ({
       </button>
     </div>
     <p className="text-sm mb-4">{appointment.appointmentType}</p>
-    {appointment.consultationMethod === "face-to-face" && (
-      <>
-        <b>MeetPlace: {appointment.meetPlace}</b>
-      </>
-    )}
+    {appointment.consultationMethod === "face-to-face" &&
+      appointment.status !== "pending" && (
+        <>
+          <b>MeetPlace: {appointment.meetPlace}</b>
+        </>
+      )}
     {showGoToRoom && appointment.consultationMethod !== "face-to-face" && (
       <div className="flex justify-end">
         <a
