@@ -50,7 +50,6 @@ const Profile = ({ setView }) => {
     firstname: user?.firstname || "",
     lastname: user?.lastname || "",
     email: user?.email || "",
-    bio: user?.bio || "",
     middleName: user?.middleName || "",
     Profession: user?.Profession || "",
     EducationBackground: user?.EducationBackground || "",
@@ -147,7 +146,6 @@ const Profile = ({ setView }) => {
       firstname: user.firstname,
       lastname: user.lastname,
       email: user.email,
-      bio: user.bio,
       middleName: user.middleName,
       Profession: user.Profession,
       EducationBackground: user.EducationBackground,
@@ -307,28 +305,6 @@ const Profile = ({ setView }) => {
             label="Email"
             name="email"
             value={formData.email}
-            onChange={handleInputChange}
-            disabled={!isEditing}
-            fullWidth
-            margin="normal"
-            variant="outlined"
-            sx={{
-              backgroundColor: "#f5f5f5",
-              borderRadius: 1,
-              "& .MuiOutlinedInput-root": {
-                "&:hover fieldset": {
-                  borderColor: "#4e8e9b",
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "#2c6975",
-                },
-              },
-            }}
-          />
-          <TextField
-            label="Bio"
-            name="bio"
-            value={formData.bio}
             onChange={handleInputChange}
             disabled={!isEditing}
             fullWidth
