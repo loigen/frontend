@@ -167,7 +167,7 @@ const Home = () => {
                 {userCount}
               </b>
               <p className="text-sm md:text-md capitalize font-poppins">
-                patients
+                Clients
               </p>
             </div>
           </div>

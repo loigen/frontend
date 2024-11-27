@@ -59,8 +59,8 @@ const Patients = () => {
         setPatients(data);
         setFilteredPatients(data);
       } catch (error) {
-        console.error("Error fetching patients:", error);
-        Swal.fire("Error", "Failed to fetch patient data", "error");
+        console.error("Error fetching clients:", error);
+        Swal.fire("Error", "Failed to fetch clients data", "error");
       }
     };
 
@@ -275,7 +275,7 @@ const Patients = () => {
             </FormControl>
             {/* Search Bar */}
             <TextField
-              label="Search Patients"
+              label="Search clients"
               variant="outlined"
               onChange={(e) => setSearchQuery(e.target.value)}
               value={searchQuery}
@@ -295,7 +295,7 @@ const Patients = () => {
               }}
             >
               <p className="text-center">
-                No patients found matching your criteria.
+                No clients found matching your criteria.
               </p>
             </Alert>
           ) : (

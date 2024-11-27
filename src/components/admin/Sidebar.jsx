@@ -61,7 +61,7 @@ const Sidebar = () => {
   const menuItems = [
     { text: "Home", icon: <HomeIcon />, link: "/home" },
     {
-      text: "Patients",
+      text: "Clients",
       icon: <Person2Icon />,
       link: "/patients",
     },
